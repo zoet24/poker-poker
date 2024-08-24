@@ -7,7 +7,7 @@
 }
 
 .screen {
-  @apply bg-blue-200 h-screen w-screen;
+  @apply bg-blue-200 h-screen w-screen relative;
 }
 
 .container {
@@ -18,8 +18,30 @@
   @apply border-2 border-black rounded-md h-20 w-14 flex items-center justify-center;
 
   &--sm {
+    @apply h-14 w-9;
+  }
+
+  &--square {
     @apply h-full w-full;
   }
+}
+
+.card--rotate {
+  @apply w-20 h-14;
+}
+
+.card--rotate.card--sm {
+  @apply w-14 h-9;
+}
+
+.btn {
+  @apply border-2 border-black rounded-md p-2 h-fit min-w-16 text-center;
+}
+
+.pot-value {
+  @apply bg-black text-white w-16 h-16 rounded-full flex items-end justify-center absolute top-12 left-1/2 -z-10 p-2;
+
+  transform: translate(-50%, 0);
 }
 
 .player-cards {

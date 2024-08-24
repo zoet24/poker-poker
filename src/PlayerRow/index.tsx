@@ -1,5 +1,3 @@
-import React from "react";
-
 const PlayerRow = () => {
   return (
     <div className="container justify-between">
@@ -7,7 +5,7 @@ const PlayerRow = () => {
         <div className="border w-20 h-20 rounded-full flex items-center justify-center">
           Zoe
         </div>
-        <div className="border w-10 h-10 rounded-full flex items-center justify-center self-center ml-[-16px] bg-white">
+        <div className="border w-10 h-10 rounded-full flex items-center justify-center self-center ml-[-16px] bg-black text-white">
           10
         </div>
       </div>
@@ -19,13 +17,13 @@ const PlayerRow = () => {
           <div className="card"></div>
         </div>
         <div className="best-card best-card--1">
-          <div className="card card--sm"></div>
+          <div className="card card--square"></div>
         </div>
         <div className="best-card best-card--2">
-          <div className="card card--sm"></div>
+          <div className="card card--square"></div>
         </div>
         <div className="best-card best-card--3">
-          <div className="card card--sm"></div>
+          <div className="card card--square"></div>
         </div>
       </div>
       <div className="flex flex-col items-center justify-center">
