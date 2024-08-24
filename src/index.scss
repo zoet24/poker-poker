@@ -14,6 +14,12 @@
   @apply bg-white h-fit w-full flex p-2;
 }
 
+.swipe {
+  @apply transform transition-transform duration-500;
+
+  transition: transform 0.5s ease;
+}
+
 .card {
   @apply border-2 border-black rounded-md h-20 w-14 flex items-center justify-center;
 
@@ -32,6 +38,10 @@
 
 .card--rotate.card--sm {
   @apply w-14 h-9;
+}
+
+.chip {
+  @apply border-2 border-black h-14 w-14 rounded-full;
 }
 
 .btn {

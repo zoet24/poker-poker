@@ -1,4 +1,4 @@
-import React from "react";
+import PlayerAdd from "./PlayerAdd";
 import PlayerRow from "./PlayerRow";
 import GameControls from "./GameControls";
 
@@ -8,9 +8,10 @@ const App = () => {
       <GameControls />
       <div className="flex flex-col space-y-1 mt-1">
         <PlayerRow />
-        <PlayerRow />
-        <PlayerRow />
-        <PlayerRow />
+        <PlayerRow name="Fran" />
+        <PlayerRow name="Mike" potValue={20} hand="Full House" />
+        <PlayerRow name="Bron" potValue={5} hand="Two Pair" />
+        <PlayerAdd />
       </div>
     </div>
   );

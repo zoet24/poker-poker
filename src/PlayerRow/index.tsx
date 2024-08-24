@@ -1,12 +1,22 @@
-const PlayerRow = () => {
+interface PlayerRowProps {
+  name?: string;
+  potValue?: number;
+  hand?: string;
+}
+
+const PlayerRow: React.FC<PlayerRowProps> = ({
+  name = "Zoe",
+  potValue = 10,
+  hand = "High Card",
+}) => {
   return (
     <div className="container justify-between">
       <div className="flex">
         <div className="border w-20 h-20 rounded-full flex items-center justify-center">
-          Zoe
+          {name}
         </div>
         <div className="border w-10 h-10 rounded-full flex items-center justify-center self-center ml-[-16px] bg-black text-white">
-          10
+          {potValue}
         </div>
       </div>
       <div className="player-cards">
@@ -26,8 +36,8 @@ const PlayerRow = () => {
           <div className="card card--square"></div>
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center">
-        <h4>Full House</h4>
+      <div className="flex flex-col items-center justify-center w-20">
+        <h4>{hand}</h4>
         <p>457</p>
       </div>
     </div>
