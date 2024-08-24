@@ -1,0 +1,72 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.border {
+  @apply border-2 border-black;
+}
+
+.screen {
+  @apply bg-blue-200 h-screen w-screen;
+}
+
+.container {
+  @apply bg-white h-fit w-full flex p-2;
+}
+
+.card {
+  @apply border-2 border-black rounded-md h-20 w-14 flex items-center justify-center;
+
+  &--sm {
+    @apply h-full w-full;
+  }
+}
+
+.player-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.5fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 4px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "player-card-1 player-card-2 best-card-1"
+    "player-card-1 player-card-2 best-card-2"
+    "player-card-1 player-card-2 best-card-3";
+}
+
+.player-card--1 {
+  grid-area: player-card-1;
+}
+
+.player-card--2 {
+  grid-area: player-card-2;
+}
+
+.best-card--1 {
+  grid-area: best-card-1;
+}
+
+.best-card--2 {
+  grid-area: best-card-2;
+}
+
+.best-card--3 {
+  grid-area: best-card-3;
+}
+
+// .card {
+//   margin: 0.25rem;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   border-radius: 0.375rem;
+//   border-width: 1px;
+//   --tw-border-opacity: 1;
+//   border-color: rgb(0 0 0 / var(--tw-border-opacity));
+//   --tw-bg-opacity: 1;
+//   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+//   text-align: center;
+//   font-weight: 700;
+//   width: 40px;
+//   height: 60px;
+// }
