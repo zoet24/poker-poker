@@ -2,6 +2,12 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .border {
   @apply border-2 border-black;
 }
@@ -42,6 +48,10 @@
 
 .chip {
   @apply border-2 border-black h-14 w-14 rounded-full;
+
+  &--sm {
+    @apply h-12 w-12;
+  }
 }
 
 .btn {
@@ -49,7 +59,7 @@
 }
 
 .pot-value {
-  @apply bg-black text-white w-16 h-16 rounded-full flex items-end justify-center absolute top-12 left-1/2 -z-10 p-2;
+  @apply bg-black text-white w-16 h-16 rounded-full flex items-end justify-center absolute top-12 left-1/2 py-2;
 
   transform: translate(-50%, 0);
 }

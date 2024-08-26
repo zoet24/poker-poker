@@ -30,7 +30,7 @@ const PlayerAdd = () => {
               <div className="card card--square border-dashed"></div>
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center w-20">
+          <div className="flex flex-col items-center justify-center w-28">
             <p>Add player</p>
           </div>
         </div>
