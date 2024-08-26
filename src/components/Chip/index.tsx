@@ -2,15 +2,20 @@ import React from "react";
 
 interface ChipProps {
   size?: "sm" | "md";
+  value?: number;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  index?: number;
 }
 
-const Chip: React.FC<ChipProps> = ({ size = "md" }) => {
+const Chip: React.FC<ChipProps> = ({ size = "md", value, onChange, index }) => {
   return (
     <div className="relative">
       <input
         className={`chip text-center ${size === "sm" && "chip--sm"}`}
         placeholder="10"
         type="number"
+        value={value ? value : ""}
+        onChange={onChange}
       ></input>
       {size === "md" && (
         <input

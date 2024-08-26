@@ -1,10 +1,12 @@
+import ChipContext from "contexts/ChipContext";
 import Chip from "../Chip";
 import LayoutContext from "contexts/LayoutContext";
 import { useContext, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 
-const GameControls = () => {
+const NavbarSwipe = () => {
   const { showCards, setShowCards } = useContext(LayoutContext);
+  const { chipValues, updateChipValues } = useContext(ChipContext);
 
   const disableScroll = () => {
     document.body.style.overflow = "hidden";
@@ -21,6 +23,14 @@ const GameControls = () => {
     onSwiped: enableScroll,
     trackMouse: true,
   });
+
+  const handleChipChange =
+    (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = parseInt(event.target.value, 10);
+      if (!isNaN(newValue)) {
+        updateChipValues(index, newValue);
+      }
+    };
 
   return (
     <div
@@ -62,15 +72,18 @@ const GameControls = () => {
             showCards ? "translate-x-full" : "translate-x-0"
           }`}
         >
-          <Chip />
-          <Chip />
-          <Chip />
-          <Chip />
-          <Chip />
+          {chipValues.map((chipValue, index) => (
+            <Chip
+              key={index}
+              index={index}
+              value={chipValue}
+              onChange={handleChipChange(index)}
+            />
+          ))}
         </div>
       </div>
     </div>
   );
 };
 
-export default GameControls;
+export default NavbarSwipe;
