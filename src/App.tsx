@@ -1,6 +1,6 @@
-import PlayerAdd from "./PlayerAdd";
-import PlayerRow from "./PlayerRow";
-import GameControls from "./GameControls";
+import PlayerAdd from "./components/PlayerAdd";
+import PlayerRow from "./components/PlayerRow";
+import GameControls from "./components/GameControls";
 
 const App = () => {
   return (
