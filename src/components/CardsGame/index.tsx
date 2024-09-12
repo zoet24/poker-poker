@@ -1,14 +1,14 @@
 import CardsDeck from "../CardsDeck";
-import CardsDealt from "../CardsDealt";
+import CardsCommunity from "../CardsCommunity";
 import CardsBurn from "../CardsBurn";
 
-// Deck, dealt cards, burn pile
+// Deck, community cards, burn pile
 
 const CardsGame = () => {
   return (
-    <div className="flex">
+    <div className="flex items-center justify-center space-x-1">
       <CardsDeck />
-      <CardsDealt />
+      <CardsCommunity />
       <CardsBurn />
     </div>
   );

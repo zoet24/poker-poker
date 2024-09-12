@@ -8,13 +8,25 @@ import ModalPlayerStats from "../ModalPlayerStats";
 // When layout = game, it shows the game cards
 // Tapping player row opens modal stats
 
-const RowPlayer = () => {
+export interface PlayerProps {
+  name: string;
+  money: number;
+}
+
+interface RowPlayerProps {
+  player: PlayerProps;
+}
+
+const RowPlayer: React.FC<RowPlayerProps> = ({ player }) => {
+  const { name, money } = player;
+
   return (
-    <div className="flex">
-      RowPlayer
-      <Player />
-      <PlayerHand />
-      <PlayerScore />
+    <div className="box p-2">
+      <div className="flex justify-between items-center max-w-96 mx-auto">
+        <Player name={name} money={money} />
+        <PlayerHand />
+        <PlayerScore />
+      </div>
       {/* <Modal>
         <ModalPlayerStats />
       </Modal> */}

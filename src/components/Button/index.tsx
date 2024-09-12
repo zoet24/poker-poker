@@ -1,7 +1,9 @@
-import React from "react";
+interface ButtonProps {
+  text: string;
+}
 
-const Button = () => {
-  return <div>Button</div>;
+const Button: React.FC<ButtonProps> = ({ text }) => {
+  return <div className="btn">{text}</div>;
 };
 
 export default Button;

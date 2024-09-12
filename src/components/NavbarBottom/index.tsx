@@ -6,11 +6,12 @@ import React from "react";
 
 const NavbarBottom = () => {
   return (
-    <div className="bg-white fixed bottom-0 left-0 right-0">
-      NavbarBottom
-      <div className="flex">
-        <Button />
-        <Button />
+    <div className="fixed bottom-0 left-0 right-0 z-10">
+      <div className="box flex justify-center relative p-2">
+        <div className="btn-pair">
+          <Button text="Deal cards" />
+          <Button text="Reset game" />
+        </div>
       </div>
     </div>
   );

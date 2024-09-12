@@ -8,15 +8,21 @@ import ModalAddPlayer from "../ModalAddPlayer";
 // Tapping add player row opens add player modal
 
 const RowAddPlayer = () => {
+  const handleAddPlayer = () => {
+    console.log("Handle add player");
+  };
+
   return (
-    <div className="flex">
-      RowAddPlayer
-      <div>+</div>
-      <PlayerHand />
-      <PlayerScore />
+    <div className="box p-2 cursor-pointer" onClick={handleAddPlayer}>
+      <div className="flex justify-between items-center max-w-96 mx-auto">
+        {/* Player */}
+        <div className="player-name border-dashed text-2xl">+</div>
+        <PlayerHand />
+        <PlayerScore />
+      </div>
       {/* <Modal>
-        <ModalAddPlayer />
-      </Modal> */}
+      <ModalPlayerStats />
+    </Modal> */}
     </div>
   );
 };

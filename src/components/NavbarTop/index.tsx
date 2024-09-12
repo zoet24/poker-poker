@@ -6,9 +6,8 @@ import Pot from "../Pot";
 
 const NavbarTop = () => {
   return (
-    <div className="bg-white fixed top-0 left-0 right-0">
-      NavbarTop
-      <div className="flex relative">
+    <div className="fixed top-0 left-0 right-0 z-10">
+      <div className="box flex justify-center relative p-2">
         <CardsGame />
         <Pot />
       </div>

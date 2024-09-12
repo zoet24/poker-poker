@@ -4,8 +4,7 @@ import Card from "../Card";
 
 const PlayerHand = () => {
   return (
-    <div>
-      PlayerHand
+    <div className="flex space-x-1">
       <Card />
       <Card />
     </div>

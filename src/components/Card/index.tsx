@@ -1,16 +1,21 @@
 import Modal from "../Modal";
 import ModalPickCard from "../ModalPickCard";
-import React from "react";
 
 // Single card
 // Can be pre-dealt (no value, dotted border), tapping on this opens pick card modal which is used to pick a value for the card
 // Can be dealt and hidden (no value, solid border)
 // Can be dealt and shown (value, solid border)
 
-const Card = () => {
+interface CardProps {
+  size?: "sm" | "square";
+}
+
+const Card: React.FC<CardProps> = ({ size }) => {
+  const sizeClass = size ? `card--${size}` : null;
+
   return (
     <div>
-      Card
+      <div className={`card card--red ${sizeClass ? sizeClass : ""}`}>9H</div>
       {/* <Modal> */}
       {/* <ModalPickCard /> */}
       {/* </Modal> */}
