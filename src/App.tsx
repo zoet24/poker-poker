@@ -3,18 +3,22 @@ import NavbarBottom from "./components/NavbarBottom";
 import NavbarTop from "./components/NavbarTop";
 import RowAddPlayer from "./components/RowAddPlayer";
 
+// Player context
 const players = [
   {
     name: "Zoe",
     money: 5.0,
+    hand: [],
   },
   {
     name: "Fran",
     money: 4.8,
+    hand: [],
   },
   {
     name: "Mike",
     money: 5.22,
+    hand: [],
   },
 ];
 
