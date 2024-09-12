@@ -1,6 +1,6 @@
-import ChipContext from "contexts/ChipContext";
+import ChipContext from "v1/contexts/ChipContext";
 import Chip from "../Chip";
-import LayoutContext from "contexts/LayoutContext";
+import LayoutContext from "v1/contexts/LayoutContext";
 import { useContext, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 

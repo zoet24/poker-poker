@@ -1,21 +1,15 @@
-import PlayerAdd from "./components/PlayerAdd";
-import PlayerRow from "./components/PlayerRow";
-import NavbarSwipe from "./components/NavbarSwipe";
-import { useContext } from "react";
-import PlayersContext from "contexts/PlayersContext";
+import RowPlayer from "./components/RowPlayer";
+import NavbarBottom from "./components/NavbarBottom";
+import NavbarTop from "./components/NavbarTop";
+import RowAddPlayer from "./components/RowAddPlayer";
 
 const App = () => {
-  const { players } = useContext(PlayersContext);
-
   return (
-    <div className="screen pt-20">
-      <NavbarSwipe />
-      <div className="flex flex-col space-y-1 mt-1">
-        {players.map((player) => (
-          <PlayerRow name={player.name} />
-        ))}
-        <PlayerAdd />
-      </div>
+    <div className="bg-blue-500 h-screen relative">
+      {/* <NavbarTop /> */}
+      <RowPlayer />
+      <RowAddPlayer />
+      <NavbarBottom />
     </div>
   );
 };

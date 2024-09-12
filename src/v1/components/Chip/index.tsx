@@ -12,7 +12,7 @@ const Chip: React.FC<ChipProps> = ({ size = "md", value, onChange, index }) => {
     <div className="relative">
       <input
         className={`chip text-center ${size === "sm" && "chip--sm"}`}
-        placeholder="10"
+        placeholder="0"
         type="number"
         value={value ? value : ""}
         onChange={onChange}
@@ -20,7 +20,7 @@ const Chip: React.FC<ChipProps> = ({ size = "md", value, onChange, index }) => {
       {size === "md" && (
         <input
           className="bg-black h-8 w-8 rounded-full text-center text-sm absolute top-[-10px] right-[-10px] text-white"
-          placeholder="10"
+          placeholder="0"
           type="number"
         ></input>
       )}

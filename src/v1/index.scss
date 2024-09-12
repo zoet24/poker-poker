@@ -1,0 +1,114 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.border {
+  @apply border-2 border-black;
+}
+
+.screen {
+  @apply bg-blue-200 h-screen w-screen relative;
+}
+
+.container {
+  @apply bg-white h-fit w-full flex p-2;
+}
+
+.swipe {
+  @apply transform transition-transform duration-500;
+
+  transition: transform 0.5s ease;
+}
+
+.card {
+  @apply border-2 border-black rounded-md h-20 w-14 flex items-center justify-center;
+
+  &--sm {
+    @apply h-14 w-9;
+  }
+
+  &--square {
+    @apply h-full w-full;
+  }
+}
+
+.card--rotate {
+  @apply w-20 h-14;
+}
+
+.card--rotate.card--sm {
+  @apply w-14 h-9;
+}
+
+.chip {
+  @apply border-2 border-black h-14 w-14 rounded-full;
+
+  &--sm {
+    @apply h-12 w-12;
+  }
+}
+
+.btn {
+  @apply border-2 border-black rounded-md p-2 h-fit min-w-16 text-center;
+}
+
+.pot-value {
+  @apply bg-black text-white w-16 h-16 rounded-full flex items-end justify-center absolute top-12 left-1/2 py-2;
+
+  transform: translate(-50%, 0);
+}
+
+.player-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.5fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 4px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "player-card-1 player-card-2 best-card-1"
+    "player-card-1 player-card-2 best-card-2"
+    "player-card-1 player-card-2 best-card-3";
+}
+
+.player-card--1 {
+  grid-area: player-card-1;
+}
+
+.player-card--2 {
+  grid-area: player-card-2;
+}
+
+.best-card--1 {
+  grid-area: best-card-1;
+}
+
+.best-card--2 {
+  grid-area: best-card-2;
+}
+
+.best-card--3 {
+  grid-area: best-card-3;
+}
+
+// .card {
+//   margin: 0.25rem;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   border-radius: 0.375rem;
+//   border-width: 1px;
+//   --tw-border-opacity: 1;
+//   border-color: rgb(0 0 0 / var(--tw-border-opacity));
+//   --tw-bg-opacity: 1;
+//   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+//   text-align: center;
+//   font-weight: 700;
+//   width: 40px;
+//   height: 60px;
+// }

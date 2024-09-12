@@ -1,7 +1,7 @@
 import React, { createContext, useState, ReactNode } from "react";
 
 // Define the Player type
-interface Player {
+export interface Player {
   name: string;
 }
 
@@ -11,14 +11,16 @@ interface PlayersContextProps {
   addPlayer: (name: string) => void;
 }
 
+export const players = [
+  { name: "Zoe" },
+  { name: "Fran" },
+  { name: "Mike" },
+  { name: "Bron" },
+];
+
 // Provide a default value for the context
 const defaultValue: PlayersContextProps = {
-  players: [
-    { name: "Zoe" },
-    { name: "Fran" },
-    { name: "Mike" },
-    { name: "Bron" },
-  ],
+  players,
   addPlayer: () => {},
 };
 
