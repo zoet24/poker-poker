@@ -8,34 +8,43 @@ import { Card as CardType, suitSymbols, suitColors } from "../../types/cards";
 // Can be dealt and shown (value, solid border)
 
 interface CardProps {
-  card: CardType;
+  card?: CardType;
   size?: "sm" | "square";
+  showCard?: boolean;
 }
 
 const getCardDisplayValue = (rank: CardType["rank"]): string => {
   switch (rank) {
     case "11":
-      return "J"; // Jack
+      return "J";
     case "12":
-      return "Q"; // Queen
+      return "Q";
     case "13":
-      return "K"; // King
+      return "K";
     case "14":
-      return "A"; // Ace
+      return "A";
     default:
-      return rank; // Return number rank as string for cards 2-10
+      return rank;
   }
 };
 
-const Card: React.FC<CardProps> = ({ card, size }) => {
-  const colourClass = `card--${suitColors[card.suit]}`;
+const Card: React.FC<CardProps> = ({ card, size, showCard = true }) => {
+  const colourClass = card ? `card--${suitColors[card.suit]}` : null;
   const sizeClass = size ? `card--${size}` : null;
 
   return (
     <div>
-      <div className={`card ${colourClass} ${sizeClass ? sizeClass : ""}`}>
-        <span>{getCardDisplayValue(card.rank)}</span>
-        <span>{suitSymbols[card.suit]}</span>
+      <div
+        className={`card ${colourClass ? colourClass : ""} ${
+          sizeClass ? sizeClass : ""
+        } ${card ? "" : "card--empty"}`}
+      >
+        {card && showCard && (
+          <>
+            <span>{getCardDisplayValue(card.rank)}</span>
+            <span>{suitSymbols[card.suit]}</span>
+          </>
+        )}
       </div>
       {/* <Modal> */}
       {/* <ModalPickCard /> */}

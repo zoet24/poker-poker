@@ -17,7 +17,7 @@ const RowAddPlayer = () => {
       <div className="flex justify-between items-center max-w-96 mx-auto">
         {/* Player */}
         <div className="player-name border-dashed text-2xl">+</div>
-        <PlayerHand />
+        {/* <PlayerHand /> */}
         <PlayerScore />
       </div>
       {/* <Modal>

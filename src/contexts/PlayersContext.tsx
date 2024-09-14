@@ -14,16 +14,19 @@ const initialPlayers: Player[] = [
     name: "Zoe",
     money: 5.0,
     hand: [],
+    showCards: true,
   },
   {
     name: "Fran",
     money: 4.8,
     hand: [],
+    showCards: false,
   },
   {
     name: "Mike",
     money: 5.22,
     hand: [],
+    showCards: true,
   },
 ];
 

@@ -58,4 +58,8 @@
   &--red {
     @apply text-red-500;
   }
+
+  &--empty {
+    @apply border-dashed;
+  }
 }
