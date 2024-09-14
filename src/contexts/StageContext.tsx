@@ -1,5 +1,13 @@
-import React, { useState, ReactNode, createContext, useEffect } from "react";
+import React, {
+  useState,
+  ReactNode,
+  createContext,
+  useEffect,
+  useContext,
+} from "react";
 import { GameStage } from "types/stage";
+import CardsContext from "./CardsContext";
+import PlayersContext from "./PlayersContext";
 
 // Stages in the game in order
 const stages: GameStage[] = ["pre-deal", "deal", "flop", "turn", "river"];
@@ -25,6 +33,8 @@ const StageContext = createContext<StageContextProps>(defaultValue);
 export const StageProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const { resetDeck } = useContext(CardsContext);
+  const { resetPlayers } = useContext(PlayersContext);
   const [stage, setStage] = useState<GameStage>("pre-deal");
 
   // Function to progress to the next stage

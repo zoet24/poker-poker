@@ -35,6 +35,7 @@ interface PlayersContextProps {
   players: Player[];
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
   resetPlayers: () => void;
+  resetPlayersHands: () => void;
 }
 
 // Default values for the context
@@ -42,6 +43,7 @@ const defaultValue: PlayersContextProps = {
   players: initialPlayers,
   setPlayers: () => {},
   resetPlayers: () => {},
+  resetPlayersHands: () => {},
 };
 
 // Create the context
@@ -59,12 +61,23 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
     setPlayers(initialPlayers);
   };
 
+  const resetPlayersHands = () => {
+    setPlayers((prevPlayers) =>
+      prevPlayers.map((player) => ({
+        ...player,
+        hand: [],
+      }))
+    );
+  };
+
   useEffect(() => {
     console.log("Players: ", players);
   }, [stage]);
 
   return (
-    <PlayersContext.Provider value={{ players, setPlayers, resetPlayers }}>
+    <PlayersContext.Provider
+      value={{ players, setPlayers, resetPlayers, resetPlayersHands }}
+    >
       {children}
     </PlayersContext.Provider>
   );

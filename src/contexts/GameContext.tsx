@@ -12,10 +12,16 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const { stage } = useContext(StageContext);
-  const { deck, setDeck } = useContext(CardsContext);
-  const { players, setPlayers } = useContext(PlayersContext);
+  const { deck, setDeck, resetDeck } = useContext(CardsContext);
+  const { players, setPlayers, resetPlayersHands } = useContext(PlayersContext);
 
   useEffect(() => {
+    // Reset deck and clear players' hands
+    if (stage === "pre-deal") {
+      resetDeck();
+      resetPlayersHands();
+    }
+
     // Deal two cards to each player
     if (stage === "deal") {
       let localDeck = [...deck];
