@@ -1,3 +1,5 @@
+import CardsContext from "contexts/CardsContext";
+import { useContext } from "react";
 import { Card, Rank, Suit } from "types/cards";
 
 const ranks: Rank[] = [
@@ -46,4 +48,35 @@ export const drawCardFromDeck = (localDeck: Card[]): [Card | null, Card[]] => {
   const drawnCard = localDeck[0];
   const newDeck = localDeck.slice(1);
   return [drawnCard, newDeck];
+};
+
+// Function to burn a card
+export const burnCard = (
+  localDeck: Card[],
+  addToBurn: (card: Card) => void
+): Card[] => {
+  const [burnedCard, newLocalDeck] = drawCardFromDeck(localDeck);
+  if (burnedCard) {
+    addToBurn(burnedCard);
+  }
+  return newLocalDeck;
+};
+
+// Function to deal a card to the community cards
+export const dealToCommunity = (
+  numberOfCards: number,
+  localDeck: Card[],
+  addToCommunity: (cards: Card[]) => void
+): Card[] => {
+  const communityCards: Card[] = [];
+  let updatedDeck = localDeck;
+  for (let i = 0; i < numberOfCards; i++) {
+    const [card, newLocalDeck] = drawCardFromDeck(updatedDeck);
+    updatedDeck = newLocalDeck;
+    if (card) {
+      communityCards.push(card);
+    }
+  }
+  addToCommunity(communityCards);
+  return updatedDeck;
 };
