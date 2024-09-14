@@ -1,15 +1,24 @@
-import React, { createContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useState,
+  ReactNode,
+  useContext,
+  useEffect,
+} from "react";
 import { generateDeck, Card } from "../utils/deck";
+import GameContext from "./GameContext";
 
 // Define the shape of the cards context
 interface CardsContextProps {
   deck: Card[];
+  setDeck: React.Dispatch<React.SetStateAction<Card[]>>;
   resetDeck: () => void;
 }
 
 // Default values for the context
 const defaultValue: CardsContextProps = {
   deck: [],
+  setDeck: () => {},
   resetDeck: () => {},
 };
 
@@ -20,16 +29,20 @@ const CardsContext = createContext<CardsContextProps>(defaultValue);
 export const CardsProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  // Pass a function to useState to ensure generateDeck is only called once
   const [deck, setDeck] = useState<Card[]>(() => generateDeck());
+  const { stage } = useContext(GameContext);
 
   // Function to reset the deck
   const resetDeck = () => {
-    setDeck(generateDeck()); // Generate a fresh deck
+    setDeck(generateDeck());
   };
 
+  useEffect(() => {
+    console.log("Deck: ", deck);
+  }, [stage]);
+
   return (
-    <CardsContext.Provider value={{ deck, resetDeck }}>
+    <CardsContext.Provider value={{ deck, setDeck, resetDeck }}>
       {children}
     </CardsContext.Provider>
   );

@@ -9,7 +9,7 @@ import ModalAddPlayer from "../ModalAddPlayer";
 
 const RowAddPlayer = () => {
   const handleAddPlayer = () => {
-    console.log("Handle add player");
+    // console.log("Handle add player");
   };
 
   return (

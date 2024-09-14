@@ -2,27 +2,14 @@ import RowPlayer from "./components/RowPlayer";
 import NavbarBottom from "./components/NavbarBottom";
 import NavbarTop from "./components/NavbarTop";
 import RowAddPlayer from "./components/RowAddPlayer";
-
-// Player context
-const players = [
-  {
-    name: "Zoe",
-    money: 5.0,
-    hand: [],
-  },
-  {
-    name: "Fran",
-    money: 4.8,
-    hand: [],
-  },
-  {
-    name: "Mike",
-    money: 5.22,
-    hand: [],
-  },
-];
+import { useContext, useEffect } from "react";
+import PlayersContext from "contexts/PlayersContext";
+import GameContext from "contexts/GameContext";
 
 const App = () => {
+  const { players } = useContext(PlayersContext);
+  // const { stage } = useContext(GameContext);
+
   return (
     <div className="bg-blue-500 h-screen relative">
       <NavbarTop />

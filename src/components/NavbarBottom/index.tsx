@@ -27,8 +27,8 @@ const NavbarBottom = () => {
   const { stage, nextStage, resetStage } = useContext(GameContext);
   const { deck } = useContext(CardsContext);
 
-  console.log("Game stage: ", stage);
-  console.log("Deck: ", deck);
+  // console.log("Game stage: ", stage);
+  // console.log("Deck: ", deck);
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-10">
