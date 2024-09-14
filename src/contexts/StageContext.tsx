@@ -1,7 +1,5 @@
 import React, { useState, ReactNode, createContext, useEffect } from "react";
-
-// Define the possible game stages and the stages array
-export type GameStage = "pre-deal" | "deal" | "flop" | "turn" | "river";
+import { GameStage } from "types/stage";
 
 // Stages in the game in order
 const stages: GameStage[] = ["pre-deal", "deal", "flop", "turn", "river"];

@@ -1,8 +1,12 @@
-import { PlayerProps } from "../RowPlayer";
-
 // Display for player name and money
 
-const Player: React.FC<PlayerProps> = ({ name, money }) => {
+import React from "react";
+import { Player as PlayerProps } from "types/players";
+
+// Create a type that omits the "hand" property from PlayerProps
+type PlayerDisplayProps = Omit<PlayerProps, "hand">;
+
+const Player: React.FC<PlayerDisplayProps> = ({ name, money }) => {
   return (
     <div className="player relative">
       <div className="player-name">{name}</div>

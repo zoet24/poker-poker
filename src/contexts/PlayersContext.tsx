@@ -5,15 +5,8 @@ import React, {
   useEffect,
   useContext,
 } from "react";
-import { Card } from "../utils/deck";
 import StageContext from "./StageContext";
-
-// Define the Player type
-interface Player {
-  name: string;
-  money: number;
-  hand: Card[];
-}
+import { Player } from "types/players";
 
 // Define the initial players array
 const initialPlayers: Player[] = [

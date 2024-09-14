@@ -3,15 +3,11 @@ import Player from "../Player";
 import PlayerHand from "../PlayerHand";
 import PlayerScore from "../PlayerScore";
 import ModalPlayerStats from "../ModalPlayerStats";
+import { Player as PlayerProps } from "../../types/players";
 
 // Container for player elements - name, money, hand, score
 // When layout = game, it shows the game cards
 // Tapping player row opens modal stats
-
-export interface PlayerProps {
-  name: string;
-  money: number;
-}
 
 interface RowPlayerProps {
   player: PlayerProps;

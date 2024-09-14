@@ -8,7 +8,11 @@ const PlayerScore = () => {
       <span>High card (123)</span>
       <div className="flex space-x-1 mt-1">
         {Array.from({ length: 5 }, (_, index) => (
-          <Card key={index} size="square" />
+          <Card
+            key={index}
+            size="square"
+            card={{ rank: "14", suit: "clubs" }}
+          />
         ))}
       </div>
     </div>

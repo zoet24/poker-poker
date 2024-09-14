@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useContext, useEffect } from "react";
 import CardsContext from "./CardsContext";
 import StageContext from "./StageContext";
 import PlayersContext from "./PlayersContext";
-import { Card } from "../utils/deck";
+import { drawCardFromDeck } from "../utils/deck";
 
 interface GameContextProps {}
 
@@ -15,16 +15,6 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
   const { deck, setDeck } = useContext(CardsContext);
   const { players, setPlayers } = useContext(PlayersContext);
 
-  // Function to draw a card from the deck
-  const drawCardFromDeck = (localDeck: Card[]): [Card | null, Card[]] => {
-    if (localDeck.length === 0) {
-      throw new Error("Deck is empty");
-    }
-    const drawnCard = localDeck[0];
-    const newDeck = localDeck.slice(1);
-    return [drawnCard, newDeck];
-  };
-
   useEffect(() => {
     // Deal two cards to each player
     if (stage === "deal") {
@@ -36,7 +26,6 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
         for (let i = 0; i < 2; i++) {
           const [card, newLocalDeck] = drawCardFromDeck(localDeck);
           localDeck = newLocalDeck;
-          console.log("Drawn card in useEffect", card);
           if (card) {
             newHand.push(card);
           }

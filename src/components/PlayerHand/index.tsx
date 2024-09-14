@@ -5,8 +5,8 @@ import Card from "../Card";
 const PlayerHand = () => {
   return (
     <div className="flex space-x-1">
-      <Card />
-      <Card />
+      <Card card={{ rank: "10", suit: "clubs" }} />
+      <Card card={{ rank: "10", suit: "diamonds" }} />
     </div>
   );
 };

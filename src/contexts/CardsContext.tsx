@@ -5,8 +5,9 @@ import React, {
   useContext,
   useEffect,
 } from "react";
-import { generateDeck, Card } from "../utils/deck";
+import { generateDeck } from "../utils/deck";
 import StageContext from "./StageContext";
+import { Card } from "types/cards";
 
 // Define the shape of the cards context
 interface CardsContextProps {
