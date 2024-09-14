@@ -20,6 +20,10 @@
 
 .btn {
   @apply border-black border-2 rounded-lg bg-white p-2 min-w-28 text-center capitalize cursor-pointer;
+
+  &:disabled {
+    @apply cursor-default border-gray-400 text-gray-400;
+  }
 }
 
 // Players

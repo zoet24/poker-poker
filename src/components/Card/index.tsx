@@ -15,7 +15,10 @@ const Card: React.FC<CardProps> = ({ size }) => {
 
   return (
     <div>
-      <div className={`card card--red ${sizeClass ? sizeClass : ""}`}>9H</div>
+      <div className={`card card--red ${sizeClass ? sizeClass : ""}`}>
+        <span>9</span>
+        <span>H</span>
+      </div>
       {/* <Modal> */}
       {/* <ModalPickCard /> */}
       {/* </Modal> */}
