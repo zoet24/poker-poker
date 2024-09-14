@@ -20,7 +20,7 @@ const initialPlayers: Player[] = [
     name: "Fran",
     money: 4.8,
     hand: [],
-    showCards: false,
+    showCards: true,
   },
   {
     name: "Mike",

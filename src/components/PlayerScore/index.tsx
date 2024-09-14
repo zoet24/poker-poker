@@ -11,7 +11,7 @@ const PlayerScore = () => {
           <Card
             key={index}
             size="square"
-            card={{ rank: "14", suit: "clubs" }}
+            // card={{ rank: "14", suit: "clubs" }}
           />
         ))}
       </div>

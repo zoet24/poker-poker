@@ -12,23 +12,23 @@ import { Card } from "types/cards";
 // Define the shape of the cards context
 interface CardsContextProps {
   deck: Card[];
-  burnPile: Card[];
+  burn: Card[];
   communityCards: Card[];
   setDeck: React.Dispatch<React.SetStateAction<Card[]>>;
   resetDeck: () => void;
   addToCommunity: (cards: Card[]) => void;
-  addToBurnPile: (card: Card) => void;
+  addToBurn: (card: Card) => void;
 }
 
 // Default values for the context
 const defaultValue: CardsContextProps = {
   deck: [],
-  burnPile: [],
+  burn: [],
   communityCards: [],
   setDeck: () => {},
   resetDeck: () => {},
   addToCommunity: () => {},
-  addToBurnPile: () => {},
+  addToBurn: () => {},
 };
 
 // Create the context
@@ -39,14 +39,14 @@ export const CardsProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [deck, setDeck] = useState<Card[]>(() => generateDeck());
-  const [burnPile, setBurnPile] = useState<Card[]>([]);
+  const [burn, setBurn] = useState<Card[]>([]);
   const [communityCards, setCommunityCards] = useState<Card[]>([]);
   const { stage } = useContext(StageContext);
 
   // Function to reset the deck
   const resetDeck = () => {
     setDeck(generateDeck());
-    setBurnPile([]);
+    setBurn([]);
     setCommunityCards([]);
   };
 
@@ -56,26 +56,26 @@ export const CardsProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   // Function to add a card to the burn pile
-  const addToBurnPile = (card: Card) => {
-    setBurnPile((prev) => [...prev, card]);
+  const addToBurn = (card: Card) => {
+    setBurn((prev) => [...prev, card]);
   };
 
   useEffect(() => {
     console.log("Deck: ", deck);
-    console.log("Burn pile: ", burnPile);
+    console.log("Burn pile: ", burn);
     console.log("Community cards: ", communityCards);
-  }, [stage, burnPile, communityCards]);
+  }, [stage, burn, communityCards]);
 
   return (
     <CardsContext.Provider
       value={{
         deck,
-        burnPile,
+        burn,
         communityCards,
         setDeck,
         resetDeck,
         addToCommunity,
-        addToBurnPile,
+        addToBurn,
       }}
     >
       {children}

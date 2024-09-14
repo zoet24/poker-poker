@@ -13,7 +13,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const { stage } = useContext(StageContext);
-  const { deck, setDeck, resetDeck, addToCommunity, addToBurnPile } =
+  const { deck, setDeck, resetDeck, addToCommunity, addToBurn } =
     useContext(CardsContext);
   const { players, setPlayers, resetPlayersHands } = useContext(PlayersContext);
 
@@ -25,7 +25,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
       const [burnedCard, newLocalDeck] = drawCardFromDeck(localDeck);
       localDeck = newLocalDeck;
       if (burnedCard) {
-        addToBurnPile(burnedCard);
+        addToBurn(burnedCard);
       }
     };
 
