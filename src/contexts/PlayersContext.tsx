@@ -6,7 +6,7 @@ import React, {
   useContext,
 } from "react";
 import { Card } from "../utils/deck";
-import GameContext from "./GameContext";
+import StageContext from "./StageContext";
 
 // Define the Player type
 interface Player {
@@ -56,7 +56,7 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
-  const { stage } = useContext(GameContext);
+  const { stage } = useContext(StageContext);
 
   // Function to reset players to their initial state
   const resetPlayers = () => {

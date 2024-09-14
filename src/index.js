@@ -2,19 +2,22 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.scss";
 import App from "./App";
-import { GameProvider } from "./contexts/GameContext";
+import { StageProvider } from "./contexts/StageContext";
 import { CardsProvider } from "./contexts/CardsContext";
 import { PlayersProvider } from "./contexts/PlayersContext";
+import { GameProvider } from "./contexts/GameContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <GameProvider>
+    <StageProvider>
       <CardsProvider>
         <PlayersProvider>
-          <App />
+          <GameProvider>
+            <App />
+          </GameProvider>
         </PlayersProvider>
       </CardsProvider>
-    </GameProvider>
+    </StageProvider>
   </React.StrictMode>
 );

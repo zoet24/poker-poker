@@ -1,54 +1,57 @@
-import React, { useState, ReactNode, createContext, useEffect } from "react";
+import React, { createContext, ReactNode, useContext, useEffect } from "react";
+import CardsContext from "./CardsContext";
+import StageContext from "./StageContext";
+import PlayersContext from "./PlayersContext";
+import { Card } from "../utils/deck";
 
-// Define the possible game stages and the stages array
-export type GameStage = "pre-deal" | "deal" | "flop" | "turn" | "river";
+interface GameContextProps {}
 
-// Stages in the game in order
-const stages: GameStage[] = ["pre-deal", "deal", "flop", "turn", "river"];
-
-// Define the shape of the context data
-interface GameContextProps {
-  stage: GameStage;
-  setStage: (stage: GameStage) => void;
-  nextStage: () => void;
-  resetStage: () => void;
-}
-
-// Default value for the context
-const defaultValue: GameContextProps = {
-  stage: "pre-deal",
-  setStage: () => {},
-  nextStage: () => {},
-  resetStage: () => {},
-};
-
-const GameContext = createContext<GameContextProps>(defaultValue);
+const GameContext = createContext<GameContextProps | undefined>(undefined);
 
 export const GameProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [stage, setStage] = useState<GameStage>("pre-deal");
+  const { stage } = useContext(StageContext);
+  const { deck, setDeck } = useContext(CardsContext);
+  const { players, setPlayers } = useContext(PlayersContext);
 
-  // Function to progress to the next stage
-  const nextStage = () => {
-    const currentIndex = stages.indexOf(stage);
-    const nextIndex = (currentIndex + 1) % stages.length;
-    setStage(stages[nextIndex]);
-  };
-
-  const resetStage = () => {
-    setStage("pre-deal");
+  // Function to draw a card from the deck
+  const drawCardFromDeck = (localDeck: Card[]): [Card | null, Card[]] => {
+    if (localDeck.length === 0) {
+      throw new Error("Deck is empty");
+    }
+    const drawnCard = localDeck[0];
+    const newDeck = localDeck.slice(1);
+    return [drawnCard, newDeck];
   };
 
   useEffect(() => {
-    console.log("Stage: ", stage);
+    // Deal two cards to each player
+    if (stage === "deal") {
+      let localDeck = [...deck];
+
+      const updatedPlayers = players.map((player) => {
+        let newHand = [...player.hand];
+
+        for (let i = 0; i < 2; i++) {
+          const [card, newLocalDeck] = drawCardFromDeck(localDeck);
+          localDeck = newLocalDeck;
+          console.log("Drawn card in useEffect", card);
+          if (card) {
+            newHand.push(card);
+          }
+        }
+
+        return {
+          ...player,
+          hand: newHand,
+        };
+      });
+
+      setPlayers(updatedPlayers);
+      setDeck(localDeck);
+    }
   }, [stage]);
 
-  return (
-    <GameContext.Provider value={{ stage, setStage, nextStage, resetStage }}>
-      {children}
-    </GameContext.Provider>
-  );
+  return <GameContext.Provider value={{}}>{children}</GameContext.Provider>;
 };
-
-export default GameContext;

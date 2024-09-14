@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from "react";
 import { generateDeck, Card } from "../utils/deck";
-import GameContext from "./GameContext";
+import StageContext from "./StageContext";
 
 // Define the shape of the cards context
 interface CardsContextProps {
@@ -30,7 +30,7 @@ export const CardsProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [deck, setDeck] = useState<Card[]>(() => generateDeck());
-  const { stage } = useContext(GameContext);
+  const { stage } = useContext(StageContext);
 
   // Function to reset the deck
   const resetDeck = () => {

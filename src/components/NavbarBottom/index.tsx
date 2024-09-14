@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import Button from "../Button";
-import GameContext, { GameStage } from "contexts/GameContext";
+import GameContext, { GameStage } from "contexts/StageContext";
 import CardsContext from "contexts/CardsContext";
 
 // Container for game controls at bottom of page
