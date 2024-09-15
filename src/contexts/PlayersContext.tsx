@@ -14,18 +14,21 @@ const initialPlayers: Player[] = [
     name: "Zoe",
     money: 5.0,
     hand: [],
+    bestHand: null,
     showCards: true,
   },
   {
     name: "Fran",
     money: 4.8,
     hand: [],
+    bestHand: null,
     showCards: true,
   },
   {
     name: "Mike",
     money: 5.22,
     hand: [],
+    bestHand: null,
     showCards: true,
   },
 ];
@@ -66,6 +69,7 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
       prevPlayers.map((player) => ({
         ...player,
         hand: [],
+        bestHand: null,
       }))
     );
   };

@@ -18,7 +18,7 @@ const RowAddPlayer = () => {
         {/* Player */}
         <div className="player-name border-dashed text-2xl">+</div>
         {/* <PlayerHand /> */}
-        <PlayerScore />
+        {/* <PlayerScore /> */}
       </div>
       {/* <Modal>
       <ModalPlayerStats />

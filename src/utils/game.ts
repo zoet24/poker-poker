@@ -83,3 +83,13 @@ export const evaluateHand = (cards: Card[]): HandRank => {
   const highCard = sortCardsByRank(cards).slice(0, 5); // Highest 5 cards
   return getHighCardScore(highCard);
 };
+
+export const evaluateBestHand = (
+  playerHand: Card[],
+  communityCards: Card[]
+): HandRank => {
+  const allCards = [...playerHand, ...communityCards];
+
+  // Evaluate and return the best possible hand
+  return evaluateHand(allCards);
+};

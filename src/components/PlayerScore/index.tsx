@@ -1,18 +1,28 @@
 // Display for player score
 
 import Card from "../Card";
+import { HandRank } from "types/cards";
 
-const PlayerScore = () => {
+interface PlayerScoreProps {
+  bestHand: HandRank | null;
+}
+
+const PlayerScore: React.FC<PlayerScoreProps> = ({ bestHand }) => {
+  const handToDisplay = bestHand
+    ? [
+        ...bestHand.cards,
+        ...Array(5 - bestHand.cards.length).fill(undefined),
+      ].slice(0, 5)
+    : Array(5).fill(undefined);
+
   return (
     <div className="text-center">
-      <span>High card (123)</span>
+      <span>
+        {bestHand?.rankName} ({bestHand?.rank})
+      </span>
       <div className="flex space-x-1 mt-1">
-        {Array.from({ length: 5 }, (_, index) => (
-          <Card
-            key={index}
-            size="square"
-            // card={{ rank: "14", suit: "clubs" }}
-          />
+        {handToDisplay.map((card, index) => (
+          <Card key={index} card={card} size="square" />
         ))}
       </div>
     </div>

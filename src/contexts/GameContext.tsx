@@ -3,18 +3,7 @@ import CardsContext from "./CardsContext";
 import StageContext from "./StageContext";
 import PlayersContext from "./PlayersContext";
 import { burnCard, dealToCommunity, drawCardFromDeck } from "../utils/deck";
-import { Card } from "types/cards";
-import {
-  isFlush,
-  isFourOfAKind,
-  isFullHouse,
-  isRoyalFlush,
-  isStraight,
-  isStraightFlush,
-  isThreeOfAKind,
-  isTwoPair,
-} from "../utils/handRanks";
-import { evaluateHand } from "../utils/game";
+import { evaluateBestHand, evaluateHand } from "../utils/game";
 
 interface GameContextProps {}
 
@@ -24,21 +13,15 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const { stage } = useContext(StageContext);
-  const { deck, setDeck, resetDeck, addToCommunity, addToBurn } =
-    useContext(CardsContext);
+  const {
+    deck,
+    communityCards,
+    setDeck,
+    resetDeck,
+    addToCommunity,
+    addToBurn,
+  } = useContext(CardsContext);
   const { players, setPlayers, resetPlayersHands } = useContext(PlayersContext);
-
-  console.log(
-    evaluateHand([
-      { rank: "4", suit: "hearts" },
-      { rank: "8", suit: "hearts" },
-      { rank: "4", suit: "spades" },
-      { rank: "8", suit: "diamonds" },
-      { rank: "6", suit: "spades" },
-      { rank: "9", suit: "hearts" },
-      { rank: "9", suit: "spades" },
-    ])
-  );
 
   useEffect(() => {
     let localDeck = [...deck];
@@ -87,6 +70,20 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     // Update the global deck
     setDeck(localDeck);
   }, [stage]);
+
+  useEffect(() => {
+    if (stage === "flop" || stage === "turn" || stage === "river") {
+      if (communityCards.length > 0) {
+        // Wait until community cards are updated, then evaluate players' hands
+        const updatedPlayers = players.map((player) => {
+          const bestHand = evaluateBestHand(player.hand, communityCards);
+          return { ...player, bestHand };
+        });
+
+        setPlayers(updatedPlayers); // Update players after community cards are available
+      }
+    }
+  }, [communityCards]);
 
   return <GameContext.Provider value={{}}>{children}</GameContext.Provider>;
 };

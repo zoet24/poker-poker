@@ -14,14 +14,14 @@ interface RowPlayerProps {
 }
 
 const RowPlayer: React.FC<RowPlayerProps> = ({ player }) => {
-  const { name, money, hand, showCards } = player;
+  const { name, money, hand, showCards, bestHand = null } = player;
 
   return (
     <div className="box p-2">
       <div className="flex justify-between items-center max-w-96 mx-auto">
         <Player name={name} money={money} />
         <PlayerHand hand={hand} showCards={showCards} />
-        <PlayerScore />
+        <PlayerScore bestHand={bestHand} />
       </div>
       {/* <Modal>
         <ModalPlayerStats />
