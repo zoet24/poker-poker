@@ -1,24 +1,6 @@
 import CardsContext from "contexts/CardsContext";
 import { useContext } from "react";
-import { Card, Rank, Suit } from "types/cards";
-
-const ranks: Rank[] = [
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "10",
-  "11",
-  "12",
-  "13",
-  "14",
-];
-
-const suits: Suit[] = ["hearts", "diamonds", "clubs", "spades"];
+import { Card, Rank, Suit, ranks, suits } from "types/cards";
 
 // Function to generate a new deck
 export const generateDeck = (): Card[] => {
