@@ -14,6 +14,7 @@ import {
   isThreeOfAKind,
   isTwoPair,
 } from "../utils/handRanks";
+import { evaluateHand } from "../utils/game";
 
 interface GameContextProps {}
 
@@ -28,7 +29,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
   const { players, setPlayers, resetPlayersHands } = useContext(PlayersContext);
 
   console.log(
-    isTwoPair([
+    evaluateHand([
       { rank: "4", suit: "hearts" },
       { rank: "8", suit: "hearts" },
       { rank: "4", suit: "spades" },
