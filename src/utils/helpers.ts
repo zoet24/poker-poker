@@ -1,3 +1,5 @@
+import { Card } from "types/cards";
+
 // Function to calculate factorial with memoization
 export const factorial = (() => {
   const cache: { [key: number]: number } = {}; // Cache to store computed factorials
@@ -39,4 +41,32 @@ export const isSequential = (array: number[]): boolean => {
     }
   }
   return true;
+};
+
+// Function to count occurrences of card ranks
+export const countRanks = (cards: Card[]): { [key: string]: number } => {
+  const valueCount: { [key: string]: number } = {};
+  cards.forEach((card) => {
+    valueCount[card.rank] = (valueCount[card.rank] || 0) + 1;
+  });
+  return valueCount;
+};
+
+// Function to sort cards by rank
+export const sortCardsByRank = (cards: Card[]): Card[] => {
+  return cards.sort((a, b) => parseInt(b.rank) - parseInt(a.rank));
+};
+
+// Function to find n of a kind cards
+export const findNOfAKind = (cards: Card[], n: number): Card[] | null => {
+  const valueCount = countRanks(cards);
+  const matchValue = Object.keys(valueCount).find(
+    (value) => valueCount[value] === n
+  );
+
+  if (matchValue) {
+    return cards.filter((card) => card.rank === matchValue);
+  }
+
+  return null;
 };

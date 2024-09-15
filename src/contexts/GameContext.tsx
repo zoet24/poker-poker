@@ -4,7 +4,16 @@ import StageContext from "./StageContext";
 import PlayersContext from "./PlayersContext";
 import { burnCard, dealToCommunity, drawCardFromDeck } from "../utils/deck";
 import { Card } from "types/cards";
-import { isRoyalFlush, isStraightFlush } from "../utils/hands";
+import {
+  isFlush,
+  isFourOfAKind,
+  isFullHouse,
+  isRoyalFlush,
+  isStraight,
+  isStraightFlush,
+  isThreeOfAKind,
+  isTwoPair,
+} from "../utils/handRanks";
 
 interface GameContextProps {}
 
@@ -19,14 +28,14 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
   const { players, setPlayers, resetPlayersHands } = useContext(PlayersContext);
 
   console.log(
-    isStraightFlush([
-      { rank: "10", suit: "spades" },
-      { rank: "11", suit: "spades" },
-      { rank: "12", suit: "spades" },
-      { rank: "13", suit: "spades" },
+    isTwoPair([
+      { rank: "4", suit: "hearts" },
+      { rank: "8", suit: "hearts" },
+      { rank: "4", suit: "spades" },
+      { rank: "8", suit: "diamonds" },
+      { rank: "6", suit: "spades" },
+      { rank: "9", suit: "hearts" },
       { rank: "9", suit: "spades" },
-      { rank: "10", suit: "hearts" },
-      { rank: "10", suit: "diamonds" },
     ])
   );
 

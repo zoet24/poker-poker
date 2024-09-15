@@ -53,5 +53,4 @@ export const suitColors = {
 export interface HandRank {
   rankName: string;
   rank: number;
-  cards: Card[];
 }
