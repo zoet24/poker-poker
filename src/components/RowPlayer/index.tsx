@@ -21,7 +21,7 @@ const RowPlayer: React.FC<RowPlayerProps> = ({ player }) => {
       <div className="flex justify-between items-center max-w-96 mx-auto">
         <Player name={name} money={money} />
         <PlayerHand hand={hand} showCards={showCards} />
-        <PlayerScore bestHand={bestHand} />
+        <PlayerScore showCards={showCards} bestHand={bestHand} />
       </div>
       {/* <Modal>
         <ModalPlayerStats />

@@ -4,10 +4,11 @@ import Card from "../Card";
 import { HandRank } from "types/cards";
 
 interface PlayerScoreProps {
+  showCards: boolean;
   bestHand: HandRank | null;
 }
 
-const PlayerScore: React.FC<PlayerScoreProps> = ({ bestHand }) => {
+const PlayerScore: React.FC<PlayerScoreProps> = ({ showCards, bestHand }) => {
   const handToDisplay = bestHand
     ? [
         ...bestHand.cards,
@@ -17,12 +18,16 @@ const PlayerScore: React.FC<PlayerScoreProps> = ({ bestHand }) => {
 
   return (
     <div className="text-center">
-      <span>
-        {bestHand?.rankName} ({bestHand?.rank})
-      </span>
+      {bestHand && showCards ? (
+        <span>
+          {bestHand?.rankName}: {bestHand?.rank}
+        </span>
+      ) : (
+        <span>---</span>
+      )}
       <div className="flex space-x-1 mt-1">
         {handToDisplay.map((card, index) => (
-          <Card key={index} card={card} size="square" />
+          <Card key={index} card={card} size="square" showCard={showCards} />
         ))}
       </div>
     </div>

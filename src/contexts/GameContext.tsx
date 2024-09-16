@@ -4,6 +4,10 @@ import StageContext from "./StageContext";
 import PlayersContext from "./PlayersContext";
 import { burnCard, dealToCommunity, drawCardFromDeck } from "../utils/deck";
 import { evaluateBestHand, evaluateHand } from "../utils/game";
+import {
+  getFourOfAKindScore,
+  getStraightFlushScore,
+} from "../utils/handScores";
 
 interface GameContextProps {}
 
@@ -35,6 +39,16 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
 
     // Handle deal: deal two cards to each player
     else if (stage === "deal") {
+      console.log(
+        "Score: ",
+        getFourOfAKindScore([
+          { rank: "14", suit: "hearts" },
+          { rank: "14", suit: "diamonds" },
+          { rank: "14", suit: "spades" },
+          { rank: "14", suit: "clubs" },
+          { rank: "13", suit: "hearts" },
+        ])
+      );
       const updatedPlayers = players.map((player) => {
         let newHand = [...player.hand];
         for (let i = 0; i < 2; i++) {
