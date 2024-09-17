@@ -20,7 +20,7 @@ const PlayerScore: React.FC<PlayerScoreProps> = ({ showCards, bestHand }) => {
     <div className="text-center">
       {bestHand && showCards ? (
         <span>
-          {bestHand?.rankName}: {bestHand?.rank}
+          {bestHand?.rankName}: {bestHand?.rank.toFixed(2)}
         </span>
       ) : (
         <span>---</span>

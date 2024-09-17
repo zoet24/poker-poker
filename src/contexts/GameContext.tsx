@@ -3,18 +3,7 @@ import CardsContext from "./CardsContext";
 import StageContext from "./StageContext";
 import PlayersContext from "./PlayersContext";
 import { burnCard, dealToCommunity, drawCardFromDeck } from "../utils/deck";
-import { evaluateBestHand, evaluateHand } from "../utils/game";
-import {
-  getFlushScore,
-  getFourOfAKindScore,
-  getFullHouseScore,
-  getHighCardScore,
-  getOnePairScore,
-  getStraightFlushScore,
-  getStraightScore,
-  getThreeOfAKindScore,
-  getTwoPairScore,
-} from "../utils/handScores";
+import { evaluateBestHand } from "../utils/game";
 
 interface GameContextProps {}
 
@@ -46,32 +35,6 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
 
     // Handle deal: deal two cards to each player
     else if (stage === "deal") {
-      // 553.54 2-3-4-5-7, 610 A-K-Q-J-9
-
-      // New 577 2-3-4-5-7, 679 A-K-Q-J-9
-
-      // 539,
-      console.log(
-        "low Score: ",
-        getFullHouseScore([
-          { rank: "2", suit: "hearts" },
-          { rank: "2", suit: "hearts" },
-          { rank: "2", suit: "hearts" },
-          { rank: "3", suit: "hearts" },
-          { rank: "3", suit: "hearts" },
-        ])
-      );
-
-      console.log(
-        "high Score: ",
-        getFullHouseScore([
-          { rank: "14", suit: "hearts" },
-          { rank: "14", suit: "hearts" },
-          { rank: "14", suit: "hearts" },
-          { rank: "13", suit: "hearts" },
-          { rank: "13", suit: "hearts" },
-        ])
-      );
       const updatedPlayers = players.map((player) => {
         let newHand = [...player.hand];
         for (let i = 0; i < 2; i++) {
@@ -117,7 +80,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
           return { ...player, bestHand };
         });
 
-        setPlayers(updatedPlayers); // Update players after community cards are available
+        setPlayers(updatedPlayers);
       }
     }
   }, [communityCards]);

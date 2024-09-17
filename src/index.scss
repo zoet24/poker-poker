@@ -63,3 +63,20 @@
     @apply border-dashed;
   }
 }
+
+.hand {
+  @apply outline rounded-lg;
+
+  &--veryGood {
+    @apply outline-blue-500;
+  }
+  &--good {
+    @apply outline-green-500;
+  }
+  &--medium {
+    @apply outline-yellow-500;
+  }
+  &--bad {
+    @apply outline-red-500;
+  }
+}
