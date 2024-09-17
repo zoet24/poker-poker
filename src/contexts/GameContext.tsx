@@ -5,8 +5,15 @@ import PlayersContext from "./PlayersContext";
 import { burnCard, dealToCommunity, drawCardFromDeck } from "../utils/deck";
 import { evaluateBestHand, evaluateHand } from "../utils/game";
 import {
+  getFlushScore,
   getFourOfAKindScore,
+  getFullHouseScore,
+  getHighCardScore,
+  getOnePairScore,
   getStraightFlushScore,
+  getStraightScore,
+  getThreeOfAKindScore,
+  getTwoPairScore,
 } from "../utils/handScores";
 
 interface GameContextProps {}
@@ -39,13 +46,29 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
 
     // Handle deal: deal two cards to each player
     else if (stage === "deal") {
+      // 553.54 2-3-4-5-7, 610 A-K-Q-J-9
+
+      // New 577 2-3-4-5-7, 679 A-K-Q-J-9
+
+      // 539,
       console.log(
-        "Score: ",
-        getFourOfAKindScore([
+        "low Score: ",
+        getFullHouseScore([
+          { rank: "2", suit: "hearts" },
+          { rank: "2", suit: "hearts" },
+          { rank: "2", suit: "hearts" },
+          { rank: "3", suit: "hearts" },
+          { rank: "3", suit: "hearts" },
+        ])
+      );
+
+      console.log(
+        "high Score: ",
+        getFullHouseScore([
           { rank: "14", suit: "hearts" },
-          { rank: "14", suit: "diamonds" },
-          { rank: "14", suit: "spades" },
-          { rank: "14", suit: "clubs" },
+          { rank: "14", suit: "hearts" },
+          { rank: "14", suit: "hearts" },
+          { rank: "13", suit: "hearts" },
           { rank: "13", suit: "hearts" },
         ])
       );

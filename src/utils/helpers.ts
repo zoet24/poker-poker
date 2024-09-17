@@ -70,3 +70,28 @@ export const findNOfAKind = (cards: Card[], n: number): Card[] | null => {
 
   return null;
 };
+
+// Calculate score contribution from a card rank
+export const calculateRankContribution = (
+  rank: number,
+  contribution: number,
+  factor: number
+): number => {
+  return (rank / 14) * (contribution / factor);
+};
+
+// Extract pairs and kickers from the card ranks
+export const getPairsAndKickers = (cards: Card[], pairCount: number) => {
+  const valueCount = countRanks(cards);
+  const pairs: Card[] = [];
+  const kickers: Card[] = [];
+
+  for (const rank in valueCount) {
+    if (valueCount[rank] === pairCount) {
+      pairs.push(...cards.filter((card) => card.rank === rank));
+    } else if (valueCount[rank] === 1) {
+      kickers.push(...cards.filter((card) => card.rank === rank));
+    }
+  }
+  return { pairs, kickers: sortCardsByRank(kickers) };
+};
