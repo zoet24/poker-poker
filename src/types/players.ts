@@ -11,6 +11,7 @@ export interface Player {
 export interface PlayerBasicInfo {
   name: string;
   money: number;
+  showCards: boolean;
 }
 
 export interface PlayerHandInfo {

@@ -1,14 +1,48 @@
 // Display for player name and money
 
-import React from "react";
+import Modal from "../Modal";
+import ModalPlayerStats from "../ModalPlayerStats";
+import PlayersContext from "contexts/PlayersContext";
+import React, { useContext, useState } from "react";
 import { PlayerBasicInfo } from "types/players";
 
-const Player: React.FC<PlayerBasicInfo> = ({ name, money }) => {
+interface PlayerProps {
+  player: PlayerBasicInfo;
+  index: number;
+}
+
+const Player: React.FC<PlayerProps> = ({ player, index }) => {
+  const { name, money, showCards } = player;
+  const { toggleShowCards } = useContext(PlayersContext);
+
+  const [isModalOpen, setModalOpen] = useState(false);
+  const handleOpenModal = () => setModalOpen(true);
+  const handleCloseModal = () => setModalOpen(false);
+
   return (
-    <div className="player relative">
-      <div className="player-name">{name}</div>
-      <div className="player-money">£{money.toFixed(2)}</div>
-    </div>
+    <>
+      <div className="player relative">
+        <div className="player-name cursor-pointer" onClick={handleOpenModal}>
+          {name}
+        </div>
+        <div
+          className="player-controls player-controls--show-cards cursor-pointer"
+          onClick={() => toggleShowCards(index)}
+        >
+          {showCards ? "Hide" : "Show"}
+        </div>
+        <div className="player-controls player-controls--money">
+          £{money.toFixed(2)}
+        </div>
+      </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title={`Player - ${name}`}
+      >
+        <ModalPlayerStats />
+      </Modal>
+    </>
   );
 };
 

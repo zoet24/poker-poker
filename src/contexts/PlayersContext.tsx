@@ -39,6 +39,7 @@ interface PlayersContextProps {
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
   resetPlayers: () => void;
   resetPlayersHands: () => void;
+  toggleShowCards: (index: number) => void;
 }
 
 // Default values for the context
@@ -47,6 +48,7 @@ const defaultValue: PlayersContextProps = {
   setPlayers: () => {},
   resetPlayers: () => {},
   resetPlayersHands: () => {},
+  toggleShowCards: () => {},
 };
 
 // Create the context
@@ -64,6 +66,7 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
     setPlayers(initialPlayers);
   };
 
+  // Function to reset players' hands to an empty array
   const resetPlayersHands = () => {
     setPlayers((prevPlayers) =>
       prevPlayers.map((player) => ({
@@ -74,13 +77,28 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
     );
   };
 
+  // Toggle the 'showCards' state for a player at a given index
+  const toggleShowCards = (index: number) => {
+    setPlayers((prevPlayers) =>
+      prevPlayers.map((player, i) =>
+        i === index ? { ...player, showCards: !player.showCards } : player
+      )
+    );
+  };
+
   useEffect(() => {
     console.log("Players: ", players);
   }, [stage]);
 
   return (
     <PlayersContext.Provider
-      value={{ players, setPlayers, resetPlayers, resetPlayersHands }}
+      value={{
+        players,
+        setPlayers,
+        resetPlayers,
+        resetPlayersHands,
+        toggleShowCards,
+      }}
     >
       {children}
     </PlayersContext.Provider>
