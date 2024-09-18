@@ -37,7 +37,7 @@ const NavbarBottom = () => {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-10">
+    <div className="fixed bottom-0 left-0 right-0 z-[9]">
       <div className="box flex justify-center relative p-2">
         <div className="btn-pair">
           <Button text={getButtonText(stage)} onClick={nextStage} />

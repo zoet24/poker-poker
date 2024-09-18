@@ -1,6 +1,8 @@
 import Modal from "../Modal";
 import ModalPickCard from "../ModalPickCard";
 import { Card as CardType, suitSymbols, suitColors } from "../../types/cards";
+import { getCardDisplayValue } from "../../utils/deck";
+import { useState } from "react";
 
 // Single card
 // Can be pre-dealt (no value, dotted border), tapping on this opens pick card modal which is used to pick a value for the card
@@ -13,22 +15,17 @@ interface CardProps {
   showCard?: boolean;
 }
 
-const getCardDisplayValue = (rank: CardType["rank"]): string => {
-  switch (rank) {
-    case "11":
-      return "J";
-    case "12":
-      return "Q";
-    case "13":
-      return "K";
-    case "14":
-      return "A";
-    default:
-      return rank;
-  }
-};
-
 const Card: React.FC<CardProps> = ({ card, size, showCard = true }) => {
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    if (!card && size !== "square") {
+      setModalOpen(true);
+    }
+  };
+
+  const handleCloseModal = () => setModalOpen(false);
+
   const colourClass = card ? `card--${suitColors[card.suit]}` : null;
   const sizeClass = size ? `card--${size}` : null;
 
@@ -38,6 +35,7 @@ const Card: React.FC<CardProps> = ({ card, size, showCard = true }) => {
         className={`card ${colourClass ? colourClass : ""} ${
           sizeClass ? sizeClass : ""
         } ${card ? "" : "card--empty"}`}
+        onClick={handleOpenModal}
       >
         {card && showCard && (
           <>
@@ -46,9 +44,13 @@ const Card: React.FC<CardProps> = ({ card, size, showCard = true }) => {
           </>
         )}
       </div>
-      {/* <Modal> */}
-      {/* <ModalPickCard /> */}
-      {/* </Modal> */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title="Pick a card"
+      >
+        <ModalPickCard />
+      </Modal>
     </div>
   );
 };

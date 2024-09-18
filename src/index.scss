@@ -35,6 +35,23 @@
   @apply h-9 w-9 rounded-full border-black border-2 bg-black text-white text-xs flex items-center justify-center absolute top-[-12px] right-[-12px];
 }
 
+.player-hand {
+  @apply outline rounded-lg;
+
+  &--veryGood {
+    @apply outline-blue-500;
+  }
+  &--good {
+    @apply outline-green-500;
+  }
+  &--medium {
+    @apply outline-yellow-500;
+  }
+  &--bad {
+    @apply outline-red-500;
+  }
+}
+
 // Cards
 .card {
   @apply border-black border-2 bg-white h-20 w-14 rounded-lg flex items-center justify-center;
@@ -64,19 +81,17 @@
   }
 }
 
-.hand {
-  @apply outline rounded-lg;
+// Modals
+.modal {
+  @apply fixed top-0 bottom-0 left-0 right-0 z-20 flex items-center justify-center;
 
-  &--veryGood {
-    @apply outline-blue-500;
+  background: rgba(0, 0, 0, 0.5);
+
+  .modal-content {
+    @apply bg-white m-5 w-full max-w-96;
   }
-  &--good {
-    @apply outline-green-500;
-  }
-  &--medium {
-    @apply outline-yellow-500;
-  }
-  &--bad {
-    @apply outline-red-500;
+
+  .modal-body {
+    @apply p-5;
   }
 }

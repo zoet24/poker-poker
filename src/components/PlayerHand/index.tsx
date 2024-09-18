@@ -13,7 +13,7 @@ const PlayerHand: React.FC<PlayerHandInfo> = ({ hand, showCards }) => {
   let handClass = "";
 
   if (hand.length === 2 && showCards) {
-    handClass = `hand hand--${evaluatePlayerHand(hand)}`;
+    handClass = `player-hand player-hand--${evaluatePlayerHand(hand)}`;
   }
 
   return (
