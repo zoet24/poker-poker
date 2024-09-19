@@ -1,6 +1,4 @@
-import CardsContext from "contexts/CardsContext";
-import { useContext } from "react";
-import { Card, Rank, Suit, ranks, suits } from "types/cards";
+import { Card, ranks, suits } from "types/cards";
 
 // Function to generate a new deck
 export const generateDeck = (): Card[] => {
