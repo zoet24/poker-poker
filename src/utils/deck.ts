@@ -75,3 +75,14 @@ export const getCardDisplayValue = (rank: Card["rank"]): string => {
       return rank;
   }
 };
+
+export const reorderDeck = (deck: Card[], selectedCard: Card): Card[] => {
+  // Filter out the selected card from the deck
+  const filteredDeck = deck.filter(
+    (card) =>
+      !(card.rank === selectedCard.rank && card.suit === selectedCard.suit)
+  );
+
+  // Add the selected card to the front of the filtered deck
+  return [selectedCard, ...filteredDeck];
+};
