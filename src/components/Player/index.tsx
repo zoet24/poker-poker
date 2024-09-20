@@ -40,7 +40,10 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
         onClose={handleCloseModal}
         title={`Player - ${name}`}
       >
-        <ModalPlayerStats />
+        <ModalPlayerStats
+          handleCloseModal={handleCloseModal}
+          playerIndex={playerIndex}
+        />
       </Modal>
     </>
   );

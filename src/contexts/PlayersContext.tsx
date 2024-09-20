@@ -9,24 +9,25 @@ import StageContext from "./StageContext";
 import { Player } from "types/players";
 
 // Define the initial players array
+const initialMoney = 5;
 const initialPlayers: Player[] = [
   {
     name: "Zoe",
-    money: 5.0,
+    money: initialMoney,
     hand: [],
     bestHand: null,
     showCards: true,
   },
   {
     name: "Fran",
-    money: 4.8,
+    money: initialMoney,
     hand: [],
     bestHand: null,
     showCards: true,
   },
   {
     name: "Mike",
-    money: 5.22,
+    money: initialMoney,
     hand: [],
     bestHand: null,
     showCards: true,
@@ -40,6 +41,8 @@ interface PlayersContextProps {
   resetPlayers: () => void;
   resetPlayersHands: () => void;
   toggleShowCards: (index: number) => void;
+  addPlayer: (name: string) => void;
+  removePlayer: (playerIndex: number) => void;
 }
 
 // Default values for the context
@@ -49,6 +52,8 @@ const defaultValue: PlayersContextProps = {
   resetPlayers: () => {},
   resetPlayersHands: () => {},
   toggleShowCards: () => {},
+  addPlayer: () => {},
+  removePlayer: () => {},
 };
 
 // Create the context
@@ -86,6 +91,23 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
     );
   };
 
+  const addPlayer = (name: string) => {
+    const newPlayer: Player = {
+      name,
+      money: 5.0,
+      hand: [],
+      bestHand: null,
+      showCards: true,
+    };
+    setPlayers((prevPlayers) => [...prevPlayers, newPlayer]);
+  };
+
+  const removePlayer = (playerIndex: number) => {
+    setPlayers((prevPlayers) =>
+      prevPlayers.filter((_, index) => index !== playerIndex)
+    );
+  };
+
   useEffect(() => {
     console.log("Players: ", players);
   }, [stage]);
@@ -98,6 +120,8 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
         resetPlayers,
         resetPlayersHands,
         toggleShowCards,
+        addPlayer,
+        removePlayer,
       }}
     >
       {children}
