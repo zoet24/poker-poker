@@ -4,7 +4,15 @@ import { PlayerHandInfo } from "types/players";
 
 // Display for player hand
 
-const PlayerHand: React.FC<PlayerHandInfo> = ({ hand, showCards }) => {
+interface PlayerHandProps extends PlayerHandInfo {
+  playerIndex: number;
+}
+
+const PlayerHand: React.FC<PlayerHandProps> = ({
+  hand,
+  showCards,
+  playerIndex,
+}) => {
   const handToDisplay = [
     ...hand,
     ...Array(2 - hand.length).fill(undefined),
@@ -18,11 +26,14 @@ const PlayerHand: React.FC<PlayerHandInfo> = ({ hand, showCards }) => {
 
   return (
     <div className="flex space-x-1">
-      {handToDisplay.map((card, index) => (
-        <div className={handClass}>
-          <Card key={index} card={card} showCard={showCards} />
-        </div>
-      ))}
+      {handToDisplay.map((card, index) => {
+        const deckIndex = playerIndex * 2 + index;
+        return (
+          <div key={index} className={handClass}>
+            <Card card={card} showCard={showCards} deckIndex={deckIndex} />
+          </div>
+        );
+      })}
     </div>
   );
 };

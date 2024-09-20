@@ -76,13 +76,23 @@ export const getCardDisplayValue = (rank: Card["rank"]): string => {
   }
 };
 
-export const reorderDeck = (deck: Card[], selectedCard: Card): Card[] => {
+// Insert the selected card at the specified index
+export const reorderDeck = (
+  deck: Card[],
+  selectedCard: Card,
+  deckIndex: number
+): Card[] => {
   // Filter out the selected card from the deck
   const filteredDeck = deck.filter(
     (card) =>
       !(card.rank === selectedCard.rank && card.suit === selectedCard.suit)
   );
 
-  // Add the selected card to the front of the filtered deck
-  return [selectedCard, ...filteredDeck];
+  const updatedDeck = [
+    ...filteredDeck.slice(0, deckIndex), // Cards before the index
+    selectedCard, // Insert selected card
+    ...filteredDeck.slice(deckIndex), // Cards after the index
+  ];
+
+  return updatedDeck;
 };

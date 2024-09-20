@@ -9,17 +9,21 @@ import { Player as PlayerProps } from "../../types/players";
 
 interface RowPlayerProps {
   player: PlayerProps;
-  index: number;
+  playerIndex: number;
 }
 
-const RowPlayer: React.FC<RowPlayerProps> = ({ player, index }) => {
+const RowPlayer: React.FC<RowPlayerProps> = ({ player, playerIndex }) => {
   const { hand, showCards, bestHand = null } = player;
 
   return (
     <div className="box p-2">
       <div className="flex justify-between items-center max-w-96 mx-auto">
-        <Player player={player} index={index} />
-        <PlayerHand hand={hand} showCards={showCards} />
+        <Player player={player} playerIndex={playerIndex} />
+        <PlayerHand
+          hand={hand}
+          showCards={showCards}
+          playerIndex={playerIndex}
+        />
         <PlayerScore showCards={showCards} bestHand={bestHand} />
       </div>
     </div>

@@ -13,7 +13,7 @@ const App = () => {
       <NavbarTop />
       <div className="pt-24 space-y-1">
         {players.map((player, index) => (
-          <RowPlayer key={index} player={player} index={index} />
+          <RowPlayer key={index} player={player} playerIndex={index} />
         ))}
         {/* <RowAddPlayer /> */}
       </div>

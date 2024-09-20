@@ -5,8 +5,16 @@ import CardsContext from "contexts/CardsContext";
 import { getCardDisplayValue, reorderDeck } from "../../utils/deck";
 import Button from "../Button";
 
+interface ModalPickCardProps {
+  deckIndex?: number;
+  handleCloseModal: () => void;
+}
+
 // Controls to select value and suit of the card before the game starts
-const ModalPickCard = () => {
+const ModalPickCard: React.FC<ModalPickCardProps> = ({
+  deckIndex,
+  handleCloseModal,
+}) => {
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
 
   const { deck, setDeck } = useContext(CardsContext);
@@ -27,13 +35,11 @@ const ModalPickCard = () => {
     return rankOrder;
   });
 
-  // Handle card confirmation and reorder the deck
-  const handleConfirmCard = () => {
+  const handleConfirmCard = (deckIndex: number) => {
     if (selectedCard) {
-      const updatedDeck = reorderDeck(deck, selectedCard);
+      const updatedDeck = reorderDeck(deck, selectedCard, deckIndex);
       setDeck(updatedDeck);
-      console.log(`Confirmed: ${selectedCard.rank} of ${selectedCard.suit}`);
-      console.log(updatedDeck);
+      handleCloseModal();
     }
   };
 
@@ -52,7 +58,10 @@ const ModalPickCard = () => {
         }))}
       />
       <div className="modal-btns">
-        <Button text="Confirm card" onClick={handleConfirmCard}></Button>
+        <Button
+          text="Confirm card"
+          onClick={() => handleConfirmCard(deckIndex ?? 0)}
+        ></Button>
       </div>
     </>
   );

@@ -8,10 +8,10 @@ import { PlayerBasicInfo } from "types/players";
 
 interface PlayerProps {
   player: PlayerBasicInfo;
-  index: number;
+  playerIndex: number;
 }
 
-const Player: React.FC<PlayerProps> = ({ player, index }) => {
+const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
   const { name, money, showCards } = player;
   const { toggleShowCards } = useContext(PlayersContext);
 
@@ -27,7 +27,7 @@ const Player: React.FC<PlayerProps> = ({ player, index }) => {
         </div>
         <div
           className="player-controls player-controls--show-cards cursor-pointer"
-          onClick={() => toggleShowCards(index)}
+          onClick={() => toggleShowCards(playerIndex)}
         >
           {showCards ? "Hide" : "Show"}
         </div>

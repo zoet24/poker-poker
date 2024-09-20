@@ -13,14 +13,22 @@ interface CardProps {
   card?: CardType;
   size?: "sm" | "square";
   showCard?: boolean;
+  deckIndex?: number;
 }
 
-const Card: React.FC<CardProps> = ({ card, size, showCard = true }) => {
+const Card: React.FC<CardProps> = ({
+  card,
+  size,
+  showCard = true,
+  deckIndex,
+}) => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleOpenModal = () => {
     if (!card && size !== "square") {
       setModalOpen(true);
+
+      console.log(deckIndex);
     }
   };
 
@@ -49,7 +57,10 @@ const Card: React.FC<CardProps> = ({ card, size, showCard = true }) => {
         onClose={handleCloseModal}
         title="Pick a card"
       >
-        <ModalPickCard />
+        <ModalPickCard
+          deckIndex={deckIndex ?? 0}
+          handleCloseModal={handleCloseModal}
+        />
       </Modal>
     </div>
   );
