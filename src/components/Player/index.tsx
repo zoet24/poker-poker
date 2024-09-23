@@ -4,7 +4,7 @@ import ModalPlaceBet from "../ModalPlaceBet";
 import Modal from "../Modal";
 import ModalPlayerStats from "../ModalPlayerStats";
 import PlayersContext from "contexts/PlayersContext";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { PlayerBasicInfo } from "types/players";
 
 interface PlayerProps {
@@ -36,6 +36,24 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
     playerRoleClass = "player--small-blind";
   }
 
+  const prevMoneyRef = useRef<number>(money);
+  const [moneyChange, setMoneyChange] = useState<number | null>(null);
+
+  useEffect(() => {
+    const prevMoney = prevMoneyRef.current;
+    const change = money - prevMoney;
+
+    console.log("Change:", name, change);
+
+    if (change !== 0) {
+      setMoneyChange(change);
+      prevMoneyRef.current = money;
+
+      const timeout = setTimeout(() => setMoneyChange(null), 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [money]);
+
   return (
     <>
       <div className={`player ${playerRoleClass}`}>
@@ -54,12 +72,15 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
         <div className="player-controls player-controls--money">
           £{money.toFixed(2)}
         </div>
-        {/* <div className="player-controls player-controls--money bet bet--win">
-          £{(2).toFixed(2)}
-        </div> */}
-        {/* <div className="player-controls player-controls--money bet bet--lose">
-          £{(1).toFixed(2)}
-        </div> */}
+        {moneyChange !== null && (
+          <div
+            className={`player-controls player-controls--money bet ${
+              moneyChange > 0 ? "bet--win" : "bet--lose"
+            }`}
+          >
+            {`£${Math.abs(moneyChange).toFixed(2)}`}
+          </div>
+        )}
       </div>
       <Modal
         isOpen={isModalPlayerStatsOpen}
