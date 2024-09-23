@@ -15,7 +15,7 @@ const App = () => {
         {players.map((player, index) => (
           <RowPlayer key={index} player={player} playerIndex={index} />
         ))}
-        {/* <RowAddPlayer /> */}
+        <RowAddPlayer />
       </div>
       <NavbarBottom />
     </div>

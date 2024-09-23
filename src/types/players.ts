@@ -6,12 +6,22 @@ export interface Player {
   hand: Card[];
   bestHand?: HandRank | null;
   showCards: boolean;
+  role: {
+    isDealer: boolean;
+    isBigBlind: boolean;
+    isSmallBlind: boolean;
+  };
 }
 
 export interface PlayerBasicInfo {
   name: string;
   money: number;
   showCards: boolean;
+  role: {
+    isDealer: boolean;
+    isBigBlind: boolean;
+    isSmallBlind: boolean;
+  };
 }
 
 export interface PlayerHandInfo {

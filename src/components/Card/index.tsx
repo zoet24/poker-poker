@@ -27,8 +27,6 @@ const Card: React.FC<CardProps> = ({
   const handleOpenModal = () => {
     if (!card && size !== "square") {
       setModalOpen(true);
-
-      console.log(deckIndex);
     }
   };
 

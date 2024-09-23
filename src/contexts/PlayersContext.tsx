@@ -9,28 +9,55 @@ import StageContext from "./StageContext";
 import { Player } from "types/players";
 
 // Define the initial players array
-const initialMoney = 5;
+const initialPlayerMoney = 5;
 const initialPlayers: Player[] = [
   {
     name: "Zoe",
-    money: initialMoney,
+    money: initialPlayerMoney,
     hand: [],
     bestHand: null,
     showCards: true,
+    role: {
+      isDealer: true,
+      isBigBlind: false,
+      isSmallBlind: false,
+    },
   },
   {
     name: "Fran",
-    money: initialMoney,
+    money: initialPlayerMoney,
     hand: [],
     bestHand: null,
     showCards: true,
+    role: {
+      isDealer: false,
+      isBigBlind: true,
+      isSmallBlind: false,
+    },
   },
   {
     name: "Mike",
-    money: initialMoney,
+    money: initialPlayerMoney,
     hand: [],
     bestHand: null,
     showCards: true,
+    role: {
+      isDealer: false,
+      isBigBlind: false,
+      isSmallBlind: true,
+    },
+  },
+  {
+    name: "Bron",
+    money: initialPlayerMoney,
+    hand: [],
+    bestHand: null,
+    showCards: true,
+    role: {
+      isDealer: false,
+      isBigBlind: false,
+      isSmallBlind: false,
+    },
   },
 ];
 
@@ -98,6 +125,11 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
       hand: [],
       bestHand: null,
       showCards: true,
+      role: {
+        isDealer: false,
+        isBigBlind: false,
+        isSmallBlind: false,
+      },
     };
     setPlayers((prevPlayers) => [...prevPlayers, newPlayer]);
   };

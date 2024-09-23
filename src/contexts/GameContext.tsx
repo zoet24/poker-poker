@@ -1,13 +1,28 @@
-import React, { createContext, ReactNode, useContext, useEffect } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import CardsContext from "./CardsContext";
 import StageContext from "./StageContext";
 import PlayersContext from "./PlayersContext";
 import { burnCard, dealToCommunity, drawCardFromDeck } from "../utils/deck";
 import { evaluateBestHand } from "../utils/game";
 
-interface GameContextProps {}
+const initialPotMoney = 0;
 
-const GameContext = createContext<GameContextProps | undefined>(undefined);
+interface GameContextProps {
+  pot: number;
+}
+
+const defaultValue: GameContextProps = {
+  pot: initialPotMoney,
+};
+
+const GameContext = createContext<GameContextProps>(defaultValue);
 
 export const GameProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -23,6 +38,11 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
   } = useContext(CardsContext);
   const { players, setPlayers, resetPlayersHands } = useContext(PlayersContext);
 
+  const [pot, setPot] = useState<number>(initialPotMoney);
+
+  const gameNumber = useRef(0);
+  const isInitialMount = useRef(true);
+
   useEffect(() => {
     let localDeck = [...deck];
 
@@ -30,6 +50,19 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     if (stage === "pre-deal") {
       resetDeck();
       resetPlayersHands();
+
+      if (!isInitialMount.current) {
+        gameNumber.current += 1;
+        console.log(`Game number: ${gameNumber.current}`);
+
+        // Dealer/big blind/small blind logic
+        // Game 1:
+        // Player 0: dealer
+        // Player 1: big blind
+        // Player 2: small blind
+      } else {
+        isInitialMount.current = false;
+      }
       return;
     }
 
@@ -85,5 +118,9 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [communityCards]);
 
-  return <GameContext.Provider value={{}}>{children}</GameContext.Provider>;
+  return (
+    <GameContext.Provider value={{ pot }}>{children}</GameContext.Provider>
+  );
 };
+
+export default GameContext;

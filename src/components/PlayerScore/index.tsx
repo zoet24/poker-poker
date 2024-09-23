@@ -17,10 +17,10 @@ const PlayerScore: React.FC<PlayerScoreProps> = ({ showCards, bestHand }) => {
     : Array(5).fill(undefined);
 
   return (
-    <div className="text-center">
+    <div className="text-center max-w-[136px] truncate">
       {bestHand && showCards ? (
-        <span>
-          {bestHand?.rankName}: {bestHand?.rank.toFixed(2)}
+        <span className="whitespace-nowrap ">
+          {bestHand?.rank.toFixed(2)}: {bestHand?.rankName}
         </span>
       ) : (
         <span>---</span>

@@ -14,9 +14,9 @@ const InputSelect: React.FC<InputSelectProps> = ({
   options,
 }) => {
   return (
-    <div className="input-select flex flex-col cursor-pointer">
-      <label className="mb-1">{label}</label>
-      <select value={value} onChange={onChange} className="box px-1 py-2">
+    <div className="input input-select">
+      <label>{label}</label>
+      <select value={value} onChange={onChange}>
         <option value="" disabled>
           {placeholder}
         </option>

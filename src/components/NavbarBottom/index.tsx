@@ -30,6 +30,8 @@ const NavbarBottom = () => {
   const { resetPlayers } = useContext(PlayersContext);
   const { resetDeck } = useContext(CardsContext);
 
+  const handleNextStage = () => {};
+
   const resetGame = () => {
     resetDeck();
     resetPlayers();

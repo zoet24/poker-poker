@@ -1,5 +1,6 @@
 // Display for player name and money
 
+import ModalPlaceBet from "../ModalPlaceBet";
 import Modal from "../Modal";
 import ModalPlayerStats from "../ModalPlayerStats";
 import PlayersContext from "contexts/PlayersContext";
@@ -12,17 +13,36 @@ interface PlayerProps {
 }
 
 const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
-  const { name, money, showCards } = player;
+  const { name, money, showCards, role } = player;
   const { toggleShowCards } = useContext(PlayersContext);
 
-  const [isModalOpen, setModalOpen] = useState(false);
-  const handleOpenModal = () => setModalOpen(true);
-  const handleCloseModal = () => setModalOpen(false);
+  const [isModalPlayerStatsOpen, setModalPlayerStatsOpen] = useState(false);
+  const handleOpenModalPlayerStats = () => setModalPlayerStatsOpen(true);
+  const handleCloseModalPlayerStats = () => {
+    setModalPlayerStatsOpen(false);
+  };
+
+  const [isModalPlaceBetOpen, setModalPlaceBetOpen] = useState(false);
+  const handleOpenModalPlaceBet = () => setModalPlaceBetOpen(true);
+  const handleCloseModalPlaceBet = () => setModalPlaceBetOpen(false);
+
+  let playerRoleClass = "";
+
+  if (role.isDealer) {
+    playerRoleClass = "player--dealer";
+  } else if (role.isBigBlind) {
+    playerRoleClass = "player--big-blind";
+  } else if (role.isSmallBlind) {
+    playerRoleClass = "player--small-blind";
+  }
 
   return (
     <>
-      <div className="player relative">
-        <div className="player-name cursor-pointer" onClick={handleOpenModal}>
+      <div className={`player ${playerRoleClass}`}>
+        <div
+          className="player-name cursor-pointer"
+          onClick={handleOpenModalPlayerStats}
+        >
           {name}
         </div>
         <div
@@ -34,14 +54,30 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
         <div className="player-controls player-controls--money">
           £{money.toFixed(2)}
         </div>
+        {/* <div className="player-controls player-controls--money bet bet--win">
+          £{(2).toFixed(2)}
+        </div> */}
+        {/* <div className="player-controls player-controls--money bet bet--lose">
+          £{(1).toFixed(2)}
+        </div> */}
       </div>
       <Modal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        title={`Player - ${name}`}
+        isOpen={isModalPlayerStatsOpen}
+        onClose={handleCloseModalPlayerStats}
+        title={`Player - ${name} - player stats`}
       >
         <ModalPlayerStats
-          handleCloseModal={handleCloseModal}
+          handleCloseModal={handleCloseModalPlayerStats}
+          playerIndex={playerIndex}
+        />
+      </Modal>
+      <Modal
+        isOpen={isModalPlaceBetOpen}
+        onClose={handleCloseModalPlaceBet}
+        title={`Player - ${name} - place bet`}
+      >
+        <ModalPlaceBet
+          handleCloseModal={handleCloseModalPlaceBet}
           playerIndex={playerIndex}
         />
       </Modal>
