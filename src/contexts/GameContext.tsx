@@ -12,15 +12,9 @@ import PlayersContext from "./PlayersContext";
 import { burnCard, dealToCommunity, drawCardFromDeck } from "../utils/deck";
 import { evaluateBestHand } from "../utils/game";
 
-const initialPotMoney = 0;
+interface GameContextProps {}
 
-interface GameContextProps {
-  pot: number;
-}
-
-const defaultValue: GameContextProps = {
-  pot: initialPotMoney,
-};
+const defaultValue: GameContextProps = {};
 
 const GameContext = createContext<GameContextProps>(defaultValue);
 
@@ -37,8 +31,6 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     addToBurn,
   } = useContext(CardsContext);
   const { players, setPlayers, resetPlayersHands } = useContext(PlayersContext);
-
-  const [pot, setPot] = useState<number>(initialPotMoney);
 
   const gameNumber = useRef(0);
   const isInitialMount = useRef(true);
@@ -118,9 +110,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [communityCards]);
 
-  return (
-    <GameContext.Provider value={{ pot }}>{children}</GameContext.Provider>
-  );
+  return <GameContext.Provider value={{}}>{children}</GameContext.Provider>;
 };
 
 export default GameContext;

@@ -19,6 +19,8 @@ const getButtonText = (stage: GameStage): string => {
     case "turn":
       return "Deal river";
     case "river":
+      return "Reveal";
+    case "showdown":
       return "New game";
     default:
       return "Start";
@@ -29,8 +31,6 @@ const NavbarBottom = () => {
   const { stage, nextStage, resetStage } = useContext(GameContext);
   const { resetPlayers } = useContext(PlayersContext);
   const { resetDeck } = useContext(CardsContext);
-
-  const handleNextStage = () => {};
 
   const resetGame = () => {
     resetDeck();

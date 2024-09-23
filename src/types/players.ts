@@ -6,6 +6,7 @@ export interface Player {
   hand: Card[];
   bestHand?: HandRank | null;
   showCards: boolean;
+  isComp: boolean;
   role: {
     isDealer: boolean;
     isBigBlind: boolean;

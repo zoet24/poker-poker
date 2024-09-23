@@ -10,7 +10,14 @@ import CardsContext from "./CardsContext";
 import PlayersContext from "./PlayersContext";
 
 // Stages in the game in order
-const stages: GameStage[] = ["pre-deal", "deal", "flop", "turn", "river"];
+const stages: GameStage[] = [
+  "pre-deal",
+  "deal",
+  "flop",
+  "turn",
+  "river",
+  "showdown",
+];
 
 // Define the shape of the context data
 interface StageContextProps {

@@ -17,6 +17,7 @@ const initialPlayers: Player[] = [
     hand: [],
     bestHand: null,
     showCards: true,
+    isComp: false,
     role: {
       isDealer: true,
       isBigBlind: false,
@@ -29,6 +30,7 @@ const initialPlayers: Player[] = [
     hand: [],
     bestHand: null,
     showCards: true,
+    isComp: true,
     role: {
       isDealer: false,
       isBigBlind: true,
@@ -41,22 +43,11 @@ const initialPlayers: Player[] = [
     hand: [],
     bestHand: null,
     showCards: true,
+    isComp: true,
     role: {
       isDealer: false,
       isBigBlind: false,
       isSmallBlind: true,
-    },
-  },
-  {
-    name: "Bron",
-    money: initialPlayerMoney,
-    hand: [],
-    bestHand: null,
-    showCards: true,
-    role: {
-      isDealer: false,
-      isBigBlind: false,
-      isSmallBlind: false,
     },
   },
 ];
@@ -125,6 +116,7 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
       hand: [],
       bestHand: null,
       showCards: true,
+      isComp: true,
       role: {
         isDealer: false,
         isBigBlind: false,
