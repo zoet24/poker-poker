@@ -13,14 +13,18 @@ import PlayersContext from "./PlayersContext";
 interface BettingContextProps {
   pot: number;
   setPot: React.Dispatch<React.SetStateAction<number>>;
-  takePlayerBets: () => void;
+  takePlayerBet: (playerIndex: number, betAmount: number) => void;
+  currentTurnIndex: number;
+  nextTurn: () => void;
 }
 
 // Default values for the context
 const defaultValue: BettingContextProps = {
   pot: 0,
   setPot: () => {},
-  takePlayerBets: () => {},
+  takePlayerBet: () => {},
+  currentTurnIndex: 0,
+  nextTurn: () => {},
 };
 
 // Create the context
@@ -31,32 +35,42 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [pot, setPot] = useState<number>(0);
+  const [currentTurnIndex, setCurrentTurnIndex] = useState<number>(0);
   const { stage } = useContext(StageContext);
   const { players, setPlayers } = useContext(PlayersContext);
 
-  const takePlayerBets = () => {
-    setPlayers((prevPlayers: Player[]) =>
-      prevPlayers.map((player) => {
-        if (player.hasFolded) {
+  const takePlayerBet = (playerIndex: number, betAmount: number) => {
+    setPlayers((prevPlayers) =>
+      prevPlayers.map((player, index) => {
+        if (player.hasFolded || index !== playerIndex) {
           return player;
         }
 
-        const updatedMoney = Math.max(0, player.money - 0.2);
+        const updatedMoney = Math.max(0, player.money - betAmount);
         return { ...player, money: updatedMoney };
       })
     );
 
-    const totalContribution = players.length * 0.2;
-    setPot((prevPot) => prevPot + totalContribution);
+    setPot((prevPot) => prevPot + betAmount);
   };
+
+  const nextTurn = () => {
+    setCurrentTurnIndex((prevIndex) => (prevIndex + 1) % players.length);
+  };
+
+  // Automatically bet for computer players
+  useEffect(() => {
+    const currentPlayer = players[currentTurnIndex];
+    if (stage && stage !== "pre-deal" && stage !== "showdown") {
+      if (currentPlayer?.isComp && !currentPlayer?.hasFolded) {
+        takePlayerBet(currentTurnIndex, 0.2); // Auto-bet for computers
+        nextTurn(); // Move to the next player
+      }
+    }
+  }, [currentTurnIndex, stage, players]);
 
   // Use effect to handle stage change
   useEffect(() => {
-    // Deduct money from players each time the stage changes
-    if (stage && stage !== "pre-deal" && stage !== "showdown") {
-      takePlayerBets();
-    }
-
     if (stage === "showdown") {
       // Show all players' cards
       setPlayers((prevPlayers) =>
@@ -103,7 +117,9 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
       value={{
         pot,
         setPot,
-        takePlayerBets,
+        takePlayerBet,
+        currentTurnIndex,
+        nextTurn,
       }}
     >
       {children}

@@ -31,7 +31,7 @@ const initialPlayers: Player[] = [
     hand: [],
     bestHand: null,
     showCards: false,
-    isComp: true,
+    isComp: false,
     hasFolded: true,
     role: {
       isDealer: false,

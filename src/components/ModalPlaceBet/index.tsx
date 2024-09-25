@@ -1,9 +1,10 @@
 // View stats associated with player's hand
 // Controls to hide player's cards or remove player
 
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import Button from "../Button";
 import PlayersContext from "contexts/PlayersContext";
+import BettingContext from "contexts/BettingContext";
 
 interface ModalPlaceBetProps {
   playerIndex: number;
@@ -15,6 +16,22 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
   handleCloseModal,
 }) => {
   const { players, setPlayers } = useContext(PlayersContext);
+  const { takePlayerBet, nextTurn } = useContext(BettingContext);
+  const [betAmount, setBetAmount] = useState<number>(0);
+
+  const handlePlaceBet = () => {
+    const player = players[playerIndex];
+
+    if (betAmount > 0 && betAmount <= player.money) {
+      takePlayerBet(playerIndex, betAmount);
+      handleCloseModal();
+      nextTurn();
+    }
+  };
+
+  const handleCheck = () => {
+    handleCloseModal();
+  };
 
   const handleFold = () => {
     setPlayers((prevPlayers) =>
@@ -29,11 +46,17 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
     <div>
       <div className="input input-number">
         <label>Bet amount:</label>
-        <input type="number" min={0} max={players[playerIndex].money} />
+        <input
+          type="number"
+          min={0}
+          max={players[playerIndex].money}
+          value={betAmount}
+          onChange={(e) => setBetAmount(Number(e.target.value))}
+        />
       </div>
       <div className="modal-btns">
-        <Button text="Place bet" onClick={() => console.log("Hello")}></Button>
-        <Button text="Check" onClick={() => console.log("Hello")}></Button>
+        <Button text="Place bet" onClick={handlePlaceBet}></Button>
+        <Button text="Check" onClick={handleCheck}></Button>
         <Button text="Fold" onClick={handleFold}></Button>
       </div>
     </div>
