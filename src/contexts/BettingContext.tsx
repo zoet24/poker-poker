@@ -62,23 +62,38 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
         }))
       );
 
-      const winner = players.reduce((prev, curr) => {
-        // Ensure both players have a valid bestHand and rank
-        if (prev.bestHand?.rank === undefined) return curr;
-        if (curr.bestHand?.rank === undefined) return prev;
+      // Find the highest rank among all players
+      const highestRank = players.reduce((max, player) => {
+        if (player.bestHand?.rank !== undefined) {
+          return Math.max(max, player.bestHand.rank);
+        }
+        return max;
+      }, 0);
 
-        return prev.bestHand.rank > curr.bestHand.rank ? prev : curr;
-      });
+      // Find all players who have the highest rank
+      const winners = players.filter(
+        (player) => player.bestHand?.rank === highestRank
+      );
 
-      if (winner) {
+      console.log("Winners", winners);
+
+      if (winners.length > 0) {
+        // Split the pot equally among the winners
+        const potShare = Math.floor(pot / winners.length);
+
+        console.log("Pot share", potShare);
+
+        // Update players' money with their share of the pot
         setPlayers((prevPlayers) =>
           prevPlayers.map((player) =>
-            player.name === winner.name
-              ? { ...player, money: player.money + pot } // Award the pot to the winner
+            winners.some((winner) => winner.name === player.name)
+              ? { ...player, money: player.money + potShare }
               : player
           )
         );
-        setPot(0); // Reset the pot after the showdown
+
+        // Reset the pot after distributing the winnings
+        setPot(0);
       }
     }
   }, [stage]);

@@ -16,7 +16,9 @@ export const getRoyalFlushScore = (cards: Card[]): HandRank => {
     };
   } else {
     throw new Error(
-      "Invalid input: A royal flush must contain exactly 5 cards."
+      `Invalid input: A royal flush must contain exactly 5 cards. Cannot use ${cards
+        .map((card) => `${card.rank} of ${card.suit}`)
+        .join(", ")}`
     );
   }
 };
@@ -37,7 +39,9 @@ export const getStraightFlushScore = (cards: Card[]): HandRank => {
     };
   } else {
     throw new Error(
-      "Invalid input: A straight flush must contain exactly 5 cards."
+      `Invalid input: A straight flush must contain exactly 5 cards. Cannot use ${cards
+        .map((card) => `${card.rank} of ${card.suit}`)
+        .join(", ")}`
     );
   }
 };
@@ -62,7 +66,9 @@ export const getFourOfAKindScore = (cards: Card[]): HandRank => {
     };
   } else {
     throw new Error(
-      "Invalid input: A four of a kind must contain exactly 5 cards."
+      `Invalid input: A four of a kind must contain exactly 5 cards. Cannot use ${cards
+        .map((card) => `${card.rank} of ${card.suit}`)
+        .join(", ")}`
     );
   }
 };
@@ -100,7 +106,9 @@ export const getFullHouseScore = (cards: Card[]): HandRank => {
     };
   } else {
     throw new Error(
-      "Invalid input: A full house must contain exactly 5 cards."
+      `Invalid input: A full house must contain exactly 5 cards. Cannot use ${cards
+        .map((card) => `${card.rank} of ${card.suit}`)
+        .join(", ")}`
     );
   }
 };
@@ -126,7 +134,11 @@ export const getFlushScore = (cards: Card[]): HandRank => {
       cards,
     };
   } else {
-    throw new Error("Invalid input: A flush must contain exactly 5 cards.");
+    throw new Error(
+      `Invalid input: A flush must contain exactly 5 cards. Cannot use ${cards
+        .map((card) => `${card.rank} of ${card.suit}`)
+        .join(", ")}`
+    );
   }
 };
 
@@ -149,7 +161,7 @@ export const getStraightScore = (cards: Card[]): HandRank => {
     };
   } else {
     throw new Error(
-      `Invalid input: A straight must contain exactly 5 cards. Cannot use Cannot use ${cards
+      `Invalid input: A straight must contain exactly 5 cards. Cannot use ${cards
         .map((card) => `${card.rank} of ${card.suit}`)
         .join(", ")}`
     );
@@ -191,7 +203,9 @@ export const getThreeOfAKindScore = (cards: Card[]): HandRank => {
     };
   } else {
     throw new Error(
-      "Invalid input: A three of a kind must contain exactly 5 cards."
+      `Invalid input: A three of a kind must contain exactly 5 cards. Cannot use ${cards
+        .map((card) => `${card.rank} of ${card.suit}`)
+        .join(", ")}`
     );
   }
 };
@@ -228,7 +242,9 @@ export const getTwoPairScore = (cards: Card[]): HandRank => {
 
     if (!firstPairRank || !secondPairRank || !kicker) {
       throw new Error(
-        "Invalid hand: Two Pair must consist of two pairs and one kicker."
+        `Invalid hand: Two Pair must consist of two pairs and one kicker. Cannot use ${cards
+          .map((card) => `${card.rank} of ${card.suit}`)
+          .join(", ")}`
       );
     }
 
@@ -249,7 +265,9 @@ export const getTwoPairScore = (cards: Card[]): HandRank => {
     };
   } else {
     throw new Error(
-      "Invalid input: A two pair hand must contain exactly 5 cards."
+      `Invalid input: A two pair hand must contain exactly 5 cards. Cannot use ${cards
+        .map((card) => `${card.rank} of ${card.suit}`)
+        .join(", ")}`
     );
   }
 };
@@ -275,7 +293,9 @@ export const getOnePairScore = (cards: Card[]): HandRank => {
 
     if (!pairRank || kickers.length < 3) {
       throw new Error(
-        "Invalid hand: One Pair must consist of one pair and three kickers."
+        `Invalid hand: One Pair must consist of one pair and three kickers. Cannot use ${cards
+          .map((card) => `${card.rank} of ${card.suit}`)
+          .join(", ")}`
       );
     }
 
@@ -300,7 +320,9 @@ export const getOnePairScore = (cards: Card[]): HandRank => {
     };
   } else {
     throw new Error(
-      "Invalid input: A one pair hand must contain exactly 5 cards."
+      `Invalid input: A one pair hand must contain exactly 5 cards. Cannot use ${cards
+        .map((card) => `${card.rank} of ${card.suit}`)
+        .join(", ")}`
     );
   }
 };
@@ -326,6 +348,10 @@ export const getHighCardScore = (cards: Card[]): HandRank => {
       cards,
     };
   } else {
-    throw new Error("Invalid input: A high card must contain exactly 5 cards.");
+    throw new Error(
+      `Invalid input: A high card must contain exactly 5 cards. Cannot use ${cards
+        .map((card) => `${card.rank} of ${card.suit}`)
+        .join(", ")}`
+    );
   }
 };

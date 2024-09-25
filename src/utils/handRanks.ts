@@ -28,14 +28,24 @@ export const isStraightFlush = (cards: Card[]): Card[] | null => {
   for (const suit of suits) {
     const suitCards = cards.filter((card) => card.suit === suit);
     if (suitCards.length >= 5) {
+      // Sort suit cards by rank in descending order
       const sortedSuitCards = sortCardsByRank(suitCards);
-      const suitCardRanks = sortedSuitCards.map((card) => parseInt(card.rank));
+      let suitCardRanks = sortedSuitCards.map((card) => parseInt(card.rank));
 
-      if (isSequential(suitCardRanks)) {
-        return sortedSuitCards.slice(0, 5);
+      // Remove duplicate ranks
+      suitCardRanks = [...new Set(suitCardRanks)];
+
+      // Check for a sequential straight flush
+      for (let i = 0; i <= suitCardRanks.length - 5; i++) {
+        if (isSequential(suitCardRanks.slice(i, i + 5))) {
+          // Return the best straight flush (top 5 cards)
+          return sortedSuitCards.filter((card) =>
+            suitCardRanks.slice(i, i + 5).includes(parseInt(card.rank))
+          );
+        }
       }
 
-      // Special case for A-2-3-4-5 straight
+      // Special case for A-2-3-4-5 straight flush
       if (suitCardRanks.includes(14) && isSequential([5, 4, 3, 2, 1])) {
         return sortedSuitCards.filter((card) =>
           ["14", "2", "3", "4", "5"].includes(card.rank)
@@ -43,6 +53,7 @@ export const isStraightFlush = (cards: Card[]): Card[] | null => {
       }
     }
   }
+
   return null;
 };
 

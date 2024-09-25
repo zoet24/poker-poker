@@ -225,7 +225,6 @@ export const evaluateHand = (cards: Card[]): HandRank => {
   // Check for Straight
   const straight = isStraight(cards);
   if (straight) {
-    console.log("Straight cards", straight);
     return getStraightScore(straight);
   }
 
