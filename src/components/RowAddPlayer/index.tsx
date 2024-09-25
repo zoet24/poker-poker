@@ -31,7 +31,7 @@ const RowAddPlayer = () => {
             {cardsToDisplay.map((card, index) => {
               const deckIndex = 0;
               return (
-                <div key={index} className="card--empty">
+                <div key={index} className="card--empty pointer-events-none">
                   <Card card={card} showCard={false} deckIndex={deckIndex} />
                 </div>
               );

@@ -43,8 +43,6 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
     const prevMoney = prevMoneyRef.current;
     const change = money - prevMoney;
 
-    console.log("Change:", name, change);
-
     if (change !== 0) {
       setMoneyChange(change);
       prevMoneyRef.current = money;

@@ -11,17 +11,22 @@ import StageContext from "./StageContext";
 import PlayersContext from "./PlayersContext";
 import { burnCard, dealToCommunity, drawCardFromDeck } from "../utils/deck";
 import { evaluateBestHand } from "../utils/game";
+import BettingContext from "./BettingContext";
 
-interface GameContextProps {}
+interface GameContextProps {
+  resetGame: () => void;
+}
 
-const defaultValue: GameContextProps = {};
+const defaultValue: GameContextProps = {
+  resetGame: () => {},
+};
 
 const GameContext = createContext<GameContextProps>(defaultValue);
 
 export const GameProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const { stage } = useContext(StageContext);
+  const { stage, resetStage } = useContext(StageContext);
   const {
     deck,
     communityCards,
@@ -30,7 +35,9 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     addToCommunity,
     addToBurn,
   } = useContext(CardsContext);
-  const { players, setPlayers, resetPlayersHands } = useContext(PlayersContext);
+  const { players, setPlayers, resetPlayersHands, resetPlayers } =
+    useContext(PlayersContext);
+  const { setPot } = useContext(BettingContext);
 
   const gameNumber = useRef(0);
   const isInitialMount = useRef(true);
@@ -45,7 +52,6 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
 
       if (!isInitialMount.current) {
         gameNumber.current += 1;
-        console.log(`Game number: ${gameNumber.current}`);
 
         // Dealer/big blind/small blind logic
         // Game 1:
@@ -110,7 +116,19 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [communityCards]);
 
-  return <GameContext.Provider value={{}}>{children}</GameContext.Provider>;
+  const resetGame = () => {
+    gameNumber.current = 0;
+    setPot(0);
+    resetDeck();
+    resetPlayers();
+    resetStage();
+  };
+
+  return (
+    <GameContext.Provider value={{ resetGame }}>
+      {children}
+    </GameContext.Provider>
+  );
 };
 
 export default GameContext;

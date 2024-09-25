@@ -40,8 +40,6 @@ const StageContext = createContext<StageContextProps>(defaultValue);
 export const StageProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const { resetDeck } = useContext(CardsContext);
-  const { resetPlayers } = useContext(PlayersContext);
   const [stage, setStage] = useState<GameStage>("pre-deal");
 
   // Function to progress to the next stage

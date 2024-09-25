@@ -148,7 +148,11 @@ export const getStraightScore = (cards: Card[]): HandRank => {
       cards,
     };
   } else {
-    throw new Error("Invalid input: A straight must contain exactly 5 cards.");
+    throw new Error(
+      `Invalid input: A straight must contain exactly 5 cards. Cannot use Cannot use ${cards
+        .map((card) => `${card.rank} of ${card.suit}`)
+        .join(", ")}`
+    );
   }
 };
 

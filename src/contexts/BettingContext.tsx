@@ -12,12 +12,14 @@ import PlayersContext from "./PlayersContext";
 // Define the shape of the PlayersContext data
 interface BettingContextProps {
   pot: number;
+  setPot: React.Dispatch<React.SetStateAction<number>>;
   takePlayerBets: () => void;
 }
 
 // Default values for the context
 const defaultValue: BettingContextProps = {
   pot: 0,
+  setPot: () => {},
   takePlayerBets: () => {},
 };
 
@@ -39,22 +41,27 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
         return { ...player, money: updatedMoney };
       })
     );
-    console.log("Betting context - players", players);
 
     const totalContribution = players.length * 0.2; // Calculate the total contribution to the pot
     setPot((prevPot) => prevPot + totalContribution); // Add the contribution to the pot
-
-    console.log("Betting context - pot", pot);
   };
 
   // Use effect to handle stage change
   useEffect(() => {
     // Deduct money from players each time the stage changes
-    if (stage && stage !== "showdown") {
+    if (stage && stage !== "pre-deal" && stage !== "showdown") {
       takePlayerBets();
     }
 
     if (stage === "showdown") {
+      // Show all players' cards
+      setPlayers((prevPlayers) =>
+        prevPlayers.map((player) => ({
+          ...player,
+          showCards: true, // Set showCards to true for all players
+        }))
+      );
+
       const winner = players.reduce((prev, curr) => {
         // Ensure both players have a valid bestHand and rank
         if (prev.bestHand?.rank === undefined) return curr;
@@ -80,6 +87,7 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
     <BettingContext.Provider
       value={{
         pot,
+        setPot,
         takePlayerBets,
       }}
     >

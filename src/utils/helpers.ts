@@ -35,12 +35,14 @@ export const generateCombinations = <T>(array: T[], length: number): T[][] => {
 
 // Function to work out if elements are next to each other (assuming the array contains numbers)
 export const isSequential = (array: number[]): boolean => {
-  for (let i = 1; i < array.length; i++) {
-    if (array[i] !== array[i - 1] + 1) {
-      return false;
-    }
-  }
-  return true;
+  const isAscending = array.every(
+    (val, i, arr) => i === 0 || val === arr[i - 1] + 1
+  );
+  const isDescending = array.every(
+    (val, i, arr) => i === 0 || val === arr[i - 1] - 1
+  );
+
+  return isAscending || isDescending;
 };
 
 // Function to count occurrences of card ranks

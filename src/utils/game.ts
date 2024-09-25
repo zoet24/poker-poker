@@ -225,6 +225,7 @@ export const evaluateHand = (cards: Card[]): HandRank => {
   // Check for Straight
   const straight = isStraight(cards);
   if (straight) {
+    console.log("Straight cards", straight);
     return getStraightScore(straight);
   }
 
@@ -256,6 +257,8 @@ export const evaluateBestHand = (
   communityCards: Card[]
 ): HandRank => {
   const allCards = [...playerHand, ...communityCards];
+
+  console.log("All cards: ", allCards);
 
   // Evaluate and return the best possible hand
   return evaluateHand(allCards);

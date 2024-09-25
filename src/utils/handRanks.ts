@@ -87,21 +87,35 @@ export const isFlush = (cards: Card[]): Card[] | null => {
 
 // Straight - 400 - 500
 export const isStraight = (cards: Card[]): Card[] | null => {
-  let values = cards.map((card) => parseInt(card.rank)).sort((a, b) => a - b);
-  values = [...new Set(values)]; // Remove duplicates
+  let values = cards.map((card) => parseInt(card.rank)).sort((a, b) => b - a);
+  values = [...new Set(values)];
 
   for (let i = 0; i <= values.length - 5; i++) {
     if (isSequential(values.slice(i, i + 5))) {
-      return cards.filter((card) =>
-        values.slice(i, i + 5).includes(parseInt(card.rank))
-      );
+      const neededValues = values.slice(i, i + 5);
+      const usedRanks = new Set();
+
+      return cards.filter((card) => {
+        const cardRank = parseInt(card.rank);
+        if (neededValues.includes(cardRank) && !usedRanks.has(cardRank)) {
+          usedRanks.add(cardRank);
+          return true;
+        }
+        return false;
+      });
     }
   }
 
   if (isSequential([14, 5, 4, 3, 2])) {
-    return cards.filter((card) =>
-      ["14", "5", "4", "3", "2"].includes(card.rank)
-    );
+    const usedRanks = new Set();
+    return cards.filter((card) => {
+      const cardRank = parseInt(card.rank);
+      if ([14, 5, 4, 3, 2].includes(cardRank) && !usedRanks.has(cardRank)) {
+        usedRanks.add(cardRank);
+        return true;
+      }
+      return false;
+    });
   }
 
   return null;
