@@ -26,16 +26,6 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
   const handleOpenModalPlaceBet = () => setModalPlaceBetOpen(true);
   const handleCloseModalPlaceBet = () => setModalPlaceBetOpen(false);
 
-  let playerRoleClass = "";
-
-  if (role.isDealer) {
-    playerRoleClass = "player--dealer";
-  } else if (role.isBigBlind) {
-    playerRoleClass = "player--big-blind";
-  } else if (role.isSmallBlind) {
-    playerRoleClass = "player--small-blind";
-  }
-
   const prevMoneyRef = useRef<number>(money);
   const [moneyChange, setMoneyChange] = useState<number | null>(null);
 
@@ -54,7 +44,7 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
 
   return (
     <>
-      <div className={`player ${playerRoleClass}`}>
+      <div className="player">
         <div
           className="player-name cursor-pointer"
           onClick={handleOpenModalPlayerStats}
@@ -77,6 +67,17 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
             }`}
           >
             {`£${Math.abs(moneyChange).toFixed(2)}`}
+          </div>
+        )}
+        {!Object.values(player.role).every((value) => value === false) && (
+          <div className="player-controls player-controls--role">
+            {player.role.isDealer
+              ? "D"
+              : player.role.isSmallBlind
+              ? "b"
+              : player.role.isBigBlind
+              ? "B"
+              : ""}
           </div>
         )}
       </div>

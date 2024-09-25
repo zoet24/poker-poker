@@ -20,8 +20,8 @@ const initialPlayers: Player[] = [
     isComp: false,
     role: {
       isDealer: true,
-      isBigBlind: false,
       isSmallBlind: false,
+      isBigBlind: false,
     },
   },
   {
@@ -33,8 +33,8 @@ const initialPlayers: Player[] = [
     isComp: true,
     role: {
       isDealer: false,
-      isBigBlind: true,
-      isSmallBlind: false,
+      isSmallBlind: true,
+      isBigBlind: false,
     },
   },
   {
@@ -46,8 +46,21 @@ const initialPlayers: Player[] = [
     isComp: true,
     role: {
       isDealer: false,
+      isSmallBlind: false,
+      isBigBlind: true,
+    },
+  },
+  {
+    name: "Bron",
+    money: initialPlayerMoney,
+    hand: [],
+    bestHand: null,
+    showCards: true,
+    isComp: true,
+    role: {
+      isDealer: false,
+      isSmallBlind: false,
       isBigBlind: false,
-      isSmallBlind: true,
     },
   },
 ];
@@ -61,6 +74,7 @@ interface PlayersContextProps {
   toggleShowCards: (index: number) => void;
   addPlayer: (name: string) => void;
   removePlayer: (playerIndex: number) => void;
+  rotatePlayerRoles: () => void;
 }
 
 // Default values for the context
@@ -72,6 +86,7 @@ const defaultValue: PlayersContextProps = {
   toggleShowCards: () => {},
   addPlayer: () => {},
   removePlayer: () => {},
+  rotatePlayerRoles: () => {},
 };
 
 // Create the context
@@ -132,6 +147,33 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
     );
   };
 
+  const rotatePlayerRoles = () => {
+    setPlayers((prevPlayers) => {
+      const numPlayers = prevPlayers.length;
+
+      if (numPlayers === 0 || numPlayers === 1) {
+        return prevPlayers;
+      }
+
+      const currentDealerIndex = prevPlayers.findIndex(
+        (player) => player.role.isDealer
+      );
+
+      const newDealerIndex = (currentDealerIndex + 1) % prevPlayers.length;
+      const newSmallBlindIndex = (newDealerIndex + 1) % prevPlayers.length;
+      const newBigBlindIndex = (newSmallBlindIndex + 1) % prevPlayers.length;
+
+      return prevPlayers.map((player, index) => ({
+        ...player,
+        role: {
+          isDealer: index === newDealerIndex,
+          isSmallBlind: index === newSmallBlindIndex,
+          isBigBlind: index === newBigBlindIndex,
+        },
+      }));
+    });
+  };
+
   useEffect(() => {
     console.log("Players: ", players);
   }, [stage]);
@@ -146,6 +188,7 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
         toggleShowCards,
         addPlayer,
         removePlayer,
+        rotatePlayerRoles,
       }}
     >
       {children}

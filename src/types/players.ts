@@ -9,8 +9,8 @@ export interface Player {
   isComp: boolean;
   role: {
     isDealer: boolean;
-    isBigBlind: boolean;
     isSmallBlind: boolean;
+    isBigBlind: boolean;
   };
 }
 

@@ -29,18 +29,6 @@
 // Players
 .player {
   @apply relative h-20 w-20 rounded-full;
-
-  // &--dealer {
-  //   @apply outline outline-2 outline-black outline-offset-[6px];
-  // }
-
-  // &--big-blind {
-  //   @apply outline outline-2 outline-black outline-offset-4;
-  // }
-
-  // &--small-blind {
-  //   @apply outline outline-2 outline-black outline-offset-2;
-  // }
 }
 
 .player-name {
@@ -68,6 +56,10 @@
         @apply bg-red-500 border-red-500;
       }
     }
+  }
+
+  &--role {
+    @apply bottom-[4px] right-[4px] h-5 w-5;
   }
 }
 

@@ -257,8 +257,6 @@ export const evaluateBestHand = (
 ): HandRank => {
   const allCards = [...playerHand, ...communityCards];
 
-  console.log("All cards: ", allCards);
-
   // Evaluate and return the best possible hand
   return evaluateHand(allCards);
 };

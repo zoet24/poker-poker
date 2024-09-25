@@ -35,8 +35,13 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     addToCommunity,
     addToBurn,
   } = useContext(CardsContext);
-  const { players, setPlayers, resetPlayersHands, resetPlayers } =
-    useContext(PlayersContext);
+  const {
+    players,
+    setPlayers,
+    resetPlayersHands,
+    resetPlayers,
+    rotatePlayerRoles,
+  } = useContext(PlayersContext);
   const { setPot } = useContext(BettingContext);
 
   const gameNumber = useRef(0);
@@ -53,11 +58,9 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
       if (!isInitialMount.current) {
         gameNumber.current += 1;
 
-        // Dealer/big blind/small blind logic
-        // Game 1:
-        // Player 0: dealer
-        // Player 1: big blind
-        // Player 2: small blind
+        if (gameNumber.current > 1) {
+          rotatePlayerRoles();
+        }
       } else {
         isInitialMount.current = false;
       }
