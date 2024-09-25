@@ -89,6 +89,28 @@
   }
 }
 
+.folded {
+  .player-name {
+    @apply border-gray-500 text-gray-500;
+  }
+
+  .player-controls {
+    @apply border-gray-500 bg-gray-500;
+  }
+
+  .player-hand {
+    outline: none !important;
+  }
+
+  .player-hand-best {
+    @apply text-gray-500;
+  }
+
+  .card {
+    @apply border-gray-500 text-gray-500;
+  }
+}
+
 // Cards
 .card {
   @apply border-black border-2 bg-white h-20 w-14 rounded-lg flex items-center justify-center;

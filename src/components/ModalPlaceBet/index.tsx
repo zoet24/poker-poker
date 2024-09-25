@@ -14,7 +14,17 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
   playerIndex,
   handleCloseModal,
 }) => {
-  const { players } = useContext(PlayersContext);
+  const { players, setPlayers } = useContext(PlayersContext);
+
+  const handleFold = () => {
+    setPlayers((prevPlayers) =>
+      prevPlayers.map((player, index) =>
+        index === playerIndex ? { ...player, hasFolded: true } : player
+      )
+    );
+    handleCloseModal();
+  };
+
   return (
     <div>
       <div className="input input-number">
@@ -24,7 +34,7 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
       <div className="modal-btns">
         <Button text="Place bet" onClick={() => console.log("Hello")}></Button>
         <Button text="Check" onClick={() => console.log("Hello")}></Button>
-        <Button text="Fold" onClick={() => console.log("Hello")}></Button>
+        <Button text="Fold" onClick={handleFold}></Button>
       </div>
     </div>
   );

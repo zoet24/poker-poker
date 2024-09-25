@@ -1,13 +1,5 @@
-import React, {
-  useState,
-  ReactNode,
-  createContext,
-  useEffect,
-  useContext,
-} from "react";
+import React, { useState, ReactNode, createContext, useEffect } from "react";
 import { GameStage } from "types/stage";
-import CardsContext from "./CardsContext";
-import PlayersContext from "./PlayersContext";
 
 // Stages in the game in order
 const stages: GameStage[] = [

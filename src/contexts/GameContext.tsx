@@ -50,7 +50,6 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     let localDeck = [...deck];
 
-    // Handle pre-deal: reset deck and clear players' hands
     if (stage === "pre-deal") {
       resetDeck();
       resetPlayersHands();

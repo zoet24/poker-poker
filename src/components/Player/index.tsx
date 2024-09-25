@@ -5,16 +5,18 @@ import Modal from "../Modal";
 import ModalPlayerStats from "../ModalPlayerStats";
 import PlayersContext from "contexts/PlayersContext";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { PlayerBasicInfo } from "types/players";
+import { Player as PlayerType } from "types/players";
+import StageContext from "contexts/StageContext";
 
 interface PlayerProps {
-  player: PlayerBasicInfo;
+  player: PlayerType;
   playerIndex: number;
 }
 
 const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
-  const { name, money, showCards, role } = player;
+  const { name, money, showCards, role, isComp, hasFolded } = player;
   const { toggleShowCards } = useContext(PlayersContext);
+  const { stage } = useContext(StageContext);
 
   const [isModalPlayerStatsOpen, setModalPlayerStatsOpen] = useState(false);
   const handleOpenModalPlayerStats = () => setModalPlayerStatsOpen(true);
@@ -41,6 +43,12 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
       return () => clearTimeout(timeout);
     }
   }, [money]);
+
+  useEffect(() => {
+    if (!isComp && !hasFolded && stage !== "pre-deal" && stage !== "showdown") {
+      handleOpenModalPlaceBet();
+    }
+  }, [stage]);
 
   return (
     <>
@@ -69,13 +77,13 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
             {`£${Math.abs(moneyChange).toFixed(2)}`}
           </div>
         )}
-        {!Object.values(player.role).every((value) => value === false) && (
+        {!Object.values(role).every((value) => value === false) && (
           <div className="player-controls player-controls--role">
-            {player.role.isDealer
+            {role.isDealer
               ? "D"
-              : player.role.isSmallBlind
+              : role.isSmallBlind
               ? "b"
-              : player.role.isBigBlind
+              : role.isBigBlind
               ? "B"
               : ""}
           </div>
@@ -94,7 +102,7 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
       <Modal
         isOpen={isModalPlaceBetOpen}
         onClose={handleCloseModalPlaceBet}
-        title={`Player - ${name} - place bet`}
+        title={`${name} - place ${stage} bet`}
       >
         <ModalPlaceBet
           handleCloseModal={handleCloseModalPlaceBet}

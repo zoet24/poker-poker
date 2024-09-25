@@ -37,13 +37,17 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
   const takePlayerBets = () => {
     setPlayers((prevPlayers: Player[]) =>
       prevPlayers.map((player) => {
-        const updatedMoney = Math.max(0, player.money - 0.2); // Deduct 20p but ensure no negative balance
+        if (player.hasFolded) {
+          return player;
+        }
+
+        const updatedMoney = Math.max(0, player.money - 0.2);
         return { ...player, money: updatedMoney };
       })
     );
 
-    const totalContribution = players.length * 0.2; // Calculate the total contribution to the pot
-    setPot((prevPot) => prevPot + totalContribution); // Add the contribution to the pot
+    const totalContribution = players.length * 0.2;
+    setPot((prevPot) => prevPot + totalContribution);
   };
 
   // Use effect to handle stage change
@@ -58,13 +62,13 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
       setPlayers((prevPlayers) =>
         prevPlayers.map((player) => ({
           ...player,
-          showCards: true, // Set showCards to true for all players
+          showCards: true,
         }))
       );
 
-      // Find the highest rank among all players
+      // Find the highest rank among all non-folded players
       const highestRank = players.reduce((max, player) => {
-        if (player.bestHand?.rank !== undefined) {
+        if (!player.hasFolded && player.bestHand?.rank !== undefined) {
           return Math.max(max, player.bestHand.rank);
         }
         return max;

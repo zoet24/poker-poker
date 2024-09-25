@@ -18,6 +18,7 @@ const initialPlayers: Player[] = [
     bestHand: null,
     showCards: true,
     isComp: false,
+    hasFolded: true,
     role: {
       isDealer: true,
       isSmallBlind: false,
@@ -29,8 +30,9 @@ const initialPlayers: Player[] = [
     money: initialPlayerMoney,
     hand: [],
     bestHand: null,
-    showCards: true,
+    showCards: false,
     isComp: true,
+    hasFolded: true,
     role: {
       isDealer: false,
       isSmallBlind: true,
@@ -42,8 +44,9 @@ const initialPlayers: Player[] = [
     money: initialPlayerMoney,
     hand: [],
     bestHand: null,
-    showCards: true,
+    showCards: false,
     isComp: true,
+    hasFolded: true,
     role: {
       isDealer: false,
       isSmallBlind: false,
@@ -55,8 +58,9 @@ const initialPlayers: Player[] = [
     money: initialPlayerMoney,
     hand: [],
     bestHand: null,
-    showCards: true,
+    showCards: false,
     isComp: true,
+    hasFolded: true,
     role: {
       isDealer: false,
       isSmallBlind: false,
@@ -107,10 +111,12 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
   // Function to reset players' hands to an empty array
   const resetPlayersHands = () => {
     setPlayers((prevPlayers) =>
-      prevPlayers.map((player) => ({
+      prevPlayers.map((player, index) => ({
         ...player,
         hand: [],
         bestHand: null,
+        showCards: initialPlayers[index].showCards,
+        hasFolded: false,
       }))
     );
   };
@@ -132,6 +138,7 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
       bestHand: null,
       showCards: true,
       isComp: true,
+      hasFolded: true,
       role: {
         isDealer: false,
         isBigBlind: false,

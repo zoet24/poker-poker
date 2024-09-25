@@ -13,11 +13,15 @@ interface RowPlayerProps {
 }
 
 const RowPlayer: React.FC<RowPlayerProps> = ({ player, playerIndex }) => {
-  const { hand, showCards, bestHand = null } = player;
+  const { hand, showCards, bestHand = null, hasFolded } = player;
+
+  const foldedClass = hasFolded ? "folded" : "";
 
   return (
     <div className="box p-2">
-      <div className="flex justify-between items-center max-w-96 mx-auto">
+      <div
+        className={`flex justify-between items-center max-w-96 mx-auto ${foldedClass}`}
+      >
         <Player player={player} playerIndex={playerIndex} />
         <PlayerHand
           hand={hand}
