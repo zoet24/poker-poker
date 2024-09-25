@@ -18,9 +18,9 @@ interface BettingContextProps {
     players: Player[],
     openBetModal: (player: Player) => Promise<void>
   ) => Promise<void>;
-  openPlayerModal: (player: Player) => Promise<void>;
-  closePlayerModal: (playerName: string) => void;
-  playerModalState: Record<string, { open: boolean; resolve?: () => void }>;
+  openPlaceBetModal: (player: Player) => Promise<void>;
+  closePlaceBetModal: (playerName: string) => void;
+  placeBetModalState: Record<string, { open: boolean; resolve?: () => void }>;
 }
 
 // Default values for the context
@@ -29,9 +29,9 @@ const defaultValue: BettingContextProps = {
   setPot: () => {},
   takePlayerBet: () => {},
   takePlayersBets: async () => {},
-  openPlayerModal: async () => {},
-  closePlayerModal: () => {},
-  playerModalState: {},
+  openPlaceBetModal: async () => {},
+  closePlaceBetModal: () => {},
+  placeBetModalState: {},
 };
 
 // Create the context
@@ -45,52 +45,76 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
   const { stage } = useContext(StageContext);
   const { players, setPlayers } = useContext(PlayersContext);
 
-  const [playerModalState, setPlayerModalState] = useState<
+  const [placeBetModalState, setPlaceBetModalState] = useState<
     Record<string, { open: boolean; resolve?: () => void }>
   >({});
 
-  const openPlayerModal = (player: Player): Promise<void> => {
+  const openPlaceBetModal = (player: Player | undefined): Promise<void> => {
     return new Promise((resolve) => {
-      setPlayerModalState((prevState) => ({
-        ...prevState,
-        [player.name]: { open: true, resolve }, // Open the modal and store resolve function
-      }));
+      if (!player) {
+        console.error("Player is undefined or null, cannot open modal");
+        resolve(); // Resolve immediately if the player is invalid
+        return;
+      }
+
+      if (!player.hasFolded) {
+        // Only open the modal if the player has not folded
+        setPlaceBetModalState((prevState) => ({
+          ...prevState,
+          [player.name]: { open: true, resolve },
+        }));
+      } else {
+        // Automatically resolve the promise if the player has folded
+        resolve();
+      }
     });
   };
 
-  const closePlayerModal = (playerName: string) => {
-    setPlayerModalState((prevState) => {
+  const closePlaceBetModal = (playerName: string) => {
+    setPlaceBetModalState((prevState) => {
       const playerState = prevState[playerName];
       if (playerState?.resolve) {
-        playerState.resolve(); // Resolve the promise when the modal is closed
+        playerState.resolve();
       }
       return {
         ...prevState,
-        [playerName]: { open: false }, // Close the modal
+        [playerName]: { open: false },
       };
     });
   };
 
   const takePlayerBet = (playerIndex: number, betAmount: number) => {
-    console.log("Take player bet");
+    setPlayers((prevPlayers) =>
+      prevPlayers.map((player, index) => {
+        if (index === playerIndex) {
+          const updatedMoney = player.money - betAmount;
+
+          return {
+            ...player,
+            money: Math.max(0, updatedMoney),
+          };
+        }
+        return player;
+      })
+    );
+
+    setPot((prevPot) => prevPot + betAmount);
   };
 
   const takePlayersBets = async (
     players: Player[],
     openBetModal: (player: Player) => Promise<void>
   ) => {
-    // Find the index of the small blind
     const smallBlindIndex = players.findIndex(
       (player) => player.role.isSmallBlind
     );
 
-    // Iterate through players starting from small blind, looping back to the beginning
-    for (let i = 0; i < players.length; i++) {
-      const currentPlayerIndex = (smallBlindIndex + i) % players.length;
-      const currentPlayer = players[currentPlayerIndex];
-      await openBetModal(currentPlayer); // Wait for the modal to be closed before proceeding to the next player
+    const activePlayers = players.filter((player) => !player.hasFolded);
 
-      console.log(`Player ${i + 1}: ${players[currentPlayerIndex].name}`);
+    for (let i = 0; i < activePlayers.length; i++) {
+      const currentPlayerIndex = (smallBlindIndex + i) % players.length;
+      const currentPlayer = activePlayers[currentPlayerIndex];
+      await openBetModal(currentPlayer);
     }
   };
 
@@ -144,9 +168,9 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
         setPot,
         takePlayerBet,
         takePlayersBets,
-        playerModalState,
-        openPlayerModal,
-        closePlayerModal,
+        placeBetModalState,
+        openPlaceBetModal,
+        closePlaceBetModal,
       }}
     >
       {children}

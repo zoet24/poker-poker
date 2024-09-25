@@ -53,20 +53,20 @@ const initialPlayers: Player[] = [
       isBigBlind: true,
     },
   },
-  {
-    name: "Bron",
-    money: initialPlayerMoney,
-    hand: [],
-    bestHand: null,
-    showCards: false,
-    isComp: true,
-    hasFolded: true,
-    role: {
-      isDealer: false,
-      isSmallBlind: false,
-      isBigBlind: false,
-    },
-  },
+  // {
+  //   name: "Bron",
+  //   money: initialPlayerMoney,
+  //   hand: [],
+  //   bestHand: null,
+  //   showCards: false,
+  //   isComp: true,
+  //   hasFolded: true,
+  //   role: {
+  //     isDealer: false,
+  //     isSmallBlind: false,
+  //     isBigBlind: false,
+  //   },
+  // },
 ];
 
 // Define the shape of the PlayersContext data

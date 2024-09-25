@@ -43,7 +43,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     resetPlayers,
     rotatePlayerRoles,
   } = useContext(PlayersContext);
-  const { setPot, takePlayersBets, openPlayerModal } =
+  const { setPot, takePlayersBets, openPlaceBetModal } =
     useContext(BettingContext);
 
   const gameNumber = useRef(0);
@@ -82,28 +82,28 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
         return { ...player, hand: newHand };
       });
       setPlayers(updatedPlayers);
-      takePlayersBets(players, openPlayerModal);
+      takePlayersBets(players, openPlaceBetModal);
     }
 
     // Handle flop: burn 1 card, deal 3 cards to community
     else if (stage === "flop") {
       localDeck = burnCard(localDeck, addToBurn);
       localDeck = dealToCommunity(3, localDeck, addToCommunity);
-      takePlayersBets(players, openPlayerModal);
+      takePlayersBets(players, openPlaceBetModal);
     }
 
     // Handle turn: burn 1 card, deal 1 to community
     else if (stage === "turn") {
       localDeck = burnCard(localDeck, addToBurn);
       localDeck = dealToCommunity(1, localDeck, addToCommunity);
-      takePlayersBets(players, openPlayerModal);
+      takePlayersBets(players, openPlaceBetModal);
     }
 
     // Handle river: burn 1 card, deal 1 to community
     else if (stage === "river") {
       localDeck = burnCard(localDeck, addToBurn);
       localDeck = dealToCommunity(1, localDeck, addToCommunity);
-      takePlayersBets(players, openPlayerModal);
+      takePlayersBets(players, openPlaceBetModal);
     }
 
     // Update the global deck
