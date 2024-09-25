@@ -48,6 +48,8 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
 
   // Use effect to handle stage change
   useEffect(() => {
+    console.log("Current pot", pot);
+
     // Deduct money from players each time the stage changes
     if (stage && stage !== "pre-deal" && stage !== "showdown") {
       takePlayerBets();
@@ -76,10 +78,11 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
       );
 
       console.log("Winners", winners);
+      console.log("Current pot", pot);
 
       if (winners.length > 0) {
         // Split the pot equally among the winners
-        const potShare = Math.floor(pot / winners.length);
+        const potShare = pot / winners.length;
 
         console.log("Pot share", potShare);
 
