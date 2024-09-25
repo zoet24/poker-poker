@@ -4,7 +4,6 @@
 import { useContext, useState } from "react";
 import Button from "../Button";
 import PlayersContext from "contexts/PlayersContext";
-import BettingContext from "contexts/BettingContext";
 
 interface ModalPlaceBetProps {
   playerIndex: number;
@@ -16,24 +15,24 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
   handleCloseModal,
 }) => {
   const { players, setPlayers } = useContext(PlayersContext);
-  const { takePlayerBet, nextTurn } = useContext(BettingContext);
   const [betAmount, setBetAmount] = useState<number>(0);
 
   const handlePlaceBet = () => {
-    const player = players[playerIndex];
+    console.log("Place bet!");
 
-    if (betAmount > 0 && betAmount <= player.money) {
-      takePlayerBet(playerIndex, betAmount);
-      handleCloseModal();
-      nextTurn();
-    }
+    const player = players[playerIndex];
+    handleCloseModal();
   };
 
   const handleCheck = () => {
+    console.log("Check!");
     handleCloseModal();
   };
 
   const handleFold = () => {
+    console.log("Fold!");
+
+    // Mark the player as folded and move to the next player
     setPlayers((prevPlayers) =>
       prevPlayers.map((player, index) =>
         index === playerIndex ? { ...player, hasFolded: true } : player
@@ -50,7 +49,7 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
           type="number"
           min={0}
           max={players[playerIndex].money}
-          value={betAmount}
+          value={betAmount.toFixed(2)}
           onChange={(e) => setBetAmount(Number(e.target.value))}
         />
       </div>

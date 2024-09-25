@@ -6,7 +6,6 @@ import React, {
   useContext,
 } from "react";
 import StageContext from "./StageContext";
-import { Player } from "types/players";
 import PlayersContext from "./PlayersContext";
 
 // Define the shape of the PlayersContext data
@@ -14,8 +13,6 @@ interface BettingContextProps {
   pot: number;
   setPot: React.Dispatch<React.SetStateAction<number>>;
   takePlayerBet: (playerIndex: number, betAmount: number) => void;
-  currentTurnIndex: number;
-  nextTurn: () => void;
 }
 
 // Default values for the context
@@ -23,8 +20,6 @@ const defaultValue: BettingContextProps = {
   pot: 0,
   setPot: () => {},
   takePlayerBet: () => {},
-  currentTurnIndex: 0,
-  nextTurn: () => {},
 };
 
 // Create the context
@@ -35,39 +30,12 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [pot, setPot] = useState<number>(0);
-  const [currentTurnIndex, setCurrentTurnIndex] = useState<number>(0);
   const { stage } = useContext(StageContext);
   const { players, setPlayers } = useContext(PlayersContext);
 
   const takePlayerBet = (playerIndex: number, betAmount: number) => {
-    setPlayers((prevPlayers) =>
-      prevPlayers.map((player, index) => {
-        if (player.hasFolded || index !== playerIndex) {
-          return player;
-        }
-
-        const updatedMoney = Math.max(0, player.money - betAmount);
-        return { ...player, money: updatedMoney };
-      })
-    );
-
-    setPot((prevPot) => prevPot + betAmount);
+    console.log("Take player bet");
   };
-
-  const nextTurn = () => {
-    setCurrentTurnIndex((prevIndex) => (prevIndex + 1) % players.length);
-  };
-
-  // Automatically bet for computer players
-  useEffect(() => {
-    const currentPlayer = players[currentTurnIndex];
-    if (stage && stage !== "pre-deal" && stage !== "showdown") {
-      if (currentPlayer?.isComp && !currentPlayer?.hasFolded) {
-        takePlayerBet(currentTurnIndex, 0.2); // Auto-bet for computers
-        nextTurn(); // Move to the next player
-      }
-    }
-  }, [currentTurnIndex, stage, players]);
 
   // Use effect to handle stage change
   useEffect(() => {
@@ -118,8 +86,6 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
         pot,
         setPot,
         takePlayerBet,
-        currentTurnIndex,
-        nextTurn,
       }}
     >
       {children}

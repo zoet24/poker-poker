@@ -1,5 +1,3 @@
-// Display for player name and money
-
 import ModalPlaceBet from "../ModalPlaceBet";
 import Modal from "../Modal";
 import ModalPlayerStats from "../ModalPlayerStats";
@@ -19,14 +17,15 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
   const { stage } = useContext(StageContext);
 
   const [isModalPlayerStatsOpen, setModalPlayerStatsOpen] = useState(false);
-  const handleOpenModalPlayerStats = () => setModalPlayerStatsOpen(true);
-  const handleCloseModalPlayerStats = () => {
-    setModalPlayerStatsOpen(false);
-  };
-
   const [isModalPlaceBetOpen, setModalPlaceBetOpen] = useState(false);
+
+  const handleOpenModalPlayerStats = () => setModalPlayerStatsOpen(true);
+  const handleCloseModalPlayerStats = () => setModalPlayerStatsOpen(false);
+
   const handleOpenModalPlaceBet = () => setModalPlaceBetOpen(true);
-  const handleCloseModalPlaceBet = () => setModalPlaceBetOpen(false);
+  const handleCloseModalPlaceBet = () => {
+    setModalPlaceBetOpen(false);
+  };
 
   const prevMoneyRef = useRef<number>(money);
   const [moneyChange, setMoneyChange] = useState<number | null>(null);
@@ -43,12 +42,6 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
       return () => clearTimeout(timeout);
     }
   }, [money]);
-
-  useEffect(() => {
-    if (!isComp && !hasFolded && stage !== "pre-deal" && stage !== "showdown") {
-      handleOpenModalPlaceBet();
-    }
-  }, [stage]);
 
   return (
     <>
@@ -77,6 +70,7 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
             {`£${Math.abs(moneyChange).toFixed(2)}`}
           </div>
         )}
+        {/* Role display */}
         {!Object.values(role).every((value) => value === false) && (
           <div className="player-controls player-controls--role">
             {role.isDealer
@@ -89,6 +83,8 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
           </div>
         )}
       </div>
+
+      {/* Modal for Player Stats */}
       <Modal
         isOpen={isModalPlayerStatsOpen}
         onClose={handleCloseModalPlayerStats}
@@ -99,6 +95,8 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
           playerIndex={playerIndex}
         />
       </Modal>
+
+      {/* Modal for Placing Bet */}
       <Modal
         isOpen={isModalPlaceBetOpen}
         onClose={handleCloseModalPlaceBet}
