@@ -5,6 +5,7 @@ import PlayersContext from "contexts/PlayersContext";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Player as PlayerType } from "types/players";
 import StageContext from "contexts/StageContext";
+import BettingContext from "contexts/BettingContext";
 
 interface PlayerProps {
   player: PlayerType;
@@ -15,6 +16,7 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
   const { name, money, showCards, role, isComp, hasFolded } = player;
   const { toggleShowCards } = useContext(PlayersContext);
   const { stage } = useContext(StageContext);
+  const { playerModalState, closePlayerModal } = useContext(BettingContext);
 
   const [isModalPlayerStatsOpen, setModalPlayerStatsOpen] = useState(false);
   const [isModalPlaceBetOpen, setModalPlaceBetOpen] = useState(false);
@@ -24,6 +26,7 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
 
   const handleOpenModalPlaceBet = () => setModalPlaceBetOpen(true);
   const handleCloseModalPlaceBet = () => {
+    closePlayerModal(player.name);
     setModalPlaceBetOpen(false);
   };
 
@@ -98,7 +101,7 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
 
       {/* Modal for Placing Bet */}
       <Modal
-        isOpen={isModalPlaceBetOpen}
+        isOpen={playerModalState[name]?.open}
         onClose={handleCloseModalPlaceBet}
         title={`${name} - place ${stage} bet`}
       >
