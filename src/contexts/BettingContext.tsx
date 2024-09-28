@@ -14,6 +14,8 @@ import { Player } from "types/players";
 interface BettingContextProps {
   pot: number;
   setPot: React.Dispatch<React.SetStateAction<number>>;
+  minimumBet: number;
+  setMinimumBet: React.Dispatch<React.SetStateAction<number>>;
   takePlayerBet: (playerIndex: number, betAmount: number) => void;
   takePlayersBets: (
     players: Player[],
@@ -29,6 +31,8 @@ interface BettingContextProps {
 const defaultValue: BettingContextProps = {
   pot: 0,
   setPot: () => {},
+  minimumBet: 0,
+  setMinimumBet: () => {},
   takePlayerBet: () => {},
   takePlayersBets: async () => {},
   openPlaceBetModal: async () => {},
@@ -45,6 +49,7 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [pot, setPot] = useState<number>(0);
+  const [minimumBet, setMinimumBet] = useState<number>(0);
   const { stage } = useContext(StageContext);
   const { players, setPlayers } = useContext(PlayersContext);
 
@@ -162,6 +167,7 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
 
   const handleDealBets = async () => {
     console.log("handle deal bets");
+    setMinimumBet(bigBlind);
 
     for (let i = 0; i < players.length; i++) {
       const currentPlayer = players[i];
@@ -173,7 +179,7 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
 
       if (currentPlayer.role.isSmallBlind) {
         // Small blind needs to put in an additional 10p to match big blind
-        const additionalBet = bigBlind - 0.1; // 0.1 already paid
+        const additionalBet = bigBlind - smallBlind; // 0.1 already paid
         if (additionalBet > 0) {
           takePlayerBet(i, additionalBet);
         }
@@ -253,6 +259,8 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
       value={{
         pot,
         setPot,
+        minimumBet,
+        setMinimumBet,
         takePlayerBet,
         takePlayersBets,
         placeBetModalState,

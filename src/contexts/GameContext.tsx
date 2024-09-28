@@ -89,21 +89,21 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     else if (stage === "flop") {
       localDeck = burnCard(localDeck, addToBurn);
       localDeck = dealToCommunity(3, localDeck, addToCommunity);
-      // takePlayersBets(players, openPlaceBetModal);
+      takePlayersBets(players, openPlaceBetModal);
     }
 
     // Handle turn: burn 1 card, deal 1 to community
     else if (stage === "turn") {
       localDeck = burnCard(localDeck, addToBurn);
       localDeck = dealToCommunity(1, localDeck, addToCommunity);
-      // takePlayersBets(players, openPlaceBetModal);
+      takePlayersBets(players, openPlaceBetModal);
     }
 
     // Handle river: burn 1 card, deal 1 to community
     else if (stage === "river") {
       localDeck = burnCard(localDeck, addToBurn);
       localDeck = dealToCommunity(1, localDeck, addToCommunity);
-      // takePlayersBets(players, openPlaceBetModal);
+      takePlayersBets(players, openPlaceBetModal);
     }
 
     // Update the global deck

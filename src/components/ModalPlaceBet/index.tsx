@@ -16,8 +16,8 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
   handleCloseModal,
 }) => {
   const { players, setPlayers } = useContext(PlayersContext);
-  const { takePlayerBet } = useContext(BettingContext);
-  const [betAmount, setBetAmount] = useState<number>(0);
+  const { takePlayerBet, minimumBet } = useContext(BettingContext);
+  const [betAmount, setBetAmount] = useState<number>(minimumBet);
 
   const handlePlaceBet = () => {
     const player = players[playerIndex];
@@ -48,7 +48,7 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
         <label>Bet amount:</label>
         <input
           type="number"
-          min={0}
+          min={minimumBet}
           max={players[playerIndex].money}
           value={betAmount.toFixed(2)}
           onChange={(e) => setBetAmount(Number(e.target.value))}
@@ -56,7 +56,11 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
       </div>
       <div className="modal-btns">
         <Button text="Place bet" onClick={handlePlaceBet}></Button>
-        <Button text="Check" onClick={handleCheck}></Button>
+        <Button
+          text="Check"
+          onClick={handleCheck}
+          disabled={minimumBet > 0}
+        ></Button>
         <Button text="Fold" onClick={handleFold}></Button>
       </div>
     </div>
