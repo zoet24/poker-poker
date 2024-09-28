@@ -18,7 +18,7 @@ const initialPlayers: Player[] = [
     bestHand: null,
     showCards: true,
     isComp: false,
-    hasFolded: true,
+    hasFolded: false,
     role: {
       isDealer: true,
       isSmallBlind: false,
@@ -31,8 +31,8 @@ const initialPlayers: Player[] = [
     hand: [],
     bestHand: null,
     showCards: false,
-    isComp: false,
-    hasFolded: true,
+    isComp: true,
+    hasFolded: false,
     role: {
       isDealer: false,
       isSmallBlind: true,
@@ -46,27 +46,41 @@ const initialPlayers: Player[] = [
     bestHand: null,
     showCards: false,
     isComp: true,
-    hasFolded: true,
+    hasFolded: false,
     role: {
       isDealer: false,
       isSmallBlind: false,
       isBigBlind: true,
     },
   },
-  // {
-  //   name: "Bron",
-  //   money: initialPlayerMoney,
-  //   hand: [],
-  //   bestHand: null,
-  //   showCards: false,
-  //   isComp: true,
-  //   hasFolded: true,
-  //   role: {
-  //     isDealer: false,
-  //     isSmallBlind: false,
-  //     isBigBlind: false,
-  //   },
-  // },
+  {
+    name: "Bron",
+    money: initialPlayerMoney,
+    hand: [],
+    bestHand: null,
+    showCards: false,
+    isComp: true,
+    hasFolded: false,
+    role: {
+      isDealer: false,
+      isSmallBlind: false,
+      isBigBlind: false,
+    },
+  },
+  {
+    name: "Char",
+    money: initialPlayerMoney,
+    hand: [],
+    bestHand: null,
+    showCards: false,
+    isComp: true,
+    hasFolded: false,
+    role: {
+      isDealer: false,
+      isSmallBlind: false,
+      isBigBlind: false,
+    },
+  },
 ];
 
 // Define the shape of the PlayersContext data
@@ -136,9 +150,9 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
       money: 5.0,
       hand: [],
       bestHand: null,
-      showCards: true,
+      showCards: false,
       isComp: true,
-      hasFolded: true,
+      hasFolded: false,
       role: {
         isDealer: false,
         isBigBlind: false,

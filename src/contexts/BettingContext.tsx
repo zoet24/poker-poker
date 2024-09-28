@@ -4,6 +4,7 @@ import React, {
   ReactNode,
   useEffect,
   useContext,
+  useRef,
 } from "react";
 import StageContext from "./StageContext";
 import PlayersContext from "./PlayersContext";
@@ -21,6 +22,7 @@ interface BettingContextProps {
   openPlaceBetModal: (player: Player) => Promise<void>;
   closePlaceBetModal: (playerName: string) => void;
   placeBetModalState: Record<string, { open: boolean; resolve?: () => void }>;
+  handleDealBets: () => Promise<void>;
 }
 
 // Default values for the context
@@ -32,6 +34,7 @@ const defaultValue: BettingContextProps = {
   openPlaceBetModal: async () => {},
   closePlaceBetModal: () => {},
   placeBetModalState: {},
+  handleDealBets: async () => {},
 };
 
 // Create the context
@@ -84,6 +87,8 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const takePlayerBet = (playerIndex: number, betAmount: number) => {
+    console.log("take player bet");
+
     setPlayers((prevPlayers) =>
       prevPlayers.map((player, index) => {
         if (index === playerIndex) {
@@ -105,21 +110,103 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
     players: Player[],
     openBetModal: (player: Player) => Promise<void>
   ) => {
-    const smallBlindIndex = players.findIndex(
-      (player) => player.role.isSmallBlind
-    );
+    console.log("take player bets");
 
     const activePlayers = players.filter((player) => !player.hasFolded);
 
+    const activeSmallBlindIndex = activePlayers.findIndex(
+      (player) => player.role.isSmallBlind
+    );
+
+    // Iterate over active players starting from the small blind
     for (let i = 0; i < activePlayers.length; i++) {
-      const currentPlayerIndex = (smallBlindIndex + i) % players.length;
-      const currentPlayer = activePlayers[currentPlayerIndex];
-      await openBetModal(currentPlayer);
+      const currentPlayer =
+        activePlayers[(activeSmallBlindIndex + i) % activePlayers.length];
+
+      // Check if the player is a computer or not
+      if (currentPlayer.isComp) {
+        const originalIndex = players.findIndex(
+          (p) => p.name === currentPlayer.name
+        );
+        takePlayerBet(originalIndex, 0.2);
+      } else {
+        await openBetModal(currentPlayer);
+      }
+    }
+  };
+
+  const isInitialMount = useRef(true);
+  const smallBlind = 0.1;
+  const bigBlind = smallBlind * 2;
+
+  const handleBlinds = () => {
+    console.log("handle blinds");
+
+    const smallBlindPlayer = players.find((player) => player.role.isSmallBlind);
+    const bigBlindPlayer = players.find((player) => player.role.isBigBlind);
+
+    if (smallBlindPlayer) {
+      const smallBlindIndex = players.findIndex(
+        (p) => p.name === smallBlindPlayer.name
+      );
+      takePlayerBet(smallBlindIndex, smallBlind);
+    }
+
+    if (bigBlindPlayer) {
+      const bigBlindIndex = players.findIndex(
+        (p) => p.name === bigBlindPlayer.name
+      );
+      takePlayerBet(bigBlindIndex, bigBlind);
+    }
+  };
+
+  const handleDealBets = async () => {
+    console.log("handle deal bets");
+
+    for (let i = 0; i < players.length; i++) {
+      const currentPlayer = players[i];
+
+      // Skip players who have folded
+      if (currentPlayer.hasFolded) {
+        continue;
+      }
+
+      if (currentPlayer.role.isSmallBlind) {
+        // Small blind needs to put in an additional 10p to match big blind
+        const additionalBet = bigBlind - 0.1; // 0.1 already paid
+        if (additionalBet > 0) {
+          takePlayerBet(i, additionalBet);
+        }
+      } else if (currentPlayer.role.isBigBlind) {
+        // Big blind has already paid the minimum, no action needed
+        continue;
+      } else {
+        // All other players must put in 20p or fold
+        if (currentPlayer.isComp) {
+          // If it's a computer player, they automatically bet the required amount
+          takePlayerBet(i, bigBlind);
+        } else {
+          // If it's a human player, open the bet modal
+          await openPlaceBetModal(currentPlayer);
+        }
+      }
     }
   };
 
   // Use effect to handle stage change
   useEffect(() => {
+    if (stage === "pre-deal") {
+      if (!isInitialMount.current) {
+        handleBlinds();
+      } else {
+        isInitialMount.current = false;
+      }
+    }
+
+    if (stage === "deal") {
+      handleDealBets();
+    }
+
     if (stage === "showdown") {
       // Show all players' cards
       setPlayers((prevPlayers) =>
@@ -171,6 +258,7 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
         placeBetModalState,
         openPlaceBetModal,
         closePlaceBetModal,
+        handleDealBets,
       }}
     >
       {children}
