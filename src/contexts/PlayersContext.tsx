@@ -17,7 +17,7 @@ const initialPlayers: Player[] = [
     hand: [],
     bestHand: null,
     showCards: true,
-    isComp: false,
+    isComp: true,
     hasFolded: false,
     role: {
       isDealer: true,
@@ -67,20 +67,20 @@ const initialPlayers: Player[] = [
       isBigBlind: false,
     },
   },
-  {
-    name: "Char",
-    money: initialPlayerMoney,
-    hand: [],
-    bestHand: null,
-    showCards: false,
-    isComp: true,
-    hasFolded: false,
-    role: {
-      isDealer: false,
-      isSmallBlind: false,
-      isBigBlind: false,
-    },
-  },
+  // {
+  //   name: "Char",
+  //   money: initialPlayerMoney,
+  //   hand: [],
+  //   bestHand: null,
+  //   showCards: false,
+  //   isComp: true,
+  //   hasFolded: false,
+  //   role: {
+  //     isDealer: false,
+  //     isSmallBlind: false,
+  //     isBigBlind: false,
+  //   },
+  // },
 ];
 
 // Define the shape of the PlayersContext data
@@ -93,6 +93,8 @@ interface PlayersContextProps {
   addPlayer: (name: string) => void;
   removePlayer: (playerIndex: number) => void;
   rotatePlayerRoles: () => void;
+  rolesUpdated: boolean; // New flag to determine role rotation completion
+  setRolesUpdated: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // Default values for the context
@@ -105,6 +107,8 @@ const defaultValue: PlayersContextProps = {
   addPlayer: () => {},
   removePlayer: () => {},
   rotatePlayerRoles: () => {},
+  rolesUpdated: false,
+  setRolesUpdated: () => {},
 };
 
 // Create the context
@@ -115,6 +119,7 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
+  const [rolesUpdated, setRolesUpdated] = useState(false);
   const { stage } = useContext(StageContext);
 
   // Function to reset players to their initial state
@@ -193,6 +198,8 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
         },
       }));
     });
+
+    setRolesUpdated(true);
   };
 
   useEffect(() => {
@@ -210,6 +217,8 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
         addPlayer,
         removePlayer,
         rotatePlayerRoles,
+        rolesUpdated,
+        setRolesUpdated,
       }}
     >
       {children}

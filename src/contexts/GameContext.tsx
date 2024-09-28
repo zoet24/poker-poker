@@ -42,8 +42,10 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     resetPlayersHands,
     resetPlayers,
     rotatePlayerRoles,
+    rolesUpdated,
+    setRolesUpdated,
   } = useContext(PlayersContext);
-  const { setPot, takePlayersBets, openPlaceBetModal, handleDealBets } =
+  const { setPot, takePlayersBets, openPlaceBetModal, handleBlinds } =
     useContext(BettingContext);
 
   const gameNumber = useRef(0);
@@ -61,6 +63,8 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
 
         if (gameNumber.current > 1) {
           rotatePlayerRoles();
+        } else {
+          handleBlinds();
         }
       } else {
         isInitialMount.current = false;
@@ -82,7 +86,6 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
         return { ...player, hand: newHand };
       });
       setPlayers(updatedPlayers);
-      handleDealBets();
     }
 
     // Handle flop: burn 1 card, deal 3 cards to community
@@ -123,6 +126,13 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
       }
     }
   }, [communityCards]);
+
+  useEffect(() => {
+    if (rolesUpdated) {
+      handleBlinds();
+      setRolesUpdated(false); // Reset rolesUpdated flag after blinds are handled
+    }
+  }, [rolesUpdated]);
 
   const resetGame = () => {
     gameNumber.current = 0;

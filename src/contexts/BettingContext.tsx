@@ -25,6 +25,7 @@ interface BettingContextProps {
   closePlaceBetModal: (playerName: string) => void;
   placeBetModalState: Record<string, { open: boolean; resolve?: () => void }>;
   handleDealBets: () => Promise<void>;
+  handleBlinds: () => void;
 }
 
 // Default values for the context
@@ -39,6 +40,7 @@ const defaultValue: BettingContextProps = {
   closePlaceBetModal: () => {},
   placeBetModalState: {},
   handleDealBets: async () => {},
+  handleBlinds: () => {},
 };
 
 // Create the context
@@ -145,10 +147,11 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
   const bigBlind = smallBlind * 2;
 
   const handleBlinds = () => {
-    console.log("handle blinds");
-
     const smallBlindPlayer = players.find((player) => player.role.isSmallBlind);
     const bigBlindPlayer = players.find((player) => player.role.isBigBlind);
+
+    console.log("handle blinds", smallBlindPlayer?.name);
+    console.log("handle blinds", bigBlindPlayer?.name);
 
     if (smallBlindPlayer) {
       const smallBlindIndex = players.findIndex(
@@ -201,13 +204,14 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
 
   // Use effect to handle stage change
   useEffect(() => {
-    if (stage === "pre-deal") {
-      if (!isInitialMount.current) {
-        handleBlinds();
-      } else {
-        isInitialMount.current = false;
-      }
-    }
+    // if (stage === "pre-deal") {
+    //   if (!isInitialMount.current) {
+    //     handleBlinds();
+    //     console.log("handle blinds in betting context");
+    //   } else {
+    //     isInitialMount.current = false;
+    //   }
+    // }
 
     if (stage === "deal") {
       handleDealBets();
@@ -267,6 +271,7 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
         openPlaceBetModal,
         closePlaceBetModal,
         handleDealBets,
+        handleBlinds,
       }}
     >
       {children}
