@@ -44,6 +44,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     rotatePlayerRoles,
     rolesUpdated,
     setRolesUpdated,
+    removePlayer,
   } = useContext(PlayersContext);
   const { setPot, takePlayersBets, openPlaceBetModal, handleBlinds } =
     useContext(BettingContext);
@@ -57,6 +58,22 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     if (stage === "pre-deal") {
       resetDeck();
       resetPlayersHands();
+
+      // Remove players whose money is less than or equal to zero
+      setPlayers((prevPlayers) => {
+        const updatedPlayers = prevPlayers.filter((player) => {
+          if (player.money <= 0) {
+            console.log(
+              `Removing player: ${player.name}, money: ${player.money}`
+            );
+          }
+          return player.money > 0;
+        });
+
+        console.log("Updated players after removal:", updatedPlayers);
+
+        return updatedPlayers;
+      });
 
       if (!isInitialMount.current) {
         gameNumber.current += 1;

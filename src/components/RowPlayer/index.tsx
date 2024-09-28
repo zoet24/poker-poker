@@ -14,7 +14,6 @@ interface RowPlayerProps {
 
 const RowPlayer: React.FC<RowPlayerProps> = ({ player, playerIndex }) => {
   const { hand, showCards, bestHand = null, hasFolded } = player;
-
   const foldedClass = hasFolded ? "folded" : "";
 
   return (

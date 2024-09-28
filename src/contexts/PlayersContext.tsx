@@ -9,7 +9,7 @@ import StageContext from "./StageContext";
 import { Player } from "types/players";
 
 // Define the initial players array
-const initialPlayerMoney = 5;
+const initialPlayerMoney = 1;
 const initialPlayers: Player[] = [
   {
     name: "Zoe",
@@ -67,20 +67,20 @@ const initialPlayers: Player[] = [
       isBigBlind: false,
     },
   },
-  // {
-  //   name: "Char",
-  //   money: initialPlayerMoney,
-  //   hand: [],
-  //   bestHand: null,
-  //   showCards: false,
-  //   isComp: true,
-  //   hasFolded: false,
-  //   role: {
-  //     isDealer: false,
-  //     isSmallBlind: false,
-  //     isBigBlind: false,
-  //   },
-  // },
+  {
+    name: "Char",
+    money: initialPlayerMoney,
+    hand: [],
+    bestHand: null,
+    showCards: false,
+    isComp: false,
+    hasFolded: false,
+    role: {
+      isDealer: false,
+      isSmallBlind: false,
+      isBigBlind: false,
+    },
+  },
 ];
 
 // Define the shape of the PlayersContext data

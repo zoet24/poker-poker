@@ -53,7 +53,7 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
   const [pot, setPot] = useState<number>(0);
   const [minimumBet, setMinimumBet] = useState<number>(0);
   const { stage } = useContext(StageContext);
-  const { players, setPlayers } = useContext(PlayersContext);
+  const { players, setPlayers, removePlayer } = useContext(PlayersContext);
 
   const [placeBetModalState, setPlaceBetModalState] = useState<
     Record<string, { open: boolean; resolve?: () => void }>
@@ -99,7 +99,8 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
     setPlayers((prevPlayers) =>
       prevPlayers.map((player, index) => {
         if (index === playerIndex) {
-          const updatedMoney = player.money - betAmount;
+          let updatedMoney = player.money - betAmount;
+          updatedMoney = Math.max(0, Math.round(updatedMoney * 100) / 100);
 
           return {
             ...player,
@@ -142,16 +143,12 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  const isInitialMount = useRef(true);
   const smallBlind = 0.1;
   const bigBlind = smallBlind * 2;
 
   const handleBlinds = () => {
     const smallBlindPlayer = players.find((player) => player.role.isSmallBlind);
     const bigBlindPlayer = players.find((player) => player.role.isBigBlind);
-
-    console.log("handle blinds", smallBlindPlayer?.name);
-    console.log("handle blinds", bigBlindPlayer?.name);
 
     if (smallBlindPlayer) {
       const smallBlindIndex = players.findIndex(
@@ -204,15 +201,6 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
 
   // Use effect to handle stage change
   useEffect(() => {
-    // if (stage === "pre-deal") {
-    //   if (!isInitialMount.current) {
-    //     handleBlinds();
-    //     console.log("handle blinds in betting context");
-    //   } else {
-    //     isInitialMount.current = false;
-    //   }
-    // }
-
     if (stage === "deal") {
       handleDealBets();
     }

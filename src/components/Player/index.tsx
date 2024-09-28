@@ -13,7 +13,7 @@ interface PlayerProps {
 }
 
 const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
-  const { name, money, showCards, role, isComp, hasFolded } = player;
+  const { name, money, showCards, role } = player;
   const { toggleShowCards } = useContext(PlayersContext);
   const { stage } = useContext(StageContext);
   const { placeBetModalState, closePlaceBetModal } = useContext(BettingContext);
