@@ -44,8 +44,9 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
 
   return (
     <div>
-      <div className="input input-number">
+      <div className="input input-currency">
         <label>Bet amount:</label>
+        <span className="currency-symbol">£</span>
         <input
           type="number"
           min={minimumBet}

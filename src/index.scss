@@ -171,4 +171,16 @@
   input {
     @apply border-black border-2 bg-white px-1 py-2 cursor-pointer;
   }
+
+  &.input-currency {
+    @apply relative;
+
+    input {
+      @apply pl-5;
+    }
+
+    .currency-symbol {
+      @apply pl-2 py-2.5 absolute bottom-0 pointer-events-none;
+    }
+  }
 }
