@@ -122,10 +122,12 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
       (player) => player.role.isSmallBlind
     );
 
+    const startIndex = activeSmallBlindIndex !== -1 ? activeSmallBlindIndex : 0;
+
     // Iterate over active players starting from the small blind
     for (let i = 0; i < activePlayers.length; i++) {
       const currentPlayer =
-        activePlayers[(activeSmallBlindIndex + i) % activePlayers.length];
+        activePlayers[(startIndex + i) % activePlayers.length];
 
       // Check if the player is a computer or not
       if (currentPlayer.isComp) {
@@ -220,7 +222,7 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
 
       // Find all players who have the highest rank
       const winners = players.filter(
-        (player) => player.bestHand?.rank === highestRank
+        (player) => !player.hasFolded && player.bestHand?.rank === highestRank
       );
 
       if (winners.length > 0) {

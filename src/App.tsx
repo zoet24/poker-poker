@@ -1,9 +1,9 @@
-import PlayersContext from "contexts/PlayersContext";
 import { useContext } from "react";
 import NavbarBottom from "./components/NavbarBottom";
 import NavbarTop from "./components/NavbarTop";
 import RowAddPlayer from "./components/RowAddPlayer";
 import RowPlayer from "./components/RowPlayer";
+import PlayersContext from "./contexts/PlayersContext";
 
 const App = () => {
   const { players } = useContext(PlayersContext);

@@ -1,26 +1,26 @@
 import { Card, HandRank } from "types/cards";
 import {
-  isRoyalFlush,
-  isStraightFlush,
+  isFlush,
   isFourOfAKind,
   isFullHouse,
-  isFlush,
+  isOnePair,
+  isRoyalFlush,
   isStraight,
+  isStraightFlush,
   isThreeOfAKind,
   isTwoPair,
-  isOnePair,
 } from "./handRanks";
 import {
-  getRoyalFlushScore,
-  getStraightFlushScore,
+  getFlushScore,
   getFourOfAKindScore,
   getFullHouseScore,
-  getFlushScore,
+  getHighCardScore,
+  getOnePairScore,
+  getRoyalFlushScore,
+  getStraightFlushScore,
   getStraightScore,
   getThreeOfAKindScore,
   getTwoPairScore,
-  getOnePairScore,
-  getHighCardScore,
 } from "./handScores";
 import { sortCardsByRank } from "./helpers";
 

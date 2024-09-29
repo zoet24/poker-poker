@@ -9,7 +9,7 @@ import { Player } from "types/players";
 import StageContext from "./StageContext";
 
 // Define the initial players array
-const initialPlayerMoney = 1;
+const initialPlayerMoney = 5;
 const initialPlayers: Player[] = [
   {
     name: "Zoe",
@@ -17,7 +17,7 @@ const initialPlayers: Player[] = [
     hand: [],
     bestHand: null,
     showCards: true,
-    isComp: true,
+    isComp: false,
     hasFolded: false,
     role: {
       isDealer: true,
@@ -53,34 +53,34 @@ const initialPlayers: Player[] = [
       isBigBlind: true,
     },
   },
-  {
-    name: "Bron",
-    money: initialPlayerMoney,
-    hand: [],
-    bestHand: null,
-    showCards: false,
-    isComp: true,
-    hasFolded: false,
-    role: {
-      isDealer: false,
-      isSmallBlind: false,
-      isBigBlind: false,
-    },
-  },
-  {
-    name: "Char",
-    money: initialPlayerMoney,
-    hand: [],
-    bestHand: null,
-    showCards: false,
-    isComp: true,
-    hasFolded: false,
-    role: {
-      isDealer: false,
-      isSmallBlind: false,
-      isBigBlind: false,
-    },
-  },
+  // {
+  //   name: "Bron",
+  //   money: initialPlayerMoney,
+  //   hand: [],
+  //   bestHand: null,
+  //   showCards: false,
+  //   isComp: true,
+  //   hasFolded: false,
+  //   role: {
+  //     isDealer: false,
+  //     isSmallBlind: false,
+  //     isBigBlind: false,
+  //   },
+  // },
+  // {
+  //   name: "Char",
+  //   money: initialPlayerMoney,
+  //   hand: [],
+  //   bestHand: null,
+  //   showCards: false,
+  //   isComp: true,
+  //   hasFolded: false,
+  //   role: {
+  //     isDealer: false,
+  //     isSmallBlind: false,
+  //     isBigBlind: false,
+  //   },
+  // },
 ];
 
 // Define the shape of the PlayersContext data

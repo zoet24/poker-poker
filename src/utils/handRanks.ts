@@ -46,7 +46,7 @@ export const isStraightFlush = (cards: Card[]): Card[] | null => {
       }
 
       // Special case for A-2-3-4-5 straight flush
-      if (suitCardRanks.includes(14) && isSequential([5, 4, 3, 2, 1])) {
+      if (suitCardRanks.includes(14) && isSequential([14, 5, 4, 3, 2])) {
         return sortedSuitCards.filter((card) =>
           ["14", "2", "3", "4", "5"].includes(card.rank)
         );
