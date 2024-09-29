@@ -12,7 +12,7 @@ import PlayersContext from "./PlayersContext";
 import { burnCard, dealToCommunity, drawCardFromDeck } from "../utils/deck";
 import { evaluateBestHand } from "../utils/game";
 import BettingContext from "./BettingContext";
-import { Player } from "types/players";
+import { handleToastError } from "../utils/toasts";
 
 interface GameContextProps {
   resetGame: () => void;
@@ -70,17 +70,13 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
       }
 
       // Remove players whose money is less than or equal to zero
-      setPlayers((prevPlayers) => {
-        const updatedPlayers = prevPlayers.filter((player) => {
-          if (player.money <= 0) {
-            console.log(
-              `Removing player: ${player.name}, money: ${player.money}`
-            );
-          }
-          return player.money > 0;
-        });
+      setPlayers((prevPlayers) =>
+        prevPlayers.filter((player) => player.money > 0)
+      );
 
-        return updatedPlayers;
+      const removedPlayers = players.filter((player) => player.money <= 0);
+      removedPlayers.forEach((player) => {
+        handleToastError(`${player.name} is all outta cash`);
       });
       return;
     }

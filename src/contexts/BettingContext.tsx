@@ -4,11 +4,11 @@ import React, {
   ReactNode,
   useEffect,
   useContext,
-  useRef,
 } from "react";
 import StageContext from "./StageContext";
 import PlayersContext from "./PlayersContext";
 import { Player } from "types/players";
+import { handleToastSuccess } from "../utils/toasts";
 
 // Define the shape of the PlayersContext data
 interface BettingContextProps {
@@ -235,6 +235,14 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
               : player
           )
         );
+
+        winners.forEach((winner) => {
+          handleToastSuccess(
+            `${winner.name} wins £${potShare.toFixed(2)} with ${
+              winner.bestHand?.rankName
+            }!`
+          );
+        });
 
         // Reset the pot after distributing the winnings
         setPot(0);

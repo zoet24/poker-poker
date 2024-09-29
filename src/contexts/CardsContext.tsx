@@ -63,7 +63,7 @@ export const CardsProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     console.log("Deck: ", deck);
     // console.log("Burn pile: ", burn);
-    // console.log("Community cards: ", communityCards);
+    console.log("Community cards: ", communityCards);
   }, [stage, burn, communityCards]);
 
   return (

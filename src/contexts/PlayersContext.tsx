@@ -9,7 +9,7 @@ import StageContext from "./StageContext";
 import { Player } from "types/players";
 
 // Define the initial players array
-const initialPlayerMoney = 10;
+const initialPlayerMoney = 1;
 const initialPlayers: Player[] = [
   {
     name: "Zoe",
@@ -152,7 +152,7 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
   const addPlayer = (name: string) => {
     const newPlayer: Player = {
       name,
-      money: 5.0,
+      money: initialPlayerMoney,
       hand: [],
       bestHand: null,
       showCards: false,
