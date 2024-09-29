@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.scss";
-import App from "./App";
-import { StageProvider } from "./contexts/StageContext";
-import { CardsProvider } from "./contexts/CardsContext";
-import { PlayersProvider } from "./contexts/PlayersContext";
-import { BettingProvider } from "./contexts/BettingContext";
-import { GameProvider } from "./contexts/GameContext";
 import { ToastContainer } from "react-toastify";
+import App from "./App";
+import { BettingProvider } from "./contexts/BettingContext";
+import { CardsProvider } from "./contexts/CardsContext";
+import { GameProvider } from "./contexts/GameContext";
+import { PlayersProvider } from "./contexts/PlayersContext";
+import { StageProvider } from "./contexts/StageContext";
+import "./index.scss";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

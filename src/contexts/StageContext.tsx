@@ -1,5 +1,4 @@
-import { handleToastSuccess } from "../utils/toasts";
-import React, { useState, ReactNode, createContext, useEffect } from "react";
+import React, { ReactNode, createContext, useEffect, useState } from "react";
 import { GameStage } from "types/stage";
 
 // Stages in the game in order

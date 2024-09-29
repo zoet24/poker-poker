@@ -22,7 +22,7 @@
   @apply border-black border-2 rounded-lg bg-white p-2 min-w-28 text-center capitalize cursor-pointer;
 
   &:disabled {
-    @apply cursor-default border-gray-400 text-gray-400;
+    @apply cursor-default border-gray text-gray;
   }
 }
 
@@ -32,11 +32,11 @@
 
   &--disabled {
     .player-name {
-      @apply border-gray-500 text-gray-500;
+      @apply border-gray text-gray;
     }
 
     .player-controls {
-      @apply border-gray-500 bg-gray-500;
+      @apply border-gray bg-gray;
     }
 
     .player-hand {
@@ -44,21 +44,21 @@
     }
 
     .player-hand-best {
-      @apply text-gray-500;
+      @apply text-gray;
     }
 
     .card {
-      @apply border-gray-500 text-gray-500;
+      @apply border-gray text-gray;
     }
   }
 
   &--out {
     .player-name {
-      @apply border-red-500 text-red-500;
+      @apply border-red text-red;
     }
 
     .player-controls {
-      @apply border-red-500 bg-red-500;
+      @apply border-red bg-red;
     }
 
     .player-hand {
@@ -66,11 +66,11 @@
     }
 
     .player-hand-best {
-      @apply text-red-500;
+      @apply text-red;
     }
 
     .card {
-      @apply border-red-500 text-red-500;
+      @apply border-red text-red;
     }
   }
 }
@@ -97,11 +97,11 @@
       animation: fadeOut 0.6s ease-in-out 0.6s forwards;
 
       &--win {
-        @apply bg-green-500 border-green-500;
+        @apply bg-green border-green;
       }
 
       &--lose {
-        @apply bg-red-500 border-red-500;
+        @apply bg-red border-red;
       }
     }
   }
@@ -124,16 +124,16 @@
   @apply outline rounded-lg;
 
   &--veryGood {
-    @apply outline-blue-500;
+    @apply outline-blue;
   }
   &--good {
-    @apply outline-green-500;
+    @apply outline-green;
   }
   &--medium {
-    @apply outline-yellow-500;
+    @apply outline-yellow;
   }
   &--bad {
-    @apply outline-red-500;
+    @apply outline-red;
   }
 }
 
@@ -158,7 +158,7 @@
   }
 
   &--red {
-    @apply text-red-500;
+    @apply text-red;
   }
 
   &--empty {

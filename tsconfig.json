@@ -18,11 +18,7 @@
     "isolatedModules": true /* Treat each file as a separate module (similar to 'ts.transpileModule'). */,
     "noEmit": true /* Do not emit outputs. */,
     "jsx": "react-jsx" /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */,
-    "baseUrl": "./src" /* Base directory to resolve non-relative module names. */,
-    "paths": {
-      "@components/*": ["components/*"] /* Setup path aliasing */,
-      "@utils/*": ["utils/*"]
-    }
+    "baseUrl": "./src" /* Base directory to resolve non-relative module names. */
   },
   "include": ["src"] /* Specify which paths to include in the compilation. */,
   "exclude": [

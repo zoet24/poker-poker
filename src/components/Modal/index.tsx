@@ -21,7 +21,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
       <div className="modal-content">
         <FocusLock autoFocus={false}>
           <div onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between p-5 bg-blue-200">
+            <div className="flex items-center justify-between p-5 bg-blue-light">
               {title && <h2 className="modal-title capitalize">{title}</h2>}
               <button className="modal-close-button" onClick={onClose}>
                 &times;
