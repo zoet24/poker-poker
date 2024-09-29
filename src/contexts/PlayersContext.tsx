@@ -1,12 +1,12 @@
 import React, {
-  createContext,
-  useState,
   ReactNode,
-  useEffect,
+  createContext,
   useContext,
+  useEffect,
+  useState,
 } from "react";
-import StageContext from "./StageContext";
 import { Player } from "types/players";
+import StageContext from "./StageContext";
 
 // Define the initial players array
 const initialPlayerMoney = 1;

@@ -1,14 +1,14 @@
 import React, {
-  createContext,
-  useState,
   ReactNode,
-  useEffect,
+  createContext,
   useContext,
+  useEffect,
+  useState,
 } from "react";
-import StageContext from "./StageContext";
-import PlayersContext from "./PlayersContext";
 import { Player } from "types/players";
 import { handleToastSuccess } from "../utils/toasts";
+import PlayersContext from "./PlayersContext";
+import StageContext from "./StageContext";
 
 // Define the shape of the PlayersContext data
 interface BettingContextProps {
