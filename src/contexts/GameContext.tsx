@@ -5,19 +5,22 @@ import React, {
   useEffect,
   useRef,
 } from "react";
+import { Player } from "../types/players";
 import { burnCard, dealToCommunity, drawCardFromDeck } from "../utils/deck";
 import { evaluateBestHand } from "../utils/game";
-import { handleToastError } from "../utils/toasts";
+import { handleToastError, handleToastSuccess } from "../utils/toasts";
 import BettingContext from "./BettingContext";
 import CardsContext from "./CardsContext";
 import PlayersContext from "./PlayersContext";
 import StageContext from "./StageContext";
 
 interface GameContextProps {
+  handleEndGame: () => void;
   resetGame: () => void;
 }
 
 const defaultValue: GameContextProps = {
+  handleEndGame: () => {},
   resetGame: () => {},
 };
 
@@ -26,7 +29,7 @@ const GameContext = createContext<GameContextProps>(defaultValue);
 export const GameProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const { stage, resetStage } = useContext(StageContext);
+  const { stage, resetStage, setStage } = useContext(StageContext);
   const {
     deck,
     communityCards,
@@ -45,11 +48,19 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     setRolesUpdated,
     removePlayer,
   } = useContext(PlayersContext);
-  const { setPot, takePlayersBets, openPlaceBetModal, handleBlinds } =
+  const { pot, setPot, takePlayersBets, openPlaceBetModal, handleBlinds } =
     useContext(BettingContext);
 
   const gameNumber = useRef(0);
   const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    console.log("remaining players");
+    const remainingPlayers = players.filter((player) => !player.hasFolded);
+    if (remainingPlayers.length === 1 && stage !== "showdown") {
+      setStage("showdown");
+    }
+  }, [players]);
 
   useEffect(() => {
     let localDeck = [...deck];
@@ -115,6 +126,12 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
       takePlayersBets(players, openPlaceBetModal);
     }
 
+    // Handle end of game logic
+    else if (stage === "showdown") {
+      handleEndGame();
+      // setPot(0);
+    }
+
     // Update the global deck
     setDeck(localDeck);
   }, [stage]);
@@ -133,6 +150,55 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [communityCards]);
 
+  const handleEndGame = () => {
+    setPlayers((prevPlayers) =>
+      prevPlayers.map((player) => ({
+        ...player,
+        showCards: true,
+      }))
+    );
+
+    // Find the highest rank among all non-folded players
+    const highestRank = players.reduce((max, player) => {
+      if (!player.hasFolded && player.bestHand?.rank !== undefined) {
+        return Math.max(max, player.bestHand.rank);
+      }
+      return max;
+    }, 0);
+
+    let winners: Player[] = players.filter((player) => !player.hasFolded);
+
+    if (winners.length > 1) {
+      winners = players.filter(
+        (player) => !player.hasFolded && player.bestHand?.rank === highestRank
+      );
+    }
+
+    if (winners.length > 0) {
+      // Split the pot equally among the winners
+      const potShare = pot / winners.length;
+
+      // Update players' money with their share of the pot
+      setPlayers((prevPlayers) =>
+        prevPlayers.map((player) =>
+          winners.some((winner) => winner.name === player.name)
+            ? { ...player, money: player.money + potShare }
+            : player
+        )
+      );
+
+      winners.forEach((winner) => {
+        handleToastSuccess(
+          `${winner.name} wins £${potShare.toFixed(2)}${
+            winner.bestHand?.rankName ? ` with ${winner.bestHand.rankName}` : ""
+          }!`
+        );
+      });
+
+      setPot(0);
+    }
+  };
+
   const resetGame = () => {
     gameNumber.current = 0;
     setPot(0);
@@ -142,7 +208,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   return (
-    <GameContext.Provider value={{ resetGame }}>
+    <GameContext.Provider value={{ handleEndGame, resetGame }}>
       {children}
     </GameContext.Provider>
   );

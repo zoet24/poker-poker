@@ -6,7 +6,6 @@ import React, {
   useState,
 } from "react";
 import { Player } from "types/players";
-import { handleToastSuccess } from "../utils/toasts";
 import PlayersContext from "./PlayersContext";
 import StageContext from "./StageContext";
 
@@ -205,54 +204,6 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
     if (stage === "deal") {
       handleBlinds();
       handleDealBets();
-    }
-
-    if (stage === "showdown") {
-      // Show all players' cards
-      setPlayers((prevPlayers) =>
-        prevPlayers.map((player) => ({
-          ...player,
-          showCards: true,
-        }))
-      );
-
-      // Find the highest rank among all non-folded players
-      const highestRank = players.reduce((max, player) => {
-        if (!player.hasFolded && player.bestHand?.rank !== undefined) {
-          return Math.max(max, player.bestHand.rank);
-        }
-        return max;
-      }, 0);
-
-      // Find all players who have the highest rank
-      const winners = players.filter(
-        (player) => !player.hasFolded && player.bestHand?.rank === highestRank
-      );
-
-      if (winners.length > 0) {
-        // Split the pot equally among the winners
-        const potShare = pot / winners.length;
-
-        // Update players' money with their share of the pot
-        setPlayers((prevPlayers) =>
-          prevPlayers.map((player) =>
-            winners.some((winner) => winner.name === player.name)
-              ? { ...player, money: player.money + potShare }
-              : player
-          )
-        );
-
-        winners.forEach((winner) => {
-          handleToastSuccess(
-            `${winner.name} wins £${potShare.toFixed(2)} with ${
-              winner.bestHand?.rankName
-            }!`
-          );
-        });
-
-        // Reset the pot after distributing the winnings
-        setPot(0);
-      }
     }
   }, [stage]);
 
