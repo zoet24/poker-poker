@@ -59,6 +59,16 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
       resetDeck();
       resetPlayersHands();
 
+      if (!isInitialMount.current) {
+        gameNumber.current += 1;
+
+        if (gameNumber.current > 1) {
+          rotatePlayerRoles();
+        }
+      } else {
+        isInitialMount.current = false;
+      }
+
       // Remove players whose money is less than or equal to zero
       setPlayers((prevPlayers) => {
         const updatedPlayers = prevPlayers.filter((player) => {
@@ -70,22 +80,8 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
           return player.money > 0;
         });
 
-        console.log("Updated players after removal:", updatedPlayers);
-
         return updatedPlayers;
       });
-
-      if (!isInitialMount.current) {
-        gameNumber.current += 1;
-
-        if (gameNumber.current > 1) {
-          rotatePlayerRoles();
-        } else {
-          handleBlinds();
-        }
-      } else {
-        isInitialMount.current = false;
-      }
       return;
     }
 
@@ -143,13 +139,6 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
       }
     }
   }, [communityCards]);
-
-  useEffect(() => {
-    if (rolesUpdated) {
-      handleBlinds();
-      setRolesUpdated(false); // Reset rolesUpdated flag after blinds are handled
-    }
-  }, [rolesUpdated]);
 
   const resetGame = () => {
     gameNumber.current = 0;

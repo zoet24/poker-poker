@@ -23,7 +23,7 @@ const PlayerScore: React.FC<PlayerScoreProps> = ({ showCards, bestHand }) => {
           {bestHand?.rank.toFixed(2)}: {bestHand?.rankName}
         </span>
       ) : (
-        <span>---</span>
+        <span className="player-hand-best">---</span>
       )}
       <div className="flex space-x-1 mt-1">
         {handToDisplay.map((card, index) => (

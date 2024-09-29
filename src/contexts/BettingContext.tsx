@@ -94,8 +94,6 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const takePlayerBet = (playerIndex: number, betAmount: number) => {
-    console.log("take player bet");
-
     setPlayers((prevPlayers) =>
       prevPlayers.map((player, index) => {
         if (index === playerIndex) {
@@ -118,8 +116,6 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
     players: Player[],
     openBetModal: (player: Player) => Promise<void>
   ) => {
-    console.log("take player bets");
-
     const activePlayers = players.filter((player) => !player.hasFolded);
 
     const activeSmallBlindIndex = activePlayers.findIndex(
@@ -166,7 +162,6 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const handleDealBets = async () => {
-    console.log("handle deal bets");
     setMinimumBet(bigBlind);
 
     for (let i = 0; i < players.length; i++) {
@@ -202,6 +197,7 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
   // Use effect to handle stage change
   useEffect(() => {
     if (stage === "deal") {
+      handleBlinds();
       handleDealBets();
     }
 

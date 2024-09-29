@@ -27,6 +27,54 @@
 }
 
 // Players
+.player-row {
+  @apply flex justify-between items-center max-w-96 mx-auto;
+
+  &--disabled {
+    .player-name {
+      @apply border-gray-500 text-gray-500;
+    }
+
+    .player-controls {
+      @apply border-gray-500 bg-gray-500;
+    }
+
+    .player-hand {
+      outline: none !important;
+    }
+
+    .player-hand-best {
+      @apply text-gray-500;
+    }
+
+    .card {
+      @apply border-gray-500 text-gray-500;
+    }
+  }
+
+  &--out {
+    .player-name {
+      @apply border-red-500 text-red-500;
+    }
+
+    .player-controls {
+      @apply border-red-500 bg-red-500;
+    }
+
+    .player-hand {
+      outline: none !important;
+    }
+
+    .player-hand-best {
+      @apply text-red-500;
+    }
+
+    .card {
+      @apply border-red-500 text-red-500;
+    }
+  }
+}
+
 .player {
   @apply relative h-20 w-20 rounded-full;
 }
@@ -86,28 +134,6 @@
   }
   &--bad {
     @apply outline-red-500;
-  }
-}
-
-.folded {
-  .player-name {
-    @apply border-gray-500 text-gray-500;
-  }
-
-  .player-controls {
-    @apply border-gray-500 bg-gray-500;
-  }
-
-  .player-hand {
-    outline: none !important;
-  }
-
-  .player-hand-best {
-    @apply text-gray-500;
-  }
-
-  .card {
-    @apply border-gray-500 text-gray-500;
   }
 }
 

@@ -4,6 +4,7 @@
 import { useContext } from "react";
 import Button from "../Button";
 import PlayersContext from "contexts/PlayersContext";
+import StageContext from "contexts/StageContext";
 
 interface ModalPlayerStatsProps {
   playerIndex: number;
@@ -15,6 +16,7 @@ const ModalPlayerStats: React.FC<ModalPlayerStatsProps> = ({
   handleCloseModal,
 }) => {
   const { removePlayer } = useContext(PlayersContext);
+  const { stage } = useContext(StageContext);
 
   const handleRemovePlayer = () => {
     removePlayer(playerIndex);
@@ -25,7 +27,11 @@ const ModalPlayerStats: React.FC<ModalPlayerStatsProps> = ({
     <div>
       ModalPlayerStats
       <div className="modal-btns">
-        <Button text="Remove player" onClick={handleRemovePlayer}></Button>
+        <Button
+          text="Remove player"
+          disabled={stage !== "pre-deal"}
+          onClick={handleRemovePlayer}
+        ></Button>
       </div>
     </div>
   );

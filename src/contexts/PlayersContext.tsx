@@ -9,7 +9,7 @@ import StageContext from "./StageContext";
 import { Player } from "types/players";
 
 // Define the initial players array
-const initialPlayerMoney = 1;
+const initialPlayerMoney = 10;
 const initialPlayers: Player[] = [
   {
     name: "Zoe",
@@ -73,7 +73,7 @@ const initialPlayers: Player[] = [
     hand: [],
     bestHand: null,
     showCards: false,
-    isComp: false,
+    isComp: true,
     hasFolded: false,
     role: {
       isDealer: false,
@@ -164,42 +164,80 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
         isSmallBlind: false,
       },
     };
-    setPlayers((prevPlayers) => [...prevPlayers, newPlayer]);
+    setPlayers((prevPlayers) => {
+      const updatedPlayers = [...prevPlayers, newPlayer];
+      return rotateRoles(updatedPlayers, true);
+    });
   };
 
   const removePlayer = (playerIndex: number) => {
-    setPlayers((prevPlayers) =>
-      prevPlayers.filter((_, index) => index !== playerIndex)
-    );
-  };
-
-  const rotatePlayerRoles = () => {
     setPlayers((prevPlayers) => {
-      const numPlayers = prevPlayers.length;
-
-      if (numPlayers === 0 || numPlayers === 1) {
-        return prevPlayers;
-      }
-
-      const currentDealerIndex = prevPlayers.findIndex(
-        (player) => player.role.isDealer
+      const updatedPlayers = prevPlayers.filter(
+        (_, index) => index !== playerIndex
       );
 
-      const newDealerIndex = (currentDealerIndex + 1) % prevPlayers.length;
-      const newSmallBlindIndex = (newDealerIndex + 1) % prevPlayers.length;
-      const newBigBlindIndex = (newSmallBlindIndex + 1) % prevPlayers.length;
+      // Check if any role (Dealer, Small Blind, Big Blind) is missing after removal
+      const dealerExists = updatedPlayers.some(
+        (player) => player.role.isDealer
+      );
+      const smallBlindExists = updatedPlayers.some(
+        (player) => player.role.isSmallBlind
+      );
+      const bigBlindExists = updatedPlayers.some(
+        (player) => player.role.isBigBlind
+      );
 
-      return prevPlayers.map((player, index) => ({
-        ...player,
-        role: {
-          isDealer: index === newDealerIndex,
-          isSmallBlind: index === newSmallBlindIndex,
-          isBigBlind: index === newBigBlindIndex,
-        },
-      }));
+      // If any role is missing, reassign roles
+      if (!dealerExists || !smallBlindExists || !bigBlindExists) {
+        return rotateRoles(updatedPlayers, true);
+      }
+
+      return updatedPlayers;
     });
+  };
 
-    setRolesUpdated(true);
+  const rotateRoles = (
+    players: Player[],
+    addingOrRemovingPlayers: boolean = false
+  ): Player[] => {
+    const numPlayers = players.length;
+
+    if (numPlayers === 0 || numPlayers === 1) {
+      return players;
+    }
+
+    const currentDealerIndex = players.findIndex(
+      (player) => player.role.isDealer
+    );
+
+    let newDealerIndex: number;
+    if (addingOrRemovingPlayers && currentDealerIndex !== -1) {
+      newDealerIndex = currentDealerIndex; // Dealer stays the same
+    } else {
+      // If the dealer was removed, assign a new dealer (e.g., first player).
+      newDealerIndex = (currentDealerIndex + 1) % players.length;
+    }
+
+    const newSmallBlindIndex = (newDealerIndex + 1) % players.length;
+    const newBigBlindIndex = (newSmallBlindIndex + 1) % players.length;
+
+    return players.map((player, index) => ({
+      ...player,
+      role: {
+        isDealer: index === newDealerIndex,
+        isSmallBlind: index === newSmallBlindIndex,
+        isBigBlind: index === newBigBlindIndex,
+      },
+    }));
+  };
+
+  // Function to rotate player roles normally
+  const rotatePlayerRoles = () => {
+    setPlayers((prevPlayers) => {
+      const updatedPlayers = rotateRoles(prevPlayers);
+      setRolesUpdated(true);
+      return updatedPlayers;
+    });
   };
 
   useEffect(() => {

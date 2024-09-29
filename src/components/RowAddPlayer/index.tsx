@@ -1,15 +1,22 @@
 import Modal from "../Modal";
 import ModalAddPlayer from "../ModalAddPlayer";
 import Card from "../Card";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import StageContext from "contexts/StageContext";
 
 // Container for adding new player - player elements - name, money, hand, score - are dotted out
 // Tapping add player row opens add player modal
 
 const RowAddPlayer = () => {
+  const { stage } = useContext(StageContext);
+
   const [isModalOpen, setModalOpen] = useState(false);
   const handleOpenModal = () => {
-    setModalOpen(true);
+    if (stage === "pre-deal") {
+      setModalOpen(true);
+    } else {
+      return;
+    }
   };
   const handleCloseModal = () => {
     setModalOpen(false);
@@ -21,7 +28,11 @@ const RowAddPlayer = () => {
   return (
     <>
       <div className="box p-2" onClick={handleOpenModal}>
-        <div className="flex justify-between items-center max-w-96 mx-auto">
+        <div
+          className={`player-row ${
+            stage !== "pre-deal" ? "player-row--disabled" : ""
+          }`}
+        >
           {/* Player */}
           <div className="player">
             <div className="player-name border-dashed text-2xl">+</div>
@@ -39,7 +50,7 @@ const RowAddPlayer = () => {
           </div>
           {/* Player score */}
           <div className="text-center max-w-[136px] truncate">
-            <span>---</span>
+            <span className="player-hand-best">---</span>
             <div className="flex space-x-1 mt-1">
               {scoreToDisplay.map((card, index) => (
                 <Card key={index} card={card} size="square" showCard={false} />
