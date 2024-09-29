@@ -9,9 +9,9 @@ const App = () => {
   const { players } = useContext(PlayersContext);
 
   return (
-    <div className="bg-blue h-screen relative">
+    <div className="relative">
       <NavbarTop />
-      <div className="pt-24 space-y-1">
+      <div className="pt-[88px] pb-[68px] space-y-1">
         {players.map((player, index) => (
           <RowPlayer key={index} player={player} playerIndex={index} />
         ))}

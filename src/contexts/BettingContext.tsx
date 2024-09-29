@@ -129,6 +129,10 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
       const currentPlayer =
         activePlayers[(startIndex + i) % activePlayers.length];
 
+      if (currentPlayer.money === 0) {
+        continue;
+      }
+
       // Check if the player is a computer or not
       if (currentPlayer.isComp) {
         const originalIndex = players.findIndex(

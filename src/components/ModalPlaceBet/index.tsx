@@ -1,10 +1,10 @@
 // View stats associated with player's hand
 // Controls to hide player's cards or remove player
 
+import BettingContext from "contexts/BettingContext";
+import PlayersContext from "contexts/PlayersContext";
 import { useContext, useState } from "react";
 import Button from "../Button";
-import PlayersContext from "contexts/PlayersContext";
-import BettingContext from "contexts/BettingContext";
 
 interface ModalPlaceBetProps {
   playerIndex: number;
@@ -17,11 +17,14 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
 }) => {
   const { players, setPlayers } = useContext(PlayersContext);
   const { takePlayerBet, minimumBet } = useContext(BettingContext);
-  const [betAmount, setBetAmount] = useState<number>(minimumBet);
+
+  const player = players[playerIndex];
+  const allIn = minimumBet >= player.money; // If min bet is bigger than player's money, player must go all in
+  const [betAmount, setBetAmount] = useState<number>(
+    allIn ? player.money : minimumBet
+  );
 
   const handlePlaceBet = () => {
-    const player = players[playerIndex];
-
     if (betAmount > 0 && betAmount <= player.money) {
       takePlayerBet(playerIndex, betAmount);
       handleCloseModal();
@@ -49,14 +52,17 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
         <span className="currency-symbol">£</span>
         <input
           type="number"
-          min={minimumBet}
-          max={players[playerIndex].money}
+          min={allIn ? player.money : minimumBet}
+          max={player.money}
           value={betAmount.toFixed(2)}
           onChange={(e) => setBetAmount(Number(e.target.value))}
         />
       </div>
       <div className="modal-btns">
-        <Button text="Place bet" onClick={handlePlaceBet}></Button>
+        <Button
+          text={allIn ? "All in" : "Place bet"}
+          onClick={handlePlaceBet}
+        ></Button>
         <Button
           text="Check"
           onClick={handleCheck}

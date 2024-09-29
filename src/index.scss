@@ -3,6 +3,10 @@
 @import "tailwindcss/utilities";
 
 // General
+body {
+  @apply bg-blue;
+}
+
 .box {
   @apply border-black border-2 bg-white;
 }
