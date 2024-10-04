@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { Card } from "types/cards";
+import { Card } from "../types/cards";
 import { generateDeck } from "../utils/deck";
 import StageContext from "./StageContext";
 

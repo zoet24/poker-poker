@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { Player } from "types/players";
+import { Player } from "../types/players";
 import { createNewPlayer, initialPlayers, rotateRoles } from "../utils/players";
 import StageContext from "./StageContext";
 
@@ -87,7 +87,7 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
         (_, index) => index !== playerIndex
       );
 
-      // Check if any role (Dealer, Small Blind, Big Blind) is missing after removal
+      // Check if any role (D, b, B) is missing after removal
       const dealerExists = updatedPlayers.some(
         (player) => player.role.isDealer
       );
