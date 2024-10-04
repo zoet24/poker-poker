@@ -1,15 +1,14 @@
 import React, {
-  createContext,
-  useState,
   ReactNode,
+  createContext,
   useContext,
   useEffect,
+  useState,
 } from "react";
+import { Card } from "types/cards";
 import { generateDeck } from "../utils/deck";
 import StageContext from "./StageContext";
-import { Card } from "types/cards";
 
-// Define the shape of the cards context
 interface CardsContextProps {
   deck: Card[];
   burn: Card[];
@@ -64,7 +63,7 @@ export const CardsProvider: React.FC<{ children: ReactNode }> = ({
     console.log("Deck: ", deck);
     // console.log("Burn pile: ", burn);
     console.log("Community cards: ", communityCards);
-  }, [stage, burn, communityCards]);
+  }, [stage]);
 
   return (
     <CardsContext.Provider

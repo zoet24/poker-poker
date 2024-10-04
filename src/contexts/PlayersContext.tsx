@@ -6,84 +6,9 @@ import React, {
   useState,
 } from "react";
 import { Player } from "types/players";
+import { createNewPlayer, initialPlayers, rotateRoles } from "../utils/players";
 import StageContext from "./StageContext";
 
-// Define the initial players array
-const initialPlayerMoney = 1;
-const initialPlayers: Player[] = [
-  {
-    name: "Zoe",
-    money: initialPlayerMoney,
-    hand: [],
-    bestHand: null,
-    showCards: true,
-    isComp: false,
-    hasFolded: false,
-    role: {
-      isDealer: true,
-      isSmallBlind: false,
-      isBigBlind: false,
-    },
-  },
-  {
-    name: "Fran",
-    money: initialPlayerMoney,
-    hand: [],
-    bestHand: null,
-    showCards: false,
-    isComp: true,
-    hasFolded: false,
-    role: {
-      isDealer: false,
-      isSmallBlind: true,
-      isBigBlind: false,
-    },
-  },
-  // {
-  //   name: "Mike",
-  //   money: initialPlayerMoney,
-  //   hand: [],
-  //   bestHand: null,
-  //   showCards: false,
-  //   isComp: true,
-  //   hasFolded: false,
-  //   role: {
-  //     isDealer: false,
-  //     isSmallBlind: false,
-  //     isBigBlind: true,
-  //   },
-  // },
-  // {
-  //   name: "Bron",
-  //   money: initialPlayerMoney,
-  //   hand: [],
-  //   bestHand: null,
-  //   showCards: false,
-  //   isComp: true,
-  //   hasFolded: false,
-  //   role: {
-  //     isDealer: false,
-  //     isSmallBlind: false,
-  //     isBigBlind: false,
-  //   },
-  // },
-  // {
-  //   name: "Char",
-  //   money: initialPlayerMoney,
-  //   hand: [],
-  //   bestHand: null,
-  //   showCards: false,
-  //   isComp: true,
-  //   hasFolded: false,
-  //   role: {
-  //     isDealer: false,
-  //     isSmallBlind: false,
-  //     isBigBlind: false,
-  //   },
-  // },
-];
-
-// Define the shape of the PlayersContext data
 interface PlayersContextProps {
   players: Player[];
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
@@ -93,11 +18,10 @@ interface PlayersContextProps {
   addPlayer: (name: string) => void;
   removePlayer: (playerIndex: number) => void;
   rotatePlayerRoles: () => void;
-  rolesUpdated: boolean; // New flag to determine role rotation completion
+  rolesUpdated: boolean;
   setRolesUpdated: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// Default values for the context
 const defaultValue: PlayersContextProps = {
   players: initialPlayers,
   setPlayers: () => {},
@@ -150,20 +74,7 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const addPlayer = (name: string) => {
-    const newPlayer: Player = {
-      name,
-      money: initialPlayerMoney,
-      hand: [],
-      bestHand: null,
-      showCards: false,
-      isComp: true,
-      hasFolded: false,
-      role: {
-        isDealer: false,
-        isBigBlind: false,
-        isSmallBlind: false,
-      },
-    };
+    const newPlayer = createNewPlayer(name);
     setPlayers((prevPlayers) => {
       const updatedPlayers = [...prevPlayers, newPlayer];
       return rotateRoles(updatedPlayers, true);
@@ -194,41 +105,6 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
 
       return updatedPlayers;
     });
-  };
-
-  const rotateRoles = (
-    players: Player[],
-    addingOrRemovingPlayers: boolean = false
-  ): Player[] => {
-    const numPlayers = players.length;
-
-    if (numPlayers === 0 || numPlayers === 1) {
-      return players;
-    }
-
-    const currentDealerIndex = players.findIndex(
-      (player) => player.role.isDealer
-    );
-
-    let newDealerIndex: number;
-    if (addingOrRemovingPlayers && currentDealerIndex !== -1) {
-      newDealerIndex = currentDealerIndex; // Dealer stays the same
-    } else {
-      // If the dealer was removed, assign a new dealer (e.g., first player).
-      newDealerIndex = (currentDealerIndex + 1) % players.length;
-    }
-
-    const newSmallBlindIndex = (newDealerIndex + 1) % players.length;
-    const newBigBlindIndex = (newSmallBlindIndex + 1) % players.length;
-
-    return players.map((player, index) => ({
-      ...player,
-      role: {
-        isDealer: index === newDealerIndex,
-        isSmallBlind: index === newSmallBlindIndex,
-        isBigBlind: index === newBigBlindIndex,
-      },
-    }));
   };
 
   // Function to rotate player roles normally
