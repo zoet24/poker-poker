@@ -29,7 +29,8 @@ export const takePlayerBet = (
 export const takePlayersBets = async (
   players: Player[],
   openBetModal: (player: Player) => Promise<void>,
-  setPlayers: React.Dispatch<React.SetStateAction<Player[]>>
+  setPlayers: React.Dispatch<React.SetStateAction<Player[]>>,
+  setPot: React.Dispatch<React.SetStateAction<number>>
 ) => {
   const activePlayers = players.filter((player) => !player.hasFolded);
 
@@ -53,7 +54,7 @@ export const takePlayersBets = async (
       const originalIndex = players.findIndex(
         (p) => p.name === currentPlayer.name
       );
-      takePlayerBet(originalIndex, 0.2, setPlayers, (newPot) => newPot);
+      takePlayerBet(originalIndex, 0.2, setPlayers, setPot);
     } else {
       await openBetModal(currentPlayer);
     }
@@ -96,7 +97,8 @@ export const handleDealBets = async (
   openPlaceBetModal: (player: Player) => Promise<void>,
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>,
   bigBlind: number,
-  smallBlind: number
+  smallBlind: number,
+  setPot: React.Dispatch<React.SetStateAction<number>>
 ) => {
   for (let i = 0; i < players.length; i++) {
     const currentPlayer = players[i];
@@ -110,7 +112,7 @@ export const handleDealBets = async (
       // Small blind needs to put in an additional amount to match big blind
       const additionalBet = bigBlind - smallBlind; // 0.1 already paid
       if (additionalBet > 0) {
-        takePlayerBet(i, additionalBet, setPlayers, (newPot) => newPot);
+        takePlayerBet(i, additionalBet, setPlayers, setPot);
       }
     } else if (currentPlayer.role.isBigBlind) {
       // Big blind has already paid the minimum, no action needed
@@ -119,7 +121,7 @@ export const handleDealBets = async (
       // All other players must put in the big blind amount or fold
       if (currentPlayer.isComp) {
         // If it's a computer player, they automatically bet the required amount
-        takePlayerBet(i, bigBlind, setPlayers, (newPot) => newPot);
+        takePlayerBet(i, bigBlind, setPlayers, setPot);
       } else {
         // If it's a human player, open the bet modal
         await openPlaceBetModal(currentPlayer);

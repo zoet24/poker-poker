@@ -79,7 +79,8 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
         (player) => openPlaceBetModal(player, setPlaceBetModalState),
         setPlayers,
         bigBlind,
-        smallBlind
+        smallBlind,
+        setPot
       );
     }
   }, [stage]);
@@ -94,7 +95,7 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
         takePlayerBet: (playerIndex, betAmount) =>
           takePlayerBet(playerIndex, betAmount, setPlayers, setPot),
         takePlayersBets: (players, openBetModal) =>
-          takePlayersBets(players, openBetModal, setPlayers),
+          takePlayersBets(players, openBetModal, setPlayers, setPot),
         openPlaceBetModal: (player) =>
           openPlaceBetModal(player, setPlaceBetModalState),
         closePlaceBetModal: (playerName) =>
@@ -106,7 +107,8 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
             (player) => openPlaceBetModal(player, setPlaceBetModalState),
             setPlayers,
             bigBlind,
-            smallBlind
+            smallBlind,
+            setPot
           ),
         handleBlinds: () =>
           handleBlinds(

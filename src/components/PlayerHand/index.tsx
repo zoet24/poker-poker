@@ -1,6 +1,6 @@
-import { evaluatePlayerHand } from "../../utils/game";
-import Card from "../Card";
 import { PlayerHandInfo } from "types/players";
+import { evaluatePlayerHand } from "../../utils/hands";
+import Card from "../Card";
 
 // Display for player hand
 

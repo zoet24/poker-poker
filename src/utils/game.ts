@@ -1,262 +1,163 @@
-import { Card, HandRank } from "types/cards";
-import {
-  isFlush,
-  isFourOfAKind,
-  isFullHouse,
-  isOnePair,
-  isRoyalFlush,
-  isStraight,
-  isStraightFlush,
-  isThreeOfAKind,
-  isTwoPair,
-} from "./handRanks";
-import {
-  getFlushScore,
-  getFourOfAKindScore,
-  getFullHouseScore,
-  getHighCardScore,
-  getOnePairScore,
-  getRoyalFlushScore,
-  getStraightFlushScore,
-  getStraightScore,
-  getThreeOfAKindScore,
-  getTwoPairScore,
-} from "./handScores";
-import { sortCardsByRank } from "./helpers";
+import { Card } from "../types/cards";
+import { Player } from "../types/players";
+import { GameStage } from "../types/stage";
+import { burnCard, dealToCommunity, drawCardFromDeck } from "./deck";
+import { evaluateBestHand } from "./hands";
+import { handleToastError, handleToastSuccess } from "./toasts";
 
-// Function to evaluate the player's starting hand as good, medium, or bad
-export const evaluatePlayerHand = (
-  hand: Card[]
-): "veryGood" | "good" | "medium" | "bad" => {
-  if (hand.length !== 2) {
-    throw new Error("Starting hand must contain exactly 2 cards.");
+type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
+
+export const handleStageTransition = (
+  stage: GameStage,
+  players: Player[],
+  setPlayers: SetState<Player[]>,
+  localDeck: Card[],
+  setDeck: SetState<Card[]>,
+  addToCommunity: (cards: Card[]) => void,
+  addToBurn: (card: Card) => void,
+  takePlayersBets: () => Promise<void>,
+  resetDeck: () => void,
+  resetPlayersHands: () => void,
+  rotatePlayerRoles: () => void,
+  isInitialMount: React.MutableRefObject<boolean>,
+  gameNumber: React.MutableRefObject<number>,
+  removePlayer: (index: number) => void
+): Card[] => {
+  if (stage === "pre-deal") {
+    resetDeck();
+    resetPlayersHands();
+
+    if (!isInitialMount.current) {
+      gameNumber.current += 1;
+
+      if (gameNumber.current > 1) {
+        rotatePlayerRoles();
+      }
+    } else {
+      isInitialMount.current = false;
+    }
+
+    players.forEach((player, index) => {
+      if (player.money <= 0) {
+        removePlayer(index);
+        handleToastError(`${player.name} is all outta cash!`);
+      }
+    });
+    return localDeck;
   }
 
-  const card1 = hand[0];
-  const card2 = hand[1];
-
-  const rank1 = card1.rank;
-  const rank2 = card2.rank;
-  const isSuited = card1.suit === card2.suit;
-
-  // Convert face cards to numbers for easier comparison
-  const rankOrder: { [key: string]: number } = {
-    "2": 2,
-    "3": 3,
-    "4": 4,
-    "5": 5,
-    "6": 6,
-    "7": 7,
-    "8": 8,
-    "9": 9,
-    "10": 10,
-    "11": 11,
-    "12": 12,
-    "13": 13,
-    "14": 14,
-  };
-
-  const higherRank = Math.max(rankOrder[rank1], rankOrder[rank2]);
-  const lowerRank = Math.min(rankOrder[rank1], rankOrder[rank2]);
-
-  // Define all possible hand rankings from the chart
-  const veryGoodHands = [
-    [14, 14],
-    [13, 13],
-    [12, 12],
-    [11, 11],
-    [10, 10],
-    [9, 9],
-    [8, 8],
-    [7, 7],
-    [14, 13],
-    [14, 12],
-    [14, 11],
-    [14, 10],
-    [13, 12],
-    [13, 11],
-    [13, 10],
-    [12, 11],
-    [12, 10],
-    [11, 10],
-    [11, 9],
-    [10, 9],
-  ];
-
-  const goodHands = [
-    [6, 6],
-    [5, 5],
-    [14, 9],
-    [14, 8],
-    [14, 7],
-    [14, 6],
-    [13, 9],
-    [12, 9],
-    [12, 8],
-    [11, 8],
-    [10, 8],
-    [9, 8],
-  ];
-
-  const mediumHands = [
-    [4, 4],
-    [3, 3],
-    [2, 2],
-    [14, 5],
-    [14, 4],
-    [14, 3],
-    [14, 2],
-    [13, 8],
-    [13, 7],
-    [13, 6],
-    [13, 5],
-    [13, 4],
-    [13, 3],
-    [13, 2],
-    [11, 7],
-    [10, 7],
-    [9, 7],
-    [9, 6],
-    [8, 7],
-    [8, 6],
-    [7, 6],
-    [7, 5],
-    [6, 5],
-    [5, 4],
-  ];
-
-  // Check for suited hands from the chart
-  if (isSuited) {
-    if (
-      veryGoodHands.some(
-        (hand) => hand[0] === higherRank && hand[1] === lowerRank
-      )
-    ) {
-      return "veryGood";
-    }
-    if (
-      goodHands.some((hand) => hand[0] === higherRank && hand[1] === lowerRank)
-    ) {
-      return "good";
-    }
-    if (
-      mediumHands.some(
-        (hand) => hand[0] === higherRank && hand[1] === lowerRank
-      )
-    ) {
-      return "medium";
-    }
-  } else {
-    // Non-suited hand logic
-    const nonSuitedVeryGoodHands = [
-      [14, 13],
-      [14, 12],
-      [13, 12],
-    ];
-    const nonSuitedGoodHands = [
-      [11, 10],
-      [10, 9],
-    ];
-
-    if (
-      veryGoodHands.some(
-        (hand) => hand[0] === higherRank && hand[1] === lowerRank
-      ) ||
-      nonSuitedVeryGoodHands.some(
-        (hand) => hand[0] === higherRank && hand[1] === lowerRank
-      )
-    ) {
-      return "veryGood";
-    }
-    if (
-      goodHands.some(
-        (hand) => hand[0] === higherRank && hand[1] === lowerRank
-      ) ||
-      nonSuitedGoodHands.some(
-        (hand) => hand[0] === higherRank && hand[1] === lowerRank
-      )
-    ) {
-      return "good";
-    }
-    if (
-      mediumHands.some(
-        (hand) => hand[0] === higherRank && hand[1] === lowerRank
-      )
-    ) {
-      return "medium";
-    }
+  if (stage === "deal") {
+    localDeck = dealInitialCardsToPlayers(players, setPlayers, localDeck);
   }
 
-  // Default to "bad" if the hand doesn't match any category
-  return "bad";
+  if (stage === "flop" || stage === "turn" || stage === "river") {
+    localDeck = burnAndDealCommunityCards(
+      stage,
+      localDeck,
+      addToBurn,
+      addToCommunity
+    );
+    // Call the betting process after dealing
+    takePlayersBets();
+  }
+
+  return localDeck;
 };
 
-export const evaluateHand = (cards: Card[]): HandRank => {
-  // Check for Royal Flush
-  const royalFlush = isRoyalFlush(cards);
-  if (royalFlush) {
-    return getRoyalFlushScore(royalFlush);
-  }
-
-  // Check for Straight Flush
-  const straightFlush = isStraightFlush(cards);
-  if (straightFlush) {
-    return getStraightFlushScore(straightFlush);
-  }
-
-  // Check for Four of a Kind
-  const fourOfAKind = isFourOfAKind(cards);
-  if (fourOfAKind) {
-    return getFourOfAKindScore(fourOfAKind);
-  }
-
-  // Check for Full House
-  const fullHouse = isFullHouse(cards);
-  if (fullHouse) {
-    return getFullHouseScore(fullHouse);
-  }
-
-  // Check for Flush
-  const flush = isFlush(cards);
-  if (flush) {
-    return getFlushScore(flush);
-  }
-
-  // Check for Straight
-  const straight = isStraight(cards);
-  if (straight) {
-    return getStraightScore(straight);
-  }
-
-  // Check for Three of a Kind
-  const threeOfAKind = isThreeOfAKind(cards);
-  if (threeOfAKind) {
-    return getThreeOfAKindScore(threeOfAKind);
-  }
-
-  // Check for Two Pair
-  const twoPair = isTwoPair(cards);
-  if (twoPair) {
-    return getTwoPairScore(twoPair);
-  }
-
-  // Check for One Pair
-  const onePair = isOnePair(cards);
-  if (onePair) {
-    return getOnePairScore(onePair);
-  }
-
-  // If no other hand is found, return High Card
-  const highCard = sortCardsByRank(cards).slice(0, 5); // Highest 5 cards
-  return getHighCardScore(highCard);
+export const dealInitialCardsToPlayers = (
+  players: Player[],
+  setPlayers: SetState<Player[]>,
+  deck: Card[]
+): Card[] => {
+  let localDeck = [...deck];
+  const updatedPlayers = players.map((player) => {
+    let newHand = [...player.hand];
+    for (let i = 0; i < 2; i++) {
+      const [card, newLocalDeck] = drawCardFromDeck(localDeck);
+      localDeck = newLocalDeck;
+      if (card) {
+        newHand.push(card);
+      }
+    }
+    return { ...player, hand: newHand };
+  });
+  setPlayers(updatedPlayers);
+  return localDeck;
 };
 
-export const evaluateBestHand = (
-  playerHand: Card[],
-  communityCards: Card[]
-): HandRank => {
-  const allCards = [...playerHand, ...communityCards];
+export const burnAndDealCommunityCards = (
+  stage: GameStage,
+  deck: Card[],
+  addToBurn: (card: Card) => void,
+  addToCommunity: (cards: Card[]) => void
+): Card[] => {
+  let localDeck = [...deck];
+  const numberToDeal = stage === "flop" ? 3 : 1;
 
-  // Evaluate and return the best possible hand
-  return evaluateHand(allCards);
+  localDeck = burnCard(localDeck, addToBurn);
+  localDeck = dealToCommunity(numberToDeal, localDeck, addToCommunity);
+
+  return localDeck;
+};
+
+export const evaluatePlayersHands = (
+  players: Player[],
+  communityCards: Card[],
+  setPlayers: SetState<Player[]>
+) => {
+  const updatedPlayers = players.map((player) => {
+    const bestHand = evaluateBestHand(player.hand, communityCards);
+    return { ...player, bestHand };
+  });
+  setPlayers(updatedPlayers);
+};
+
+export const determineWinnersAndDistributePot = (
+  players: Player[],
+  pot: number,
+  setPlayers: SetState<Player[]>,
+  setPot: SetState<number>
+) => {
+  setPlayers((prevPlayers) =>
+    prevPlayers.map((player) => ({
+      ...player,
+      showCards: true,
+    }))
+  );
+
+  const highestRank = players.reduce((max, player) => {
+    if (!player.hasFolded && player.bestHand?.rank !== undefined) {
+      return Math.max(max, player.bestHand.rank);
+    }
+    return max;
+  }, 0);
+
+  let winners: Player[] = players.filter((player) => !player.hasFolded);
+
+  if (winners.length > 1) {
+    winners = players.filter(
+      (player) => !player.hasFolded && player.bestHand?.rank === highestRank
+    );
+  }
+
+  if (winners.length > 0) {
+    const potShare = pot / winners.length;
+    setPlayers((prevPlayers) =>
+      prevPlayers.map((player) =>
+        winners.some((winner) => winner.name === player.name)
+          ? { ...player, money: player.money + potShare }
+          : player
+      )
+    );
+
+    winners.forEach((winner) => {
+      handleToastSuccess(
+        `${winner.name} wins £${potShare.toFixed(2)}${
+          winner.bestHand?.rankName ? ` with ${winner.bestHand.rankName}` : ""
+        }!`
+      );
+    });
+
+    setPot(0);
+  }
 };
