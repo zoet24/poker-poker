@@ -33,42 +33,95 @@ export const handleBets = async (
   openPlaceBetModal: (player: Player) => Promise<number>,
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>
 ) => {
-  let currentPlayers = [...players]; // Create a copy of the initial players
+  let currentPlayers = [...players];
+  let isRaise = false;
+  let playerArrayLength = currentPlayers.length;
+  let currentMinimumBet = 0;
+  let lastRaiserIndex = -1;
 
-  for (let i = 0; i < currentPlayers.length; i++) {
-    const betAmount = await openPlaceBetModal(currentPlayers[i]);
+  // Use a while loop to continue betting until no raises occur
+  do {
+    isRaise = false; // Reset the raise flag at the start of each round
 
-    // Update the player's current bet and money in state
-    setPlayers((prevPlayers) =>
-      prevPlayers.map((p, index) =>
+    for (let i = 0; i < playerArrayLength; i++) {
+      const currentPlayer = currentPlayers[i];
+
+      if (lastRaiserIndex === i) {
+        continue;
+      }
+
+      // Open the betting modal and get the player's bet amount
+      const betAmount = await openPlaceBetModal(currentPlayer);
+
+      // Update the player's current bet and money in state
+      setPlayers((prevPlayers) =>
+        prevPlayers.map((p, index) =>
+          index === i
+            ? {
+                ...p,
+                currentBet: p.currentBet + betAmount,
+                money: Math.max(0, p.money - betAmount), // Ensure money doesn't go negative
+              }
+            : p
+        )
+      );
+
+      // Update currentPlayers from the latest state
+      currentPlayers = currentPlayers.map((p, index) =>
         index === i
           ? {
               ...p,
               currentBet: p.currentBet + betAmount,
-              money: Math.max(0, p.money - betAmount), // Ensure money doesn't go negative
+              money: Math.max(0, p.money - betAmount),
             }
           : p
-      )
-    );
+      );
 
-    // Update currentPlayers from the latest state
-    currentPlayers = currentPlayers.map((p, index) =>
-      index === i
-        ? {
-            ...p,
-            currentBet: p.currentBet + betAmount,
-            money: Math.max(0, p.money - betAmount),
-          }
-        : p
-    );
+      console.log(
+        "handleBets - player, currentBet, money: ",
+        i,
+        currentPlayers[i].name,
+        currentPlayers[i].currentBet,
+        currentPlayers[i].money
+      );
 
-    console.log(
-      "handleBets - player, currentBet, money: ",
-      currentPlayers[i].name,
-      currentPlayers[i].currentBet,
-      currentPlayers[i].money
-    );
-  }
+      console.log("handleBets - current players", currentPlayers);
+
+      // Check if the player has raised
+      if (currentPlayers[i].currentBet > currentMinimumBet) {
+        console.log(
+          "handleBets - player: ",
+          currentPlayers[i].name,
+          " has raised from ",
+          currentMinimumBet
+        );
+
+        isRaise = true; // Player raised
+        currentMinimumBet = currentPlayers[i].currentBet;
+        lastRaiserIndex = currentPlayers.length - 1;
+
+        console.log(
+          "handleBets - currentMinimumBet is now ",
+          currentMinimumBet
+        );
+
+        currentPlayers = [
+          ...currentPlayers.slice(i + 1),
+          ...currentPlayers.slice(0, i + 1),
+        ];
+
+        i = 0;
+
+        console.log(
+          "handleBets - reshuffled players order: ",
+          currentPlayers.map((p) => p.name)
+        );
+
+        // Exit the for loop early to restart from the next player after a raise
+        break;
+      }
+    }
+  } while (isRaise); // Repeat the loop if a raise occurred
 };
 
 export const resetPlayersBets = (
@@ -153,8 +206,8 @@ export const handleStageBets = async (
 //     const currentPlayer =
 //       activePlayers[(startIndex + i) % activePlayers.length];
 
-//     let isRaise = false;
-//     let currentMinimumBet = minimumBet;
+// let isRaise = false;
+// let currentMinimumBet = minimumBet;
 
 //     // Skip players without money or who have already bet in this round
 //     if (currentPlayer.money === 0) {
@@ -197,19 +250,19 @@ export const handleStageBets = async (
 //           // );
 //         } else {
 //           await openPlaceBetModal(currentPlayer);
-//           if (currentPlayer.currentBet > currentMinimumBet) {
-//             console.log(
-//               "Betting - player: ",
-//               currentPlayer.name,
-//               " is raised from ",
-//               currentMinimumBet
-//             );
+// if (currentPlayer.currentBet > currentMinimumBet) {
+//   console.log(
+//     "Betting - player: ",
+//     currentPlayer.name,
+//     " is raised from ",
+//     currentMinimumBet
+//   );
 
-//             isRaise = true; // Player raised
-//             currentMinimumBet = currentPlayer.currentBet;
+//   isRaise = true; // Player raised
+//   currentMinimumBet = currentPlayer.currentBet;
 
-//             console.log("currentMinimumBet is now ", currentMinimumBet);
-//           }
+//   console.log("currentMinimumBet is now ", currentMinimumBet);
+// }
 //         }
 //       }
 //     } else {

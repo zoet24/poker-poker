@@ -4,7 +4,7 @@ import { Player } from "../types/players";
 const initialPlayerMoney = 5;
 export const initialPlayers: Player[] = [
   {
-    name: "Zoe",
+    name: "A",
     money: initialPlayerMoney,
     currentBet: 0,
     hand: [],
@@ -19,7 +19,7 @@ export const initialPlayers: Player[] = [
     },
   },
   {
-    name: "Fran",
+    name: "B",
     money: initialPlayerMoney,
     currentBet: 0,
     hand: [],
@@ -34,7 +34,7 @@ export const initialPlayers: Player[] = [
     },
   },
   {
-    name: "Mike",
+    name: "C",
     money: initialPlayerMoney,
     currentBet: 0,
     hand: [],
@@ -49,7 +49,7 @@ export const initialPlayers: Player[] = [
     },
   },
   {
-    name: "Bron",
+    name: "D",
     money: initialPlayerMoney,
     currentBet: 0,
     hand: [],
@@ -64,7 +64,7 @@ export const initialPlayers: Player[] = [
     },
   },
   {
-    name: "Char",
+    name: "E",
     money: initialPlayerMoney,
     currentBet: 0,
     hand: [],
