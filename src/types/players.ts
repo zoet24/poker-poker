@@ -3,6 +3,7 @@ import { Card, HandRank } from "./cards";
 export interface Player {
   name: string;
   money: number;
+  currentBet: number;
   hand: Card[];
   bestHand?: HandRank | null;
   showCards: boolean;

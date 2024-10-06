@@ -6,6 +6,7 @@ export const initialPlayers: Player[] = [
   {
     name: "Zoe",
     money: initialPlayerMoney,
+    currentBet: 0,
     hand: [],
     bestHand: null,
     showCards: true,
@@ -20,6 +21,7 @@ export const initialPlayers: Player[] = [
   {
     name: "Fran",
     money: initialPlayerMoney,
+    currentBet: 0,
     hand: [],
     bestHand: null,
     showCards: false,
@@ -34,6 +36,7 @@ export const initialPlayers: Player[] = [
   {
     name: "Mike",
     money: initialPlayerMoney,
+    currentBet: 0,
     hand: [],
     bestHand: null,
     showCards: false,
@@ -48,6 +51,7 @@ export const initialPlayers: Player[] = [
   {
     name: "Bron",
     money: initialPlayerMoney,
+    currentBet: 0,
     hand: [],
     bestHand: null,
     showCards: false,
@@ -62,6 +66,7 @@ export const initialPlayers: Player[] = [
   {
     name: "Char",
     money: initialPlayerMoney,
+    currentBet: 0,
     hand: [],
     bestHand: null,
     showCards: false,
@@ -78,6 +83,7 @@ export const initialPlayers: Player[] = [
 export const createNewPlayer = (name: string): Player => ({
   name,
   money: initialPlayerMoney,
+  currentBet: 0,
   hand: [],
   bestHand: null,
   showCards: false,

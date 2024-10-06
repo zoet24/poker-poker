@@ -13,9 +13,12 @@ export const takePlayerBet = (
         let updatedMoney = player.money - betAmount;
         updatedMoney = Math.max(0, Math.round(updatedMoney * 100) / 100);
 
+        // console.log("Betting - player: ", player.name, betAmount, player.money);
+
         return {
           ...player,
           money: Math.max(0, updatedMoney),
+          currentBet: (player.currentBet ?? 0) + betAmount,
         };
       }
       return player;
@@ -61,6 +64,17 @@ export const takePlayersBets = async (
   }
 };
 
+export const resetPlayersBets = (
+  setPlayers: React.Dispatch<React.SetStateAction<Player[]>>
+) => {
+  setPlayers((prevPlayers) =>
+    prevPlayers.map((player) => ({
+      ...player,
+      currentBet: 0,
+    }))
+  );
+};
+
 // Function to handle blinds
 export const handleBlinds = (
   players: Player[],
@@ -91,41 +105,63 @@ export const handleBlinds = (
   }
 };
 
-// Function to handle the betting during the deal stage
-export const handleDealBets = async (
+export const handleStageBets = async (
   players: Player[],
   openPlaceBetModal: (player: Player) => Promise<void>,
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>,
-  bigBlind: number,
+  setPot: React.Dispatch<React.SetStateAction<number>>,
   smallBlind: number,
-  setPot: React.Dispatch<React.SetStateAction<number>>
+  bigBlind: number,
+  isDeal: boolean = false
 ) => {
-  for (let i = 0; i < players.length; i++) {
-    const currentPlayer = players[i];
+  const activePlayers = players.filter((player) => !player.hasFolded);
 
-    // Skip players who have folded
-    if (currentPlayer.hasFolded) {
+  const bigBlindIndex = activePlayers.findIndex(
+    (player) => player.role.isBigBlind
+  );
+  const startIndex = (bigBlindIndex + 1) % activePlayers.length; // Start taking bets after the big blind
+
+  for (let i = 0; i < activePlayers.length; i++) {
+    const currentPlayer =
+      activePlayers[(startIndex + i) % activePlayers.length];
+
+    console.log("Betting - current player: ", currentPlayer.name);
+
+    // Skip players without money or who have already bet in this round
+    if (currentPlayer.money === 0) {
       continue;
     }
 
-    if (currentPlayer.role.isSmallBlind) {
+    console.log("Betting, isDeal", isDeal);
+
+    if (isDeal && currentPlayer.role.isSmallBlind) {
       // Small blind needs to put in an additional amount to match big blind
       const additionalBet = bigBlind - smallBlind; // 0.1 already paid
+      const originalIndex = players.findIndex(
+        (p) => p.name === currentPlayer.name
+      );
       if (additionalBet > 0) {
-        takePlayerBet(i, additionalBet, setPlayers, setPot);
+        takePlayerBet(originalIndex, additionalBet, setPlayers, setPot);
       }
-    } else if (currentPlayer.role.isBigBlind) {
+    } else if (isDeal && currentPlayer.role.isBigBlind) {
       // Big blind has already paid the minimum, no action needed
       continue;
     } else {
       // All other players must put in the big blind amount or fold
       if (currentPlayer.isComp) {
-        // If it's a computer player, they automatically bet the required amount
-        takePlayerBet(i, bigBlind, setPlayers, setPot);
+        const originalIndex = players.findIndex(
+          (p) => p.name === currentPlayer.name
+        );
+        takePlayerBet(originalIndex, 0.2, setPlayers, setPot);
       } else {
-        // If it's a human player, open the bet modal
         await openPlaceBetModal(currentPlayer);
       }
     }
+
+    console.log(
+      "Betting - player: ",
+      currentPlayer.name,
+      currentPlayer.currentBet
+    );
   }
 };

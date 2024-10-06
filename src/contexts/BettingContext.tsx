@@ -8,7 +8,7 @@ import React, {
 import { Player } from "../types/players";
 import {
   handleBlinds,
-  handleDealBets,
+  handleStageBets,
   takePlayerBet,
   takePlayersBets,
 } from "../utils/betting";
@@ -29,7 +29,6 @@ interface BettingContextProps {
   openPlaceBetModal: (player: Player) => Promise<void>;
   closePlaceBetModal: (playerName: string) => void;
   placeBetModalState: Record<string, { open: boolean; resolve?: () => void }>;
-  handleDealBets: () => Promise<void>;
   handleBlinds: () => void;
 }
 
@@ -43,7 +42,6 @@ const defaultValue: BettingContextProps = {
   openPlaceBetModal: async () => {},
   closePlaceBetModal: () => {},
   placeBetModalState: {},
-  handleDealBets: async () => {},
   handleBlinds: () => {},
 };
 
@@ -74,13 +72,23 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
         bigBlind,
         setMinimumBet
       );
-      handleDealBets(
+      handleStageBets(
         players,
-        (player) => openPlaceBetModal(player, setPlaceBetModalState),
+        (player: Player) => openPlaceBetModal(player, setPlaceBetModalState),
         setPlayers,
-        bigBlind,
+        setPot,
         smallBlind,
-        setPot
+        bigBlind,
+        true
+      );
+    } else if (stage === "flop" || stage === "turn" || stage === "river") {
+      handleStageBets(
+        players,
+        (player: Player) => openPlaceBetModal(player, setPlaceBetModalState),
+        setPlayers,
+        setPot,
+        smallBlind,
+        bigBlind
       );
     }
   }, [stage]);
@@ -101,15 +109,6 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
         closePlaceBetModal: (playerName) =>
           closePlaceBetModal(playerName, setPlaceBetModalState),
         placeBetModalState,
-        handleDealBets: () =>
-          handleDealBets(
-            players,
-            (player) => openPlaceBetModal(player, setPlaceBetModalState),
-            setPlayers,
-            bigBlind,
-            smallBlind,
-            setPot
-          ),
         handleBlinds: () =>
           handleBlinds(
             players,

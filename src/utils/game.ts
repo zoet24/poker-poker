@@ -12,10 +12,9 @@ export const handleStageTransition = (
   players: Player[],
   setPlayers: SetState<Player[]>,
   localDeck: Card[],
-  setDeck: SetState<Card[]>,
   addToCommunity: (cards: Card[]) => void,
   addToBurn: (card: Card) => void,
-  takePlayersBets: () => Promise<void>,
+  handleStageBets: () => Promise<void>,
   resetDeck: () => void,
   resetPlayersHands: () => void,
   rotatePlayerRoles: () => void,
@@ -57,8 +56,6 @@ export const handleStageTransition = (
       addToBurn,
       addToCommunity
     );
-    // Call the betting process after dealing
-    takePlayersBets();
   }
 
   return localDeck;
