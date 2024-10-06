@@ -13,8 +13,7 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
   handleCloseModal,
 }) => {
   const { players, setPlayers } = useContext(PlayersContext);
-  const { takePlayerBet, minimumBet, setMinimumBet } =
-    useContext(BettingContext);
+  const { minimumBet, setMinimumBet } = useContext(BettingContext);
 
   const player = players[playerIndex];
   const allIn = minimumBet >= player.money; // If min bet is bigger than player's money, player must go all in
@@ -24,19 +23,24 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
 
   const handlePlaceBet = () => {
     if (betAmount > 0 && betAmount <= player.money) {
-      // takePlayerBet(playerIndex, betAmount);
+      setPlayers((prevPlayers) =>
+        prevPlayers.map((p, index) =>
+          index === playerIndex
+            ? {
+                ...p,
+                currentBet: p.currentBet + betAmount,
+                money: Math.max(0, p.money - betAmount),
+              }
+            : p
+        )
+      );
 
-      // if (betAmount > minimumBet) {
-      //   setMinimumBet(betAmount);
-      // }
-
-      handleCloseModal(betAmount); // Pass betAmount when closing modal
+      handleCloseModal(betAmount);
     }
   };
 
   const handleCheck = () => {
-    takePlayerBet(playerIndex, 0);
-    handleCloseModal(0); // Pass 0 when checking
+    handleCloseModal(0);
   };
 
   const handleFold = () => {
@@ -46,7 +50,7 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
       )
     );
 
-    handleCloseModal(0); // No bet is placed, pass 0
+    handleCloseModal(0);
   };
 
   return (

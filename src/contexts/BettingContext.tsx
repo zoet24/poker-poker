@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { Player } from "../types/players";
-import { handleBets, takePlayerBet } from "../utils/betting";
+import { handleBets } from "../utils/betting";
 import { closePlaceBetModal, openPlaceBetModal } from "../utils/bettingModals";
 import PlayersContext from "./PlayersContext";
 import StageContext from "./StageContext";
@@ -16,7 +16,7 @@ interface BettingContextProps {
   setPot: React.Dispatch<React.SetStateAction<number>>;
   minimumBet: number;
   setMinimumBet: React.Dispatch<React.SetStateAction<number>>;
-  takePlayerBet: (playerIndex: number, betAmount: number) => void;
+  // takePlayerBet: (playerIndex: number, betAmount: number) => void;
   openPlaceBetModal: (player: Player) => Promise<number>;
   closePlaceBetModal: (playerName: string, betAmount: number) => void;
   placeBetModalState: Record<
@@ -30,7 +30,7 @@ const defaultValue: BettingContextProps = {
   setPot: () => {},
   minimumBet: 0,
   setMinimumBet: () => {},
-  takePlayerBet: () => {},
+  // takePlayerBet: () => {},
   openPlaceBetModal: async () => 0,
   closePlaceBetModal: () => {},
   placeBetModalState: {},
@@ -63,7 +63,8 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
       handleBets(
         players,
         (player: Player) => openPlaceBetModal(player, setPlaceBetModalState),
-        setPlayers
+        setPlayers,
+        setPot
       );
       console.log("handleBets");
     }
@@ -76,8 +77,8 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
         setPot,
         minimumBet,
         setMinimumBet,
-        takePlayerBet: (playerIndex, betAmount) =>
-          takePlayerBet(playerIndex, betAmount, setPlayers, setPot),
+        // takePlayerBet: (playerIndex, betAmount) =>
+        //   takePlayerBet(playerIndex, betAmount, setPlayers, setPot),
         openPlaceBetModal: (player) =>
           openPlaceBetModal(player, setPlaceBetModalState),
         closePlaceBetModal: (playerName, betAmount) =>
