@@ -28,42 +28,6 @@ export const takePlayerBet = (
   setPot((prevPot) => prevPot + betAmount);
 };
 
-// Function to take bets from all active players
-export const takePlayersBets = async (
-  players: Player[],
-  openBetModal: (player: Player) => Promise<void>,
-  setPlayers: React.Dispatch<React.SetStateAction<Player[]>>,
-  setPot: React.Dispatch<React.SetStateAction<number>>
-) => {
-  const activePlayers = players.filter((player) => !player.hasFolded);
-
-  const activeSmallBlindIndex = activePlayers.findIndex(
-    (player) => player.role.isSmallBlind
-  );
-
-  const startIndex = activeSmallBlindIndex !== -1 ? activeSmallBlindIndex : 0;
-
-  // Iterate over active players starting from the small blind
-  for (let i = 0; i < activePlayers.length; i++) {
-    const currentPlayer =
-      activePlayers[(startIndex + i) % activePlayers.length];
-
-    if (currentPlayer.money === 0) {
-      continue;
-    }
-
-    // Check if the player is a computer or not
-    if (currentPlayer.isComp) {
-      const originalIndex = players.findIndex(
-        (p) => p.name === currentPlayer.name
-      );
-      takePlayerBet(originalIndex, 0.2, setPlayers, setPot);
-    } else {
-      await openBetModal(currentPlayer);
-    }
-  }
-};
-
 export const resetPlayersBets = (
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>
 ) => {
@@ -81,14 +45,10 @@ export const handleBlinds = (
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>,
   setPot: React.Dispatch<React.SetStateAction<number>>,
   smallBlind: number,
-  bigBlind: number,
-  setMinimumBet: React.Dispatch<React.SetStateAction<number>>
+  bigBlind: number
 ) => {
   const smallBlindPlayer = players.find((player) => player.role.isSmallBlind);
   const bigBlindPlayer = players.find((player) => player.role.isBigBlind);
-
-  // Set the minimum bet to the big blind value
-  setMinimumBet(bigBlind);
 
   if (smallBlindPlayer) {
     const smallBlindIndex = players.findIndex(
@@ -112,6 +72,7 @@ export const handleStageBets = async (
   setPot: React.Dispatch<React.SetStateAction<number>>,
   smallBlind: number,
   bigBlind: number,
+  minimumBet: number,
   isDeal: boolean = false
 ) => {
   const activePlayers = players.filter((player) => !player.hasFolded);
@@ -134,25 +95,39 @@ export const handleStageBets = async (
 
     console.log("Betting, isDeal", isDeal);
 
-    if (isDeal && currentPlayer.role.isSmallBlind) {
-      // Small blind needs to put in an additional amount to match big blind
-      const additionalBet = bigBlind - smallBlind; // 0.1 already paid
-      const originalIndex = players.findIndex(
-        (p) => p.name === currentPlayer.name
-      );
-      if (additionalBet > 0) {
-        takePlayerBet(originalIndex, additionalBet, setPlayers, setPot);
+    if (isDeal) {
+      if (currentPlayer.role.isSmallBlind) {
+        const additionalBet = bigBlind - smallBlind; // 0.1 already paid
+        const originalIndex = players.findIndex(
+          (p) => p.name === currentPlayer.name
+        );
+        if (additionalBet > 0) {
+          takePlayerBet(originalIndex, additionalBet, setPlayers, setPot);
+        }
+      } else if (currentPlayer.role.isBigBlind) {
+        continue;
+      } else {
+        if (currentPlayer.isComp) {
+          const originalIndex = players.findIndex(
+            (p) => p.name === currentPlayer.name
+          );
+          takePlayerBet(originalIndex, minimumBet, setPlayers, setPot);
+
+          console.log(
+            "Betting - current computer player",
+            currentPlayer.name,
+            minimumBet
+          );
+        } else {
+          await openPlaceBetModal(currentPlayer);
+        }
       }
-    } else if (isDeal && currentPlayer.role.isBigBlind) {
-      // Big blind has already paid the minimum, no action needed
-      continue;
     } else {
-      // All other players must put in the big blind amount or fold
       if (currentPlayer.isComp) {
         const originalIndex = players.findIndex(
           (p) => p.name === currentPlayer.name
         );
-        takePlayerBet(originalIndex, 0.2, setPlayers, setPot);
+        takePlayerBet(originalIndex, minimumBet, setPlayers, setPot);
       } else {
         await openPlaceBetModal(currentPlayer);
       }

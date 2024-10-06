@@ -14,7 +14,6 @@ export const handleStageTransition = (
   localDeck: Card[],
   addToCommunity: (cards: Card[]) => void,
   addToBurn: (card: Card) => void,
-  handleStageBets: () => Promise<void>,
   resetDeck: () => void,
   resetPlayersHands: () => void,
   rotatePlayerRoles: () => void,

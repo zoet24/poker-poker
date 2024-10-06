@@ -57,10 +57,15 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
         />
       </div>
       <div className="modal-btns">
-        <Button
-          text={allIn ? "All in" : "Place bet"}
-          onClick={handlePlaceBet}
-        ></Button>
+        {allIn ? (
+          <Button text="All in" onClick={handlePlaceBet}></Button>
+        ) : (
+          <Button
+            text="Place bet"
+            onClick={handlePlaceBet}
+            disabled={betAmount == 0}
+          ></Button>
+        )}
         <Button
           text="Check"
           onClick={handleCheck}

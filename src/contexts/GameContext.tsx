@@ -47,8 +47,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     rotatePlayerRoles,
     removePlayer,
   } = useContext(PlayersContext);
-  const { pot, setPot, takePlayersBets, openPlaceBetModal } =
-    useContext(BettingContext);
+  const { pot, setPot } = useContext(BettingContext);
 
   const gameNumber = useRef(0);
   const isInitialMount = useRef(true);
@@ -63,7 +62,6 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
       localDeck,
       addToCommunity,
       addToBurn,
-      () => takePlayersBets(players, openPlaceBetModal),
       resetDeck,
       resetPlayersHands,
       rotatePlayerRoles,

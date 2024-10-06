@@ -6,12 +6,7 @@ import React, {
   useState,
 } from "react";
 import { Player } from "../types/players";
-import {
-  handleBlinds,
-  handleStageBets,
-  takePlayerBet,
-  takePlayersBets,
-} from "../utils/betting";
+import { handleBlinds, handleStageBets, takePlayerBet } from "../utils/betting";
 import { closePlaceBetModal, openPlaceBetModal } from "../utils/bettingModals";
 import PlayersContext from "./PlayersContext";
 import StageContext from "./StageContext";
@@ -22,14 +17,9 @@ interface BettingContextProps {
   minimumBet: number;
   setMinimumBet: React.Dispatch<React.SetStateAction<number>>;
   takePlayerBet: (playerIndex: number, betAmount: number) => void;
-  takePlayersBets: (
-    players: Player[],
-    openBetModal: (player: Player) => Promise<void>
-  ) => Promise<void>;
   openPlaceBetModal: (player: Player) => Promise<void>;
   closePlaceBetModal: (playerName: string) => void;
   placeBetModalState: Record<string, { open: boolean; resolve?: () => void }>;
-  handleBlinds: () => void;
 }
 
 const defaultValue: BettingContextProps = {
@@ -38,11 +28,9 @@ const defaultValue: BettingContextProps = {
   minimumBet: 0,
   setMinimumBet: () => {},
   takePlayerBet: () => {},
-  takePlayersBets: async () => {},
   openPlaceBetModal: async () => {},
   closePlaceBetModal: () => {},
   placeBetModalState: {},
-  handleBlinds: () => {},
 };
 
 const BettingContext = createContext<BettingContextProps>(defaultValue);
@@ -63,15 +51,13 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
 
   // Use effect to handle stage change
   useEffect(() => {
+    let localMinimumBet = 0;
+
     if (stage === "deal") {
-      handleBlinds(
-        players,
-        setPlayers,
-        setPot,
-        smallBlind,
-        bigBlind,
-        setMinimumBet
-      );
+      localMinimumBet = bigBlind;
+      setMinimumBet(bigBlind);
+
+      handleBlinds(players, setPlayers, setPot, smallBlind, bigBlind);
       handleStageBets(
         players,
         (player: Player) => openPlaceBetModal(player, setPlaceBetModalState),
@@ -79,16 +65,21 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
         setPot,
         smallBlind,
         bigBlind,
+        localMinimumBet,
         true
       );
     } else if (stage === "flop" || stage === "turn" || stage === "river") {
+      localMinimumBet = 0;
+      setMinimumBet(0);
+
       handleStageBets(
         players,
         (player: Player) => openPlaceBetModal(player, setPlaceBetModalState),
         setPlayers,
         setPot,
         smallBlind,
-        bigBlind
+        bigBlind,
+        localMinimumBet
       );
     }
   }, [stage]);
@@ -102,22 +93,11 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
         setMinimumBet,
         takePlayerBet: (playerIndex, betAmount) =>
           takePlayerBet(playerIndex, betAmount, setPlayers, setPot),
-        takePlayersBets: (players, openBetModal) =>
-          takePlayersBets(players, openBetModal, setPlayers, setPot),
         openPlaceBetModal: (player) =>
           openPlaceBetModal(player, setPlaceBetModalState),
         closePlaceBetModal: (playerName) =>
           closePlaceBetModal(playerName, setPlaceBetModalState),
         placeBetModalState,
-        handleBlinds: () =>
-          handleBlinds(
-            players,
-            setPlayers,
-            setPot,
-            smallBlind,
-            bigBlind,
-            setMinimumBet
-          ),
       }}
     >
       {children}
