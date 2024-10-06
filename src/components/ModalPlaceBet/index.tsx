@@ -13,7 +13,8 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
   handleCloseModal,
 }) => {
   const { players, setPlayers } = useContext(PlayersContext);
-  const { takePlayerBet, minimumBet } = useContext(BettingContext);
+  const { takePlayerBet, minimumBet, setMinimumBet } =
+    useContext(BettingContext);
 
   const player = players[playerIndex];
   const allIn = minimumBet >= player.money; // If min bet is bigger than player's money, player must go all in
@@ -24,6 +25,11 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
   const handlePlaceBet = () => {
     if (betAmount > 0 && betAmount <= player.money) {
       takePlayerBet(playerIndex, betAmount);
+
+      if (betAmount > minimumBet) {
+        setMinimumBet(betAmount);
+      }
+
       handleCloseModal();
     }
   };
