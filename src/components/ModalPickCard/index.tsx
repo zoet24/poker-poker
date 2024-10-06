@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
-import InputSelect from "../InputSelect";
+import CardsContext from "../../contexts/CardsContext";
 import { Card } from "../../types/cards";
-import CardsContext from "contexts/CardsContext";
 import { getCardDisplayValue, reorderDeck } from "../../utils/deck";
 import Button from "../Button";
+import InputSelect from "../InputSelect";
 
 interface ModalPickCardProps {
   deckIndex?: number;

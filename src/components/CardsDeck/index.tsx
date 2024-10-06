@@ -1,7 +1,5 @@
-// Shows number of cards remaining in deck
-
-import CardsContext from "contexts/CardsContext";
 import { useContext } from "react";
+import CardsContext from "../../contexts/CardsContext";
 
 const CardsDeck = () => {
   const { deck } = useContext(CardsContext);

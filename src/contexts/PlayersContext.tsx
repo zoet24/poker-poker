@@ -35,10 +35,8 @@ const defaultValue: PlayersContextProps = {
   setRolesUpdated: () => {},
 };
 
-// Create the context
 const PlayersContext = createContext<PlayersContextProps>(defaultValue);
 
-// Create the provider
 export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {

@@ -1,11 +1,8 @@
+import { useContext, useState } from "react";
+import StageContext from "../../contexts/StageContext";
+import Card from "../Card";
 import Modal from "../Modal";
 import ModalAddPlayer from "../ModalAddPlayer";
-import Card from "../Card";
-import { useContext, useState } from "react";
-import StageContext from "contexts/StageContext";
-
-// Container for adding new player - player elements - name, money, hand, score - are dotted out
-// Tapping add player row opens add player modal
 
 const RowAddPlayer = () => {
   const { stage } = useContext(StageContext);

@@ -1,8 +1,5 @@
-// Display of current pot of money per game, or sets the initial pot for chip calculation
-// When layout = game, it shows the pot of money per game
-
 import { useContext } from "react";
-import BettingContext from "contexts/BettingContext";
+import BettingContext from "../../contexts/BettingContext";
 
 const Pot = () => {
   const { pot } = useContext(BettingContext);

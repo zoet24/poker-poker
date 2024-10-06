@@ -1,13 +1,8 @@
+import { useState } from "react";
+import { Card as CardType, suitColors, suitSymbols } from "../../types/cards";
+import { getCardDisplayValue } from "../../utils/deck";
 import Modal from "../Modal";
 import ModalPickCard from "../ModalPickCard";
-import { Card as CardType, suitSymbols, suitColors } from "../../types/cards";
-import { getCardDisplayValue } from "../../utils/deck";
-import { useState } from "react";
-
-// Single card
-// Can be pre-dealt (no value, dotted border), tapping on this opens pick card modal which is used to pick a value for the card
-// Can be dealt and hidden (no value, solid border)
-// Can be dealt and shown (value, solid border)
 
 interface CardProps {
   card?: CardType;

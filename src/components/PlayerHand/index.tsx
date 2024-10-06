@@ -1,10 +1,8 @@
-import { PlayerHandInfo } from "types/players";
+import { PlayerHand as PlayerHandType } from "../../types/players";
 import { evaluatePlayerHand } from "../../utils/hands";
 import Card from "../Card";
 
-// Display for player hand
-
-interface PlayerHandProps extends PlayerHandInfo {
+interface PlayerHandProps extends PlayerHandType {
   playerIndex: number;
 }
 

@@ -1,11 +1,11 @@
-import ModalPlaceBet from "../ModalPlaceBet";
-import Modal from "../Modal";
-import ModalPlayerStats from "../ModalPlayerStats";
-import PlayersContext from "contexts/PlayersContext";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Player as PlayerType } from "types/players";
-import StageContext from "contexts/StageContext";
-import BettingContext from "contexts/BettingContext";
+import BettingContext from "../../contexts/BettingContext";
+import PlayersContext from "../../contexts/PlayersContext";
+import StageContext from "../../contexts/StageContext";
+import { Player as PlayerType } from "../../types/players";
+import Modal from "../Modal";
+import ModalPlaceBet from "../ModalPlaceBet";
+import ModalPlayerStats from "../ModalPlayerStats";
 
 interface PlayerProps {
   player: PlayerType;
@@ -24,7 +24,6 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
   const handleOpenModalPlayerStats = () => setModalPlayerStatsOpen(true);
   const handleCloseModalPlayerStats = () => setModalPlayerStatsOpen(false);
 
-  const handleOpenModalPlaceBet = () => setModalPlaceBetOpen(true);
   const handleCloseModalPlaceBet = () => {
     closePlaceBetModal(player.name);
     setModalPlaceBetOpen(false);

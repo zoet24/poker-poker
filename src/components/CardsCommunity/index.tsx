@@ -1,10 +1,8 @@
-// Shows cards dealt in round
-
 import { useContext } from "react";
+import CardsContext from "../../contexts/CardsContext";
+import PlayersContext from "../../contexts/PlayersContext";
+import StageContext from "../../contexts/StageContext";
 import Card from "../Card";
-import CardsContext from "contexts/CardsContext";
-import StageContext from "contexts/StageContext";
-import PlayersContext from "contexts/PlayersContext";
 
 const CardsCommunity = () => {
   const { stage } = useContext(StageContext);

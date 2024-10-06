@@ -1,10 +1,6 @@
-// View stats associated with player's hand
-// Controls to hide player's cards or remove player
-
-import BettingContext from "contexts/BettingContext";
-import PlayersContext from "contexts/PlayersContext";
 import { useContext, useState } from "react";
-import StageContext from "../../contexts/StageContext";
+import BettingContext from "../../contexts/BettingContext";
+import PlayersContext from "../../contexts/PlayersContext";
 import Button from "../Button";
 
 interface ModalPlaceBetProps {
@@ -18,7 +14,6 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
 }) => {
   const { players, setPlayers } = useContext(PlayersContext);
   const { takePlayerBet, minimumBet } = useContext(BettingContext);
-  const { setStage } = useContext(StageContext);
 
   const player = players[playerIndex];
   const allIn = minimumBet >= player.money; // If min bet is bigger than player's money, player must go all in
@@ -39,14 +34,12 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
   };
 
   const handleFold = () => {
-    // Mark the player as folded in the players' state
     setPlayers((prevPlayers) =>
       prevPlayers.map((player, index) =>
         index === playerIndex ? { ...player, hasFolded: true } : player
       )
     );
 
-    // Close the modal after updating the player state
     handleCloseModal();
   };
 

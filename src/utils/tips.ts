@@ -1,5 +1,13 @@
 import { GameStage } from "../types/stage";
 
+export const tipsOn = false;
+
+export const getRandomTips = (stage: GameStage): string => {
+  const tipsArray = tips[stage];
+  const randomIndex = Math.floor(Math.random() * tipsArray.length);
+  return tipsArray[randomIndex];
+};
+
 // Build up tips from BlackRain69
 export const tips: Record<GameStage, string[]> = {
   "pre-deal": [

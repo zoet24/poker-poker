@@ -1,4 +1,4 @@
-import { Card, HandRank } from "types/cards";
+import { Card, HandRank } from "../types/cards";
 import {
   isFlush,
   isFourOfAKind,

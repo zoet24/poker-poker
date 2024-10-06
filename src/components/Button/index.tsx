@@ -1,6 +1,5 @@
 import React from "react";
 
-// Define the interface for the Button props
 interface ButtonProps {
   text: string;
   onClick: () => void;

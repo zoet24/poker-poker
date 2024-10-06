@@ -19,7 +19,6 @@ interface CardsContextProps {
   addToBurn: (card: Card) => void;
 }
 
-// Default values for the context
 const defaultValue: CardsContextProps = {
   deck: [],
   burn: [],
@@ -30,10 +29,8 @@ const defaultValue: CardsContextProps = {
   addToBurn: () => {},
 };
 
-// Create the context
 const CardsContext = createContext<CardsContextProps>(defaultValue);
 
-// Create the provider
 export const CardsProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {

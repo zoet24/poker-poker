@@ -15,20 +15,7 @@ export interface Player {
   };
 }
 
-export interface PlayerBasicInfo {
-  name: string;
-  money: number;
-  showCards: boolean;
-  role: {
-    isDealer: boolean;
-    isBigBlind: boolean;
-    isSmallBlind: boolean;
-  };
-}
-
-export interface PlayerHandInfo {
+export interface PlayerHand {
   hand: Card[];
   showCards: boolean;
 }
-
-export interface PlayerBestHandInfo {}

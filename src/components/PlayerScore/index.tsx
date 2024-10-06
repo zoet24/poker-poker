@@ -1,7 +1,5 @@
-// Display for player score
-
+import { HandRank } from "../../types/cards";
 import Card from "../Card";
-import { HandRank } from "types/cards";
 
 interface PlayerScoreProps {
   showCards: boolean;

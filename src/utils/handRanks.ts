@@ -1,4 +1,4 @@
-import { Card, Rank, suits } from "types/cards";
+import { Card, Rank, suits } from "../types/cards";
 import {
   countRanks,
   findNOfAKind,

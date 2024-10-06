@@ -1,11 +1,8 @@
 import { useContext } from "react";
+import GameContext from "../../contexts/GameContext";
+import StageContext from "../../contexts/StageContext";
+import { GameStage } from "../../types/stage";
 import Button from "../Button";
-import GameContext from "contexts/GameContext";
-import { GameStage } from "types/stage";
-import StageContext from "contexts/StageContext";
-
-// Container for game controls at bottom of page
-// When layout = game, it shows the game controls (play next round or reset game)
 
 const getButtonText = (stage: GameStage): string => {
   switch (stage) {

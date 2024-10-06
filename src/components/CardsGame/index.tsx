@@ -1,8 +1,6 @@
-import CardsDeck from "../CardsDeck";
-import CardsCommunity from "../CardsCommunity";
 import CardsBurn from "../CardsBurn";
-
-// Deck, community cards, burn pile
+import CardsCommunity from "../CardsCommunity";
+import CardsDeck from "../CardsDeck";
 
 const CardsGame = () => {
   return (

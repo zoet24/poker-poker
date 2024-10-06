@@ -1,6 +1,6 @@
 import React, { ReactNode, createContext, useEffect, useState } from "react";
 import { GameStage } from "../types/stage";
-import { tips } from "../utils/tips";
+import { getRandomTips, tipsOn } from "../utils/tips";
 import { handleToastSuccess } from "../utils/toasts";
 
 // Stages in the game in order
@@ -13,7 +13,6 @@ const stages: GameStage[] = [
   "showdown",
 ];
 
-// Define the shape of the context data
 interface StageContextProps {
   stage: GameStage;
   setStage: (stage: GameStage) => void;
@@ -21,7 +20,6 @@ interface StageContextProps {
   resetStage: () => void;
 }
 
-// Default value for the context
 const defaultValue: StageContextProps = {
   stage: "pre-deal",
   setStage: () => {},
@@ -30,14 +28,6 @@ const defaultValue: StageContextProps = {
 };
 
 const StageContext = createContext<StageContextProps>(defaultValue);
-
-const tipsOn = false;
-
-const getRandomTips = (stage: GameStage): string => {
-  const tipsArray = tips[stage];
-  const randomIndex = Math.floor(Math.random() * tipsArray.length);
-  return tipsArray[randomIndex];
-};
 
 export const StageProvider: React.FC<{ children: ReactNode }> = ({
   children,

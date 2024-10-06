@@ -1,6 +1,6 @@
-import { Card } from "types/cards";
+import { Card } from "../types/cards";
 
-// Function to calculate factorial with memoization
+// Function to calculate factorial
 export const factorial = (() => {
   const cache: { [key: number]: number } = {}; // Cache to store computed factorials
   return (n: number): number => {

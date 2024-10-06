@@ -1,10 +1,7 @@
-// View stats associated with player's hand
-// Controls to hide player's cards or remove player
-
 import { useContext } from "react";
+import PlayersContext from "../../contexts/PlayersContext";
+import StageContext from "../../contexts/StageContext";
 import Button from "../Button";
-import PlayersContext from "contexts/PlayersContext";
-import StageContext from "contexts/StageContext";
 
 interface ModalPlayerStatsProps {
   playerIndex: number;
