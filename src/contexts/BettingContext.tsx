@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { Player } from "../types/players";
-import { handleBlinds, handleStageBets, takePlayerBet } from "../utils/betting";
+import { handleBets, takePlayerBet } from "../utils/betting";
 import { closePlaceBetModal, openPlaceBetModal } from "../utils/bettingModals";
 import PlayersContext from "./PlayersContext";
 import StageContext from "./StageContext";
@@ -54,33 +54,36 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
     let localMinimumBet = 0;
 
     if (stage === "deal") {
-      localMinimumBet = bigBlind;
-      setMinimumBet(bigBlind);
+      // localMinimumBet = bigBlind;
+      // setMinimumBet(bigBlind);
 
-      handleBlinds(players, setPlayers, setPot, smallBlind, bigBlind);
-      handleStageBets(
-        players,
-        (player: Player) => openPlaceBetModal(player, setPlaceBetModalState),
-        setPlayers,
-        setPot,
-        smallBlind,
-        bigBlind,
-        localMinimumBet,
-        true
-      );
+      // handleBlinds(players, setPlayers, setPot, smallBlind, bigBlind);
+      // handleStageBets(
+      //   players,
+      //   (player: Player) => openPlaceBetModal(player, setPlaceBetModalState),
+      //   setPlayers,
+      //   setPot,
+      //   smallBlind,
+      //   bigBlind,
+      //   localMinimumBet,
+      //   true
+      // );
+
+      handleBets();
     } else if (stage === "flop" || stage === "turn" || stage === "river") {
-      localMinimumBet = 0;
-      setMinimumBet(0);
+      // localMinimumBet = 0;
+      // setMinimumBet(0);
 
-      handleStageBets(
-        players,
-        (player: Player) => openPlaceBetModal(player, setPlaceBetModalState),
-        setPlayers,
-        setPot,
-        smallBlind,
-        bigBlind,
-        localMinimumBet
-      );
+      // handleStageBets(
+      //   players,
+      //   (player: Player) => openPlaceBetModal(player, setPlaceBetModalState),
+      //   setPlayers,
+      //   setPot,
+      //   smallBlind,
+      //   bigBlind,
+      //   localMinimumBet
+      // );
+      handleBets();
     }
   }, [stage]);
 

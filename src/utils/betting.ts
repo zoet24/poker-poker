@@ -65,6 +65,8 @@ export const handleBlinds = (
   }
 };
 
+export const handleBets = () => {};
+
 export const handleStageBets = async (
   players: Player[],
   openPlaceBetModal: (player: Player) => Promise<void>,
@@ -76,111 +78,135 @@ export const handleStageBets = async (
   isDeal: boolean = false
 ) => {
   const activePlayers = players.filter((player) => !player.hasFolded);
-
-  const bigBlindIndex = activePlayers.findIndex(
-    (player) => player.role.isBigBlind
-  );
-  const startIndex = (bigBlindIndex + 1) % activePlayers.length; // Start taking bets after the big blind
+  let minBet = 0;
 
   for (let i = 0; i < activePlayers.length; i++) {
-    const currentPlayer =
-      activePlayers[(startIndex + i) % activePlayers.length];
-
-    let isRaise = false;
-    let currentMinimumBet = minimumBet;
-
-    // Skip players without money or who have already bet in this round
-    if (currentPlayer.money === 0) {
-      continue;
-    }
-
-    if (isDeal) {
-      if (currentPlayer.role.isSmallBlind) {
-        const additionalBet = bigBlind - smallBlind; // 0.1 already paid
-        const originalIndex = players.findIndex(
-          (p) => p.name === currentPlayer.name
-        );
-        if (additionalBet > 0) {
-          takePlayerBet(originalIndex, additionalBet, setPlayers, setPot);
-        }
-
-        // console.log(
-        //   "Betting - current small blind player",
-        //   currentPlayer.name,
-        //   currentMinimumBet
-        // );
-      } else if (currentPlayer.role.isBigBlind) {
-        // console.log(
-        //   "Betting - current big blind player",
-        //   currentPlayer.name,
-        //   currentMinimumBet
-        // );
-        continue;
-      } else {
-        if (currentPlayer.isComp) {
-          const originalIndex = players.findIndex(
-            (p) => p.name === currentPlayer.name
-          );
-          takePlayerBet(originalIndex, currentMinimumBet, setPlayers, setPot);
-
-          // console.log(
-          //   "Betting - current computer player",
-          //   currentPlayer.name,
-          //   minimumBet
-          // );
-        } else {
-          await openPlaceBetModal(currentPlayer);
-          if (currentPlayer.currentBet > currentMinimumBet) {
-            console.log(
-              "Betting - player: ",
-              currentPlayer.name,
-              " is raised from ",
-              currentMinimumBet
-            );
-
-            isRaise = true; // Player raised
-            currentMinimumBet = currentPlayer.currentBet;
-
-            console.log("currentMinimumBet is now ", currentMinimumBet);
-          }
-        }
-      }
-    } else {
-      if (currentPlayer.isComp) {
-        const originalIndex = players.findIndex(
-          (p) => p.name === currentPlayer.name
-        );
-        takePlayerBet(originalIndex, currentMinimumBet, setPlayers, setPot);
-      } else {
-        await openPlaceBetModal(currentPlayer);
-        if (currentPlayer.currentBet > currentMinimumBet) {
-          console.log(
-            "Betting - player: ",
-            currentPlayer.name,
-            " is raised from ",
-            currentMinimumBet
-          );
-
-          isRaise = true; // Player raised
-          currentMinimumBet = currentPlayer.currentBet;
-
-          console.log("currentMinimumBet is now ", currentMinimumBet);
-        }
-      }
-    }
-
-    // console.log(
-    //   "Betting - player: ",
-    //   currentPlayer.name,
-    //   "Current bet is: ",
-    //   currentPlayer.currentBet,
-    //   "Current minimum bet is: ",
-    //   currentMinimumBet
-    // );
+    // To start off with:
+    // Iterate over each player - open the place bet modal, take their bet and move on to the next player (make sure state is getting updated correctly)
+    // Added complexity
+    // If playerBet = minBet, the player has checked - proceed to the next player
+    // If playerBet > minBet, the player has raised - increase minBet, break for loop and start again from next player
+    // If playerBet < minBet, collect the difference so the player stays in
+    // Then when this is working add blinds, isComp etc back in (maybe in smaller functions?)
   }
-
-  // resetPlayersBets(setPlayers);
 };
+
+// export const handleStageBets = async (
+//   players: Player[],
+//   openPlaceBetModal: (player: Player) => Promise<void>,
+//   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>,
+//   setPot: React.Dispatch<React.SetStateAction<number>>,
+//   smallBlind: number,
+//   bigBlind: number,
+//   minimumBet: number,
+//   isDeal: boolean = false
+// ) => {
+//   const activePlayers = players.filter((player) => !player.hasFolded);
+
+//   const bigBlindIndex = activePlayers.findIndex(
+//     (player) => player.role.isBigBlind
+//   );
+//   const startIndex = (bigBlindIndex + 1) % activePlayers.length; // Start taking bets after the big blind
+
+//   for (let i = 0; i < activePlayers.length; i++) {
+//     const currentPlayer =
+//       activePlayers[(startIndex + i) % activePlayers.length];
+
+//     let isRaise = false;
+//     let currentMinimumBet = minimumBet;
+
+//     // Skip players without money or who have already bet in this round
+//     if (currentPlayer.money === 0) {
+//       continue;
+//     }
+
+//     if (isDeal) {
+//       if (currentPlayer.role.isSmallBlind) {
+//         const additionalBet = bigBlind - smallBlind; // 0.1 already paid
+//         const originalIndex = players.findIndex(
+//           (p) => p.name === currentPlayer.name
+//         );
+//         if (additionalBet > 0) {
+//           takePlayerBet(originalIndex, additionalBet, setPlayers, setPot);
+//         }
+
+//         // console.log(
+//         //   "Betting - current small blind player",
+//         //   currentPlayer.name,
+//         //   currentMinimumBet
+//         // );
+//       } else if (currentPlayer.role.isBigBlind) {
+//         // console.log(
+//         //   "Betting - current big blind player",
+//         //   currentPlayer.name,
+//         //   currentMinimumBet
+//         // );
+//         continue;
+//       } else {
+//         if (currentPlayer.isComp) {
+//           const originalIndex = players.findIndex(
+//             (p) => p.name === currentPlayer.name
+//           );
+//           takePlayerBet(originalIndex, currentMinimumBet, setPlayers, setPot);
+
+//           // console.log(
+//           //   "Betting - current computer player",
+//           //   currentPlayer.name,
+//           //   minimumBet
+//           // );
+//         } else {
+//           await openPlaceBetModal(currentPlayer);
+//           if (currentPlayer.currentBet > currentMinimumBet) {
+//             console.log(
+//               "Betting - player: ",
+//               currentPlayer.name,
+//               " is raised from ",
+//               currentMinimumBet
+//             );
+
+//             isRaise = true; // Player raised
+//             currentMinimumBet = currentPlayer.currentBet;
+
+//             console.log("currentMinimumBet is now ", currentMinimumBet);
+//           }
+//         }
+//       }
+//     } else {
+//       if (currentPlayer.isComp) {
+//         const originalIndex = players.findIndex(
+//           (p) => p.name === currentPlayer.name
+//         );
+//         takePlayerBet(originalIndex, currentMinimumBet, setPlayers, setPot);
+//       } else {
+//         await openPlaceBetModal(currentPlayer);
+//         if (currentPlayer.currentBet > currentMinimumBet) {
+//           console.log(
+//             "Betting - player: ",
+//             currentPlayer.name,
+//             " is raised from ",
+//             currentMinimumBet
+//           );
+
+//           isRaise = true; // Player raised
+//           currentMinimumBet = currentPlayer.currentBet;
+
+//           console.log("currentMinimumBet is now ", currentMinimumBet);
+//         }
+//       }
+//     }
+
+//     // console.log(
+//     //   "Betting - player: ",
+//     //   currentPlayer.name,
+//     //   "Current bet is: ",
+//     //   currentPlayer.currentBet,
+//     //   "Current minimum bet is: ",
+//     //   currentMinimumBet
+//     // );
+//   }
+
+//   // resetPlayersBets(setPlayers);
+// };
 
 // export const handleStageBets = async (
 //   players: Player[],
