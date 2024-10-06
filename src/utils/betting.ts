@@ -28,6 +28,49 @@ export const takePlayerBet = (
   setPot((prevPot) => prevPot + betAmount);
 };
 
+export const handleBets = async (
+  players: Player[],
+  openPlaceBetModal: (player: Player) => Promise<number>,
+  setPlayers: React.Dispatch<React.SetStateAction<Player[]>>
+) => {
+  let currentPlayers = [...players]; // Create a copy of the initial players
+
+  for (let i = 0; i < currentPlayers.length; i++) {
+    const betAmount = await openPlaceBetModal(currentPlayers[i]);
+
+    // Update the player's current bet and money in state
+    setPlayers((prevPlayers) =>
+      prevPlayers.map((p, index) =>
+        index === i
+          ? {
+              ...p,
+              currentBet: p.currentBet + betAmount,
+              money: Math.max(0, p.money - betAmount), // Ensure money doesn't go negative
+            }
+          : p
+      )
+    );
+
+    // Update currentPlayers from the latest state
+    currentPlayers = currentPlayers.map((p, index) =>
+      index === i
+        ? {
+            ...p,
+            currentBet: p.currentBet + betAmount,
+            money: Math.max(0, p.money - betAmount),
+          }
+        : p
+    );
+
+    console.log(
+      "handleBets - player, currentBet, money: ",
+      currentPlayers[i].name,
+      currentPlayers[i].currentBet,
+      currentPlayers[i].money
+    );
+  }
+};
+
 export const resetPlayersBets = (
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>
 ) => {
@@ -64,8 +107,6 @@ export const handleBlinds = (
     takePlayerBet(bigBlindIndex, bigBlind, setPlayers, setPot);
   }
 };
-
-export const handleBets = () => {};
 
 export const handleStageBets = async (
   players: Player[],

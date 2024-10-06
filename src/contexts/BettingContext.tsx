@@ -17,9 +17,12 @@ interface BettingContextProps {
   minimumBet: number;
   setMinimumBet: React.Dispatch<React.SetStateAction<number>>;
   takePlayerBet: (playerIndex: number, betAmount: number) => void;
-  openPlaceBetModal: (player: Player) => Promise<void>;
-  closePlaceBetModal: (playerName: string) => void;
-  placeBetModalState: Record<string, { open: boolean; resolve?: () => void }>;
+  openPlaceBetModal: (player: Player) => Promise<number>;
+  closePlaceBetModal: (playerName: string, betAmount: number) => void;
+  placeBetModalState: Record<
+    string,
+    { open: boolean; resolve?: (betAmount: number) => void }
+  >;
 }
 
 const defaultValue: BettingContextProps = {
@@ -28,7 +31,7 @@ const defaultValue: BettingContextProps = {
   minimumBet: 0,
   setMinimumBet: () => {},
   takePlayerBet: () => {},
-  openPlaceBetModal: async () => {},
+  openPlaceBetModal: async () => 0,
   closePlaceBetModal: () => {},
   placeBetModalState: {},
 };
@@ -46,44 +49,23 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
   const bigBlind = smallBlind * 2;
 
   const [placeBetModalState, setPlaceBetModalState] = useState<
-    Record<string, { open: boolean; resolve?: () => void }>
+    Record<string, { open: boolean; resolve?: (betAmount: number) => void }>
   >({});
 
   // Use effect to handle stage change
   useEffect(() => {
-    let localMinimumBet = 0;
-
-    if (stage === "deal") {
-      // localMinimumBet = bigBlind;
-      // setMinimumBet(bigBlind);
-
-      // handleBlinds(players, setPlayers, setPot, smallBlind, bigBlind);
-      // handleStageBets(
-      //   players,
-      //   (player: Player) => openPlaceBetModal(player, setPlaceBetModalState),
-      //   setPlayers,
-      //   setPot,
-      //   smallBlind,
-      //   bigBlind,
-      //   localMinimumBet,
-      //   true
-      // );
-
-      handleBets();
-    } else if (stage === "flop" || stage === "turn" || stage === "river") {
-      // localMinimumBet = 0;
-      // setMinimumBet(0);
-
-      // handleStageBets(
-      //   players,
-      //   (player: Player) => openPlaceBetModal(player, setPlaceBetModalState),
-      //   setPlayers,
-      //   setPot,
-      //   smallBlind,
-      //   bigBlind,
-      //   localMinimumBet
-      // );
-      handleBets();
+    if (
+      stage === "deal" ||
+      stage === "flop" ||
+      stage === "turn" ||
+      stage === "river"
+    ) {
+      handleBets(
+        players,
+        (player: Player) => openPlaceBetModal(player, setPlaceBetModalState),
+        setPlayers
+      );
+      console.log("handleBets");
     }
   }, [stage]);
 
@@ -98,8 +80,8 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
           takePlayerBet(playerIndex, betAmount, setPlayers, setPot),
         openPlaceBetModal: (player) =>
           openPlaceBetModal(player, setPlaceBetModalState),
-        closePlaceBetModal: (playerName) =>
-          closePlaceBetModal(playerName, setPlaceBetModalState),
+        closePlaceBetModal: (playerName, betAmount) =>
+          closePlaceBetModal(playerName, setPlaceBetModalState, betAmount), // Corrected usage of the close function
         placeBetModalState,
       }}
     >

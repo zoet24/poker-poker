@@ -5,7 +5,7 @@ import Button from "../Button";
 
 interface ModalPlaceBetProps {
   playerIndex: number;
-  handleCloseModal: () => void;
+  handleCloseModal: (betAmount: number) => void;
 }
 
 const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
@@ -24,19 +24,19 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
 
   const handlePlaceBet = () => {
     if (betAmount > 0 && betAmount <= player.money) {
-      takePlayerBet(playerIndex, betAmount);
+      // takePlayerBet(playerIndex, betAmount);
 
-      if (betAmount > minimumBet) {
-        setMinimumBet(betAmount);
-      }
+      // if (betAmount > minimumBet) {
+      //   setMinimumBet(betAmount);
+      // }
 
-      handleCloseModal();
+      handleCloseModal(betAmount); // Pass betAmount when closing modal
     }
   };
 
   const handleCheck = () => {
     takePlayerBet(playerIndex, 0);
-    handleCloseModal();
+    handleCloseModal(0); // Pass 0 when checking
   };
 
   const handleFold = () => {
@@ -46,7 +46,7 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
       )
     );
 
-    handleCloseModal();
+    handleCloseModal(0); // No bet is placed, pass 0
   };
 
   return (
