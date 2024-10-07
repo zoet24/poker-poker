@@ -32,7 +32,8 @@ export const handleBets = async (
     player: Player
   ) => Promise<{ betAmount: number; hasFolded: boolean }>,
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>,
-  setPot: React.Dispatch<React.SetStateAction<number>>
+  setPot: React.Dispatch<React.SetStateAction<number>>,
+  setMinimumBet: React.Dispatch<React.SetStateAction<number>>
 ) => {
   // Add an originalIndex to each player to keep track of their original positions
   let currentPlayers = players.map((player, index) => ({
@@ -60,9 +61,12 @@ export const handleBets = async (
     for (let i = 0; i < playerArrayLength; i++) {
       const currentPlayer = currentPlayers[i];
 
-      if (lastRaiserIndex === i) {
+      // Skip player if they were the person who raised or if they are all in
+      if (lastRaiserIndex === i || currentPlayer.money === 0) {
         continue;
       }
+
+      setMinimumBet(currentMinimumBet - currentPlayer.currentBet);
 
       // Open the betting modal and get the player's bet amount
       const { betAmount, hasFolded } = await openPlaceBetModal(currentPlayer);

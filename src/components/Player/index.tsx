@@ -30,11 +30,6 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
     closePlaceBetModal(player.name, { betAmount, hasFolded });
   };
 
-  // This function is for the onClose prop of the Modal, which requires no arguments.
-  const handleCloseModal = () => {
-    handleCloseModalPlaceBet(0); // Default to closing with a betAmount of 0.
-  };
-
   const prevMoneyRef = useRef<number>(money);
   const [moneyChange, setMoneyChange] = useState<number | null>(null);
 
@@ -107,11 +102,10 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
       {/* Modal for Placing Bet */}
       <Modal
         isOpen={placeBetModalState[name]?.open}
-        onClose={handleCloseModal} // Use handleCloseModal here
         title={`${name} - place ${stage} bet`}
       >
         <ModalPlaceBet
-          handleCloseModal={handleCloseModalPlaceBet} // Pass original handleCloseModalPlaceBet for use in ModalPlaceBet
+          handleCloseModal={handleCloseModalPlaceBet}
           playerIndex={playerIndex}
         />
       </Modal>

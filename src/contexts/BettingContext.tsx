@@ -76,7 +76,8 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
         players,
         (player: Player) => openPlaceBetModal(player, setPlaceBetModalState),
         setPlayers,
-        setPot
+        setPot,
+        setMinimumBet
       );
       console.log("handleBets");
     }
