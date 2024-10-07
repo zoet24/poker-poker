@@ -23,8 +23,11 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
   const handleOpenModalPlayerStats = () => setModalPlayerStatsOpen(true);
   const handleCloseModalPlayerStats = () => setModalPlayerStatsOpen(false);
 
-  const handleCloseModalPlaceBet = (betAmount: number = 0) => {
-    closePlaceBetModal(player.name, betAmount);
+  const handleCloseModalPlaceBet = (
+    betAmount: number = 0,
+    hasFolded: boolean = false
+  ) => {
+    closePlaceBetModal(player.name, { betAmount, hasFolded });
   };
 
   // This function is for the onClose prop of the Modal, which requires no arguments.

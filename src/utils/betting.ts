@@ -28,15 +28,30 @@ export const handleBet = (
 
 export const handleBets = async (
   players: Player[],
-  openPlaceBetModal: (player: Player) => Promise<number>,
+  openPlaceBetModal: (
+    player: Player
+  ) => Promise<{ betAmount: number; hasFolded: boolean }>,
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>,
   setPot: React.Dispatch<React.SetStateAction<number>>
 ) => {
-  let currentPlayers = [...players];
+  // Add an originalIndex to each player to keep track of their original positions
+  let currentPlayers = players.map((player, index) => ({
+    ...player,
+    originalIndex: index,
+  }));
   let isRaise = false;
   let playerArrayLength = currentPlayers.length;
   let currentMinimumBet = 0;
   let lastRaiserIndex = -1;
+
+  console.log(
+    "handleBets new",
+    currentPlayers,
+    isRaise,
+    playerArrayLength,
+    currentMinimumBet,
+    lastRaiserIndex
+  );
 
   // Use a while loop to continue betting until no raises occur
   do {
@@ -50,27 +65,38 @@ export const handleBets = async (
       }
 
       // Open the betting modal and get the player's bet amount
-      const betAmount = await openPlaceBetModal(currentPlayer);
+      const { betAmount, hasFolded } = await openPlaceBetModal(currentPlayer);
 
+      // Update the player's state if they folded
+      if (hasFolded) {
+        setPlayers((prevPlayers) =>
+          prevPlayers.map((p, index) =>
+            index === currentPlayer.originalIndex
+              ? { ...p, hasFolded: true }
+              : p
+          )
+        );
+        currentPlayers[i].hasFolded = true;
+        continue;
+      }
+
+      // Update the pot with the bet amount
       setPot((prevPot) => prevPot + betAmount);
 
-      // Update currentPlayers from the latest state
-      currentPlayers = currentPlayers.map((p, index) =>
-        index === i
-          ? {
-              ...p,
-              currentBet: p.currentBet + betAmount,
-              money: Math.max(0, p.money - betAmount),
-            }
-          : p
-      );
+      // Update currentPlayers with the new bet and money after the player's action
+      currentPlayers[i] = {
+        ...currentPlayer,
+        currentBet: currentPlayer.currentBet + betAmount,
+        money: Math.max(0, currentPlayer.money - betAmount),
+      };
 
       console.log(
-        "handleBets - player, currentBet, money: ",
+        "handleBets - player, currentBet, money, hasFolded: ",
         i,
         currentPlayers[i].name,
         currentPlayers[i].currentBet,
-        currentPlayers[i].money
+        currentPlayers[i].money,
+        currentPlayers[i].hasFolded
       );
 
       console.log("handleBets - current players", currentPlayers);
@@ -93,12 +119,13 @@ export const handleBets = async (
           currentMinimumBet
         );
 
+        // Reshuffle the players to start from the next one after the raiser
         currentPlayers = [
           ...currentPlayers.slice(i + 1),
           ...currentPlayers.slice(0, i + 1),
         ];
 
-        i = 0;
+        i = -1; // Set to -1 because the loop will increment it to 0 after `continue`
 
         console.log(
           "handleBets - reshuffled players order: ",
@@ -110,6 +137,14 @@ export const handleBets = async (
       }
     }
   } while (isRaise); // Repeat the loop if a raise occurred
+
+  // Reset all players' bets at the end of the round
+  setPlayers((prevPlayers) =>
+    prevPlayers.map((p) => ({
+      ...p,
+      currentBet: 0,
+    }))
+  );
 };
 
 export const resetPlayersBets = (

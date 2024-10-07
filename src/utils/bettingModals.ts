@@ -5,14 +5,20 @@ export const openPlaceBetModal = (
   player: Player | undefined,
   setPlaceBetModalState: React.Dispatch<
     React.SetStateAction<
-      Record<string, { open: boolean; resolve?: (betAmount: number) => void }>
+      Record<
+        string,
+        {
+          open: boolean;
+          resolve?: (result: { betAmount: number; hasFolded: boolean }) => void;
+        }
+      >
     >
   >
-): Promise<number> => {
+): Promise<{ betAmount: number; hasFolded: boolean }> => {
   return new Promise((resolve) => {
     if (!player) {
       console.error("Player is undefined or null, cannot open modal");
-      resolve(0); // Resolve immediately with 0 if the player is invalid
+      resolve({ betAmount: 0, hasFolded: false });
       return;
     }
 
@@ -24,7 +30,7 @@ export const openPlaceBetModal = (
       }));
     } else {
       // Automatically resolve the promise if the player has folded
-      resolve(0);
+      resolve({ betAmount: 0, hasFolded: true });
     }
   });
 };
@@ -34,15 +40,21 @@ export const closePlaceBetModal = (
   playerName: string,
   setPlaceBetModalState: React.Dispatch<
     React.SetStateAction<
-      Record<string, { open: boolean; resolve?: (betAmount: number) => void }>
+      Record<
+        string,
+        {
+          open: boolean;
+          resolve?: (result: { betAmount: number; hasFolded: boolean }) => void;
+        }
+      >
     >
   >,
-  betAmount: number
+  result: { betAmount: number; hasFolded: boolean }
 ) => {
   setPlaceBetModalState((prevState) => {
     const playerState = prevState[playerName];
     if (playerState?.resolve) {
-      playerState.resolve(betAmount); // Resolve with the bet amount
+      playerState.resolve(result);
     }
     return {
       ...prevState,

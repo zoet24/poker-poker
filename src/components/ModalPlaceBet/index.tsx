@@ -5,7 +5,7 @@ import Button from "../Button";
 
 interface ModalPlaceBetProps {
   playerIndex: number;
-  handleCloseModal: (betAmount: number) => void;
+  handleCloseModal: (betAmount: number, hasFolded: boolean) => void;
 }
 
 const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
@@ -35,12 +35,12 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
         )
       );
 
-      handleCloseModal(betAmount);
+      handleCloseModal(betAmount, false); // Player has not folded
     }
   };
 
   const handleCheck = () => {
-    handleCloseModal(0);
+    handleCloseModal(0, false); // Player checks, has not folded
   };
 
   const handleFold = () => {
@@ -50,7 +50,7 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
       )
     );
 
-    handleCloseModal(0);
+    handleCloseModal(0, true); // Player has folded
   };
 
   return (
@@ -73,7 +73,7 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
           <Button
             text="Place bet"
             onClick={handlePlaceBet}
-            disabled={betAmount == 0}
+            disabled={betAmount === 0}
           ></Button>
         )}
         <Button

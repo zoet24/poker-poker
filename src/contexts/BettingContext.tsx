@@ -16,12 +16,19 @@ interface BettingContextProps {
   setPot: React.Dispatch<React.SetStateAction<number>>;
   minimumBet: number;
   setMinimumBet: React.Dispatch<React.SetStateAction<number>>;
-  // takePlayerBet: (playerIndex: number, betAmount: number) => void;
-  openPlaceBetModal: (player: Player) => Promise<number>;
-  closePlaceBetModal: (playerName: string, betAmount: number) => void;
+  openPlaceBetModal: (
+    player: Player
+  ) => Promise<{ betAmount: number; hasFolded: boolean }>;
+  closePlaceBetModal: (
+    playerName: string,
+    result: { betAmount: number; hasFolded: boolean }
+  ) => void;
   placeBetModalState: Record<
     string,
-    { open: boolean; resolve?: (betAmount: number) => void }
+    {
+      open: boolean;
+      resolve?: (result: { betAmount: number; hasFolded: boolean }) => void;
+    }
   >;
 }
 
@@ -30,8 +37,7 @@ const defaultValue: BettingContextProps = {
   setPot: () => {},
   minimumBet: 0,
   setMinimumBet: () => {},
-  // takePlayerBet: () => {},
-  openPlaceBetModal: async () => 0,
+  openPlaceBetModal: async () => ({ betAmount: 0, hasFolded: false }),
   closePlaceBetModal: () => {},
   placeBetModalState: {},
 };
@@ -49,7 +55,13 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
   const bigBlind = smallBlind * 2;
 
   const [placeBetModalState, setPlaceBetModalState] = useState<
-    Record<string, { open: boolean; resolve?: (betAmount: number) => void }>
+    Record<
+      string,
+      {
+        open: boolean;
+        resolve?: (result: { betAmount: number; hasFolded: boolean }) => void;
+      }
+    >
   >({});
 
   // Use effect to handle stage change
@@ -77,12 +89,10 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
         setPot,
         minimumBet,
         setMinimumBet,
-        // takePlayerBet: (playerIndex, betAmount) =>
-        //   takePlayerBet(playerIndex, betAmount, setPlayers, setPot),
         openPlaceBetModal: (player) =>
           openPlaceBetModal(player, setPlaceBetModalState),
-        closePlaceBetModal: (playerName, betAmount) =>
-          closePlaceBetModal(playerName, setPlaceBetModalState, betAmount), // Corrected usage of the close function
+        closePlaceBetModal: (playerName, result) =>
+          closePlaceBetModal(playerName, setPlaceBetModalState, result),
         placeBetModalState,
       }}
     >
