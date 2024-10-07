@@ -22,21 +22,7 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
   );
 
   const handlePlaceBet = () => {
-    if (betAmount > 0 && betAmount <= player.money) {
-      setPlayers((prevPlayers) =>
-        prevPlayers.map((p, index) =>
-          index === playerIndex
-            ? {
-                ...p,
-                currentBet: p.currentBet + betAmount,
-                money: Math.max(0, p.money - betAmount),
-              }
-            : p
-        )
-      );
-
-      handleCloseModal(betAmount, false); // Player has not folded
-    }
+    handleCloseModal(betAmount, false); // Player has not folded
   };
 
   const handleCheck = () => {

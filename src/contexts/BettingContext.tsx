@@ -79,7 +79,6 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
         setPot,
         setMinimumBet
       );
-      console.log("handleBets");
     }
   }, [stage]);
 
