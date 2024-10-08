@@ -51,7 +51,8 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
       <div className="player">
         <div
           className="player-name cursor-pointer"
-          onClick={handleOpenModalPlayerStats}
+          // onClick={handleOpenModalPlayerStats}
+          onClick={() => console.log("Hello!")}
         >
           {name}
         </div>

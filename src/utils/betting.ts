@@ -1,4 +1,5 @@
 import { Player } from "../types/players";
+import { roundToTwoDecimals } from "./helpers";
 import { rotateRoles } from "./players";
 
 export const updatePlayerBetAndMoney = (
@@ -12,14 +13,13 @@ export const updatePlayerBetAndMoney = (
         ? {
             ...player,
             currentBet: player.currentBet + betAmount,
-            money: Math.max(0, player.money - betAmount),
+            money: roundToTwoDecimals(Math.max(0, player.money - betAmount)),
           }
         : player
     )
   );
 };
 
-// ADDED THIS
 export const handleBlinds = (
   players: Player[],
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>,
@@ -58,7 +58,6 @@ export const handleBlinds = (
   handleBlind(smallBlindPlayer, smallBlind);
   handleBlind(bigBlindPlayer, bigBlind);
 };
-// ADDED THIS
 
 export const handleBets = async (
   players: Player[],
@@ -144,7 +143,7 @@ export const handleBets = async (
       currentPlayers[i] = {
         ...currentPlayer,
         currentBet: currentPlayer.currentBet + betAmount,
-        money: Math.max(0, currentPlayer.money - betAmount),
+        money: roundToTwoDecimals(Math.max(0, currentPlayer.money - betAmount)),
       };
 
       // Check if the player has raised

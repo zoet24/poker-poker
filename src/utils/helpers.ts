@@ -97,3 +97,8 @@ export const getPairsAndKickers = (cards: Card[], pairCount: number) => {
   }
   return { pairs, kickers: sortCardsByRank(kickers) };
 };
+
+// Function to round money values to 2 places
+export const roundToTwoDecimals = (value: number): number => {
+  return Math.round(value * 100) / 100;
+};

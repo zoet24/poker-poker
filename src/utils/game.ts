@@ -3,6 +3,7 @@ import { Player } from "../types/players";
 import { GameStage } from "../types/stage";
 import { burnCard, dealToCommunity, drawCardFromDeck } from "./deck";
 import { evaluateBestHand } from "./hands";
+import { roundToTwoDecimals } from "./helpers";
 import { handleToastError, handleToastSuccess } from "./toasts";
 
 type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
@@ -122,7 +123,7 @@ export const determineWinnersAndDistributePot = (
     setPlayers((prevPlayers) =>
       prevPlayers.map((player) =>
         winners.some((winner) => winner.name === player.name)
-          ? { ...player, money: player.money + potShare }
+          ? { ...player, money: roundToTwoDecimals(player.money + potShare) }
           : player
       )
     );
