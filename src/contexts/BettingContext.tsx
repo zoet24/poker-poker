@@ -55,7 +55,7 @@ export const BettingProvider: React.FC<{ children: ReactNode }> = ({
   const [minimumBet, setMinimumBet] = useState<number>(0);
   const { stage, resetStage } = useContext(StageContext);
   const { resetDeck } = useContext(CardsContext);
-  const { players, setPlayers, resetPlayers, resetPlayersHands } =
+  const { players, setPlayers, resetPlayers, resetPlayersHands, removePlayer } =
     useContext(PlayersContext);
   const smallBlind = 0.1;
   const bigBlind = smallBlind * 2;

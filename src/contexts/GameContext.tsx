@@ -22,7 +22,7 @@ const GameContext = createContext<GameContextProps>(defaultValue);
 export const GameProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const { stage, resetStage, setStage } = useContext(StageContext);
+  const { stage, setStage } = useContext(StageContext);
   const {
     deck,
     communityCards,
@@ -31,7 +31,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     addToCommunity,
     addToBurn,
   } = useContext(CardsContext);
-  const { players, setPlayers, removePlayer } = useContext(PlayersContext);
+  const { players, setPlayers } = useContext(PlayersContext);
   const { pot, setPot } = useContext(BettingContext);
 
   useEffect(() => {
@@ -43,8 +43,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
       setPlayers,
       localDeck,
       addToCommunity,
-      addToBurn,
-      removePlayer
+      addToBurn
     );
 
     setDeck(localDeck);

@@ -74,7 +74,11 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
         ) : (
           <Button
             text={
-              minimumBet == betAmount && minimumBet > 0 ? "Call" : "Place bet"
+              minimumBet === betAmount && minimumBet > 0
+                ? "Call"
+                : betAmount === player.money
+                ? "All in"
+                : "Place bet"
             }
             onClick={handlePlaceBet}
             disabled={betAmount === 0 || betAmount > player.money || !!error}

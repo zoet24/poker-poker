@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { Player } from "../types/players";
 import { createNewPlayer, initialPlayers, rotateRoles } from "../utils/players";
+import { handleToastError } from "../utils/toasts";
 import StageContext from "./StageContext";
 
 interface PlayersContextProps {
@@ -115,6 +116,15 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   useEffect(() => {
+    if (stage === "pre-deal") {
+      for (let i = players.length - 1; i >= 0; i--) {
+        if (players[i].money <= 0) {
+          removePlayer(i);
+          handleToastError(`${players[i].name} is all outta cash!`);
+        }
+      }
+    }
+
     console.log("Players: ", players);
   }, [stage]);
 

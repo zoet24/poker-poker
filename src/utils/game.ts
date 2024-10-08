@@ -4,7 +4,7 @@ import { GameStage } from "../types/stage";
 import { burnCard, dealToCommunity, drawCardFromDeck } from "./deck";
 import { evaluateBestHand } from "./hands";
 import { roundToTwoDecimals } from "./helpers";
-import { handleToastError, handleToastSuccess } from "./toasts";
+import { handleToastSuccess } from "./toasts";
 
 type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
 
@@ -14,18 +14,8 @@ export const handleStageTransition = (
   setPlayers: SetState<Player[]>,
   localDeck: Card[],
   addToCommunity: (cards: Card[]) => void,
-  addToBurn: (card: Card) => void,
-  removePlayer: (index: number) => void
+  addToBurn: (card: Card) => void
 ): Card[] => {
-  if (stage === "pre-deal") {
-    players.forEach((player, index) => {
-      if (player.money <= 0) {
-        removePlayer(index);
-        handleToastError(`${player.name} is all outta cash!`);
-      }
-    });
-  }
-
   if (stage === "deal") {
     localDeck = dealInitialCardsToPlayers(players, setPlayers, localDeck);
   }
