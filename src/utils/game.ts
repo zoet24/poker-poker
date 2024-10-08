@@ -14,25 +14,9 @@ export const handleStageTransition = (
   localDeck: Card[],
   addToCommunity: (cards: Card[]) => void,
   addToBurn: (card: Card) => void,
-  resetPlayersHands: () => void,
-  rotatePlayerRoles: () => void,
-  isInitialMount: React.MutableRefObject<boolean>,
-  gameNumber: React.MutableRefObject<number>,
   removePlayer: (index: number) => void
 ): Card[] => {
   if (stage === "pre-deal") {
-    resetPlayersHands();
-
-    if (!isInitialMount.current) {
-      gameNumber.current += 1;
-
-      if (gameNumber.current > 1) {
-        rotatePlayerRoles();
-      }
-    } else {
-      isInitialMount.current = false;
-    }
-
     players.forEach((player, index) => {
       if (player.money <= 0) {
         removePlayer(index);

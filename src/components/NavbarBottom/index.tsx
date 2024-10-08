@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import GameContext from "../../contexts/GameContext";
+import BettingContext from "../../contexts/BettingContext";
 import StageContext from "../../contexts/StageContext";
 import { GameStage } from "../../types/stage";
 import Button from "../Button";
@@ -24,7 +24,7 @@ const getButtonText = (stage: GameStage): string => {
 };
 
 const NavbarBottom = () => {
-  const { resetGame } = useContext(GameContext);
+  const { resetGame } = useContext(BettingContext);
   const { stage, nextStage } = useContext(StageContext);
 
   return (

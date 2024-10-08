@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useRef,
-} from "react";
+import React, { createContext, ReactNode, useContext, useEffect } from "react";
 import {
   determineWinnersAndDistributePot,
   evaluatePlayersHands,
@@ -17,12 +11,10 @@ import StageContext from "./StageContext";
 
 interface GameContextProps {
   handleEndGame: () => void;
-  resetGame: () => void;
 }
 
 const defaultValue: GameContextProps = {
   handleEndGame: () => {},
-  resetGame: () => {},
 };
 
 const GameContext = createContext<GameContextProps>(defaultValue);
@@ -39,18 +31,8 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     addToCommunity,
     addToBurn,
   } = useContext(CardsContext);
-  const {
-    players,
-    setPlayers,
-    resetPlayersHands,
-    resetPlayers,
-    rotatePlayerRoles,
-    removePlayer,
-  } = useContext(PlayersContext);
+  const { players, setPlayers, removePlayer } = useContext(PlayersContext);
   const { pot, setPot } = useContext(BettingContext);
-
-  const gameNumber = useRef(0);
-  const isInitialMount = useRef(true);
 
   useEffect(() => {
     let localDeck = [...deck];
@@ -62,10 +44,6 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
       localDeck,
       addToCommunity,
       addToBurn,
-      resetPlayersHands,
-      rotatePlayerRoles,
-      isInitialMount,
-      gameNumber,
       removePlayer
     );
 
@@ -100,16 +78,8 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     determineWinnersAndDistributePot(players, pot, setPlayers, setPot);
   };
 
-  const resetGame = () => {
-    gameNumber.current = 0;
-    setPot(0);
-    resetDeck();
-    resetPlayers();
-    resetStage();
-  };
-
   return (
-    <GameContext.Provider value={{ handleEndGame, resetGame }}>
+    <GameContext.Provider value={{ handleEndGame }}>
       {children}
     </GameContext.Provider>
   );
