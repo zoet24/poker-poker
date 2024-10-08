@@ -14,7 +14,6 @@ export const handleStageTransition = (
   localDeck: Card[],
   addToCommunity: (cards: Card[]) => void,
   addToBurn: (card: Card) => void,
-  resetDeck: () => void,
   resetPlayersHands: () => void,
   rotatePlayerRoles: () => void,
   isInitialMount: React.MutableRefObject<boolean>,
@@ -22,7 +21,6 @@ export const handleStageTransition = (
   removePlayer: (index: number) => void
 ): Card[] => {
   if (stage === "pre-deal") {
-    resetDeck();
     resetPlayersHands();
 
     if (!isInitialMount.current) {
@@ -41,7 +39,6 @@ export const handleStageTransition = (
         handleToastError(`${player.name} is all outta cash!`);
       }
     });
-    return localDeck;
   }
 
   if (stage === "deal") {

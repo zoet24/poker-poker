@@ -62,7 +62,6 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
       localDeck,
       addToCommunity,
       addToBurn,
-      resetDeck,
       resetPlayersHands,
       rotatePlayerRoles,
       isInitialMount,
@@ -71,6 +70,10 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     );
 
     setDeck(localDeck);
+
+    if (stage === "pre-deal") {
+      resetDeck();
+    }
 
     if (stage === "showdown") {
       handleEndGame();

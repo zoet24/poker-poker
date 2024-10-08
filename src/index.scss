@@ -184,6 +184,10 @@ body {
     @apply p-5;
   }
 
+  .modal-error-text {
+    @apply mt-2 text-red;
+  }
+
   .modal-btns {
     @apply pt-5 space-x-2 flex items-center justify-center;
   }

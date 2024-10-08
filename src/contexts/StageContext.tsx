@@ -46,7 +46,7 @@ export const StageProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   useEffect(() => {
-    console.log("Betting - stage: ", stage);
+    console.log("Stage: ", stage);
 
     if (tipsOn) {
       const tips = getRandomTips(stage);

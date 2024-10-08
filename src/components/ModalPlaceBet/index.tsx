@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import BettingContext from "../../contexts/BettingContext";
 import PlayersContext from "../../contexts/PlayersContext";
 import Button from "../Button";
@@ -20,6 +20,17 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
   const [betAmount, setBetAmount] = useState<number>(
     allIn ? player.money : minimumBet
   );
+  const [error, setError] = useState<string>("");
+
+  useEffect(() => {
+    if (betAmount > player.money) {
+      setError(`You can only place a bet of up to £${player.money.toFixed(2)}`);
+    } else if (betAmount < minimumBet && !allIn) {
+      setError(`The minimum bet is £${minimumBet.toFixed(2)}`);
+    } else {
+      setError(""); // Clear error if everything is valid
+    }
+  }, [betAmount, player.money, minimumBet, allIn]);
 
   const handlePlaceBet = () => {
     handleCloseModal(betAmount, false); // Player has not folded
@@ -52,6 +63,11 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
           onChange={(e) => setBetAmount(Number(e.target.value))}
         />
       </div>
+      {error && (
+        <div className="modal-error-text">
+          <p>{error}</p>
+        </div>
+      )}
       <div className="modal-btns">
         {allIn ? (
           <Button text="All in" onClick={handlePlaceBet}></Button>
@@ -61,7 +77,7 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
               minimumBet == betAmount && minimumBet > 0 ? "Call" : "Place bet"
             }
             onClick={handlePlaceBet}
-            disabled={betAmount === 0}
+            disabled={betAmount === 0 || betAmount > player.money || !!error}
           ></Button>
         )}
         <Button

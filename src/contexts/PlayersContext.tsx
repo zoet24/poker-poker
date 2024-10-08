@@ -116,13 +116,6 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     console.log("Players: ", players);
-    // players.forEach((player) => {
-    //   console.log(
-    //     `Betting - players: ${player.name}, Money: £${player.money.toFixed(
-    //       2
-    //     )}, Current Bet: £${player.currentBet.toFixed(2)}`
-    //   );
-    // });
   }, [stage]);
 
   return (
