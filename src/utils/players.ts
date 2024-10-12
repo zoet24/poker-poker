@@ -125,7 +125,7 @@ export const rotateRoles = (
     role: {
       isDealer: index === newDealerIndex,
       isSmallBlind: index === newSmallBlindIndex,
-      isBigBlind: index === newBigBlindIndex,
+      isBigBlind: numPlayers === 2 ? false : index === newBigBlindIndex,
     },
   }));
 };

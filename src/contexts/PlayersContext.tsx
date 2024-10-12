@@ -93,13 +93,20 @@ export const PlayersProvider: React.FC<{ children: ReactNode }> = ({
       const smallBlindExists = updatedPlayers.some(
         (player) => player.role.isSmallBlind
       );
-      const bigBlindExists = updatedPlayers.some(
-        (player) => player.role.isBigBlind
-      );
 
-      // If any role is missing, reassign roles
-      if (!dealerExists || !smallBlindExists || !bigBlindExists) {
-        return rotateRoles(updatedPlayers, true);
+      // Handle 2-player case: no big blind needed
+      if (updatedPlayers.length === 2) {
+        if (!dealerExists || !smallBlindExists) {
+          return rotateRoles(updatedPlayers, true);
+        }
+      } else {
+        // Handle 3 or more players
+        const bigBlindExists = updatedPlayers.some(
+          (player) => player.role.isBigBlind
+        );
+        if (!dealerExists || !smallBlindExists || !bigBlindExists) {
+          return rotateRoles(updatedPlayers, true);
+        }
       }
 
       return updatedPlayers;
