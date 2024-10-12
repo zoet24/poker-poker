@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import BettingContext from "../../contexts/BettingContext";
+import GameContext from "../../contexts/GameContext";
 
 const Pot = () => {
-  const { pot } = useContext(BettingContext);
+  const { pot } = useContext(GameContext);
 
   return (
     <div className="absolute centered box h-20 w-20 p-2 rounded-full flex items-end justify-center !top-full -z-10">

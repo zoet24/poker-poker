@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import BettingContext from "../../contexts/BettingContext";
+import GameContext from "../../contexts/GameContext";
 import PlayersContext from "../../contexts/PlayersContext";
 import Button from "../Button";
 
@@ -13,7 +13,7 @@ const ModalPlaceBet: React.FC<ModalPlaceBetProps> = ({
   handleCloseModal,
 }) => {
   const { players, setPlayers } = useContext(PlayersContext);
-  const { minimumBet, setMinimumBet } = useContext(BettingContext);
+  const { minimumBet, setMinimumBet } = useContext(GameContext);
 
   const player = players[playerIndex];
   const allIn = minimumBet >= player.money; // If min bet is bigger than player's money, player must go all in

@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { ToastContainer } from "react-toastify";
 import App from "./App";
-import { BettingProvider } from "./contexts/BettingContext";
 import { CardsProvider } from "./contexts/CardsContext";
 import { GameProvider } from "./contexts/GameContext";
 import { PlayersProvider } from "./contexts/PlayersContext";
@@ -15,22 +14,22 @@ root.render(
     <StageProvider>
       <CardsProvider>
         <PlayersProvider>
-          <BettingProvider>
-            <GameProvider>
-              <App />
-              <ToastContainer
-                position="top-right"
-                autoClose={2000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-              />
-            </GameProvider>
-          </BettingProvider>
+          {/* <BettingProvider> */}
+          <GameProvider>
+            <App />
+            <ToastContainer
+              position="top-right"
+              autoClose={2000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
+          </GameProvider>
+          {/* </BettingProvider> */}
         </PlayersProvider>
       </CardsProvider>
     </StageProvider>

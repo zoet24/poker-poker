@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import BettingContext from "../../contexts/BettingContext";
+import GameContext from "../../contexts/GameContext";
 import PlayersContext from "../../contexts/PlayersContext";
 import StageContext from "../../contexts/StageContext";
 import { Player as PlayerType } from "../../types/players";
@@ -16,7 +16,7 @@ const Player: React.FC<PlayerProps> = ({ player, playerIndex }) => {
   const { name, money, showCards, role } = player;
   const { toggleShowCards } = useContext(PlayersContext);
   const { stage } = useContext(StageContext);
-  const { placeBetModalState, closePlaceBetModal } = useContext(BettingContext);
+  const { placeBetModalState, closePlaceBetModal } = useContext(GameContext);
 
   const [isModalPlayerStatsOpen, setModalPlayerStatsOpen] = useState(false);
 
